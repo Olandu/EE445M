@@ -755,23 +755,6 @@ void static commonInit(const uint8_t *cmdList) {
   if(cmdList) commandList(cmdList);
 }
 
-//------------ST7735_Message----------
-// Two logically separate displays (top half and bottom half of the LCD)
-// At least 4 lines per display
-// Input: device			Species top (0) or bottom (1)
-// 				line				Specifies the line number (0 to 3)
-//				string 			A pinter null terminated ASCII string
-//				value				Number to display
-// Output: none
-// Top (x,y): Title (0,0)
-//						Line 0/1/2/3 (0,2/3/4/5)
-// Bottom (x,y): Title (0,9)
-//							 Line 0/1/2/3 (0,11/12/13/14)	
-							
-
-void ST7735_Message (int device, int line, char *string, int32_t value){
-	
-}
 
 //------------ST7735_InitB------------
 // Initialization for ST7735B screens.
@@ -1626,4 +1609,29 @@ void Output_On(void){ // Turns on the display
 // Output: none
 void Output_Color(uint32_t newColor){ // Set color of future output
   ST7735_SetTextColor(newColor);
+}
+
+
+//------------ST7735_Message----------
+// Two logically separate displays (top half and bottom half of the LCD)
+// At least 4 lines per display
+// Input: device			Species top (0) or bottom (1)
+// 				line				Specifies the line number (0 to 3)
+//				string 			A pinter null terminated ASCII string
+//				value				Number to display
+// Output: none
+// Top (x,y): Title (0,0)
+//						Line 0/1/2/3 (0,2/3/4/5)
+// Bottom (x,y): Title (0,9)
+//							 Line 0/1/2/3 (0,11/12/13/14)	
+							
+
+void ST7735_Message (int device, int line, char *string, int32_t value){
+	if(device == 0){
+		ST7735_SetCursor(0, 2);
+	}else{
+		ST7735_SetCursor(0, 11+line);
+	}
+	 ST7735_OutString(string);
+	 ST7735_OutUDec(value);
 }

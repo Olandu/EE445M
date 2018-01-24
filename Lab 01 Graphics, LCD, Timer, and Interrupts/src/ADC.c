@@ -88,7 +88,7 @@
 
 	}
 	
-	/------------ADC0_InSeq3------------
+	//------------ADC0_InSeq3------------
 // Busy-wait Analog to digital conversion
 // Input: none
 // Output: 12-bit result of ADC conversion
@@ -420,4 +420,11 @@ uint16_t ADC_In (void){
 // Output: 
 int ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t numberOfSamples){
 	return 1;
+}
+
+//----------ADC_Collect--------
+// Input:
+//Output:
+int ADC_Status(void){
+	return 0; 
 }

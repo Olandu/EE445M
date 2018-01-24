@@ -45,20 +45,7 @@
 // software can transfer the conversion result to memory and
 // process it after all measurements are complete.
 
-//----------ADC_Open----------
-// Input: channelNum
-// Output: int
-int ADC_Open(uint32_t channelNum);
 
-//----------ADC_In------------
-// Input: none
-// Output: uint16_t
-uint16_t ADC_In (void);
-
-//----------ADC_Collect--------
-// Input: 
-// Output: 
-int ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t numberOfSamples);
 
 // This initialization function sets up the ADC according to the
 // following parameters.  Any parameters not explicitly listed
@@ -155,4 +142,25 @@ void ADC_In3210(uint32_t data[4]);
 // Input:  adcSample 0 to 4095 
 // Output: distance in 1mm
 uint32_t ADC2millimeter(uint32_t adcSample);
+
+//----------ADC_Open----------
+// Input: channelNum
+// Output: int
+int ADC_Open(uint32_t channelNum);
+
+//----------ADC_In------------
+// Input: none
+// Output: uint16_t
+uint16_t ADC_In (void);
+
+//----------ADC_Collect--------
+// Input: 
+// Output: 
+int ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t numberOfSamples);
+
+
+//----------ADC_Status--------
+// Input: 
+// Output: 
+int ADC_Status(void);
 

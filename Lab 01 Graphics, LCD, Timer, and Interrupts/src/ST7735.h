@@ -112,15 +112,7 @@ enum initRFlags{
 #define ST7735_YELLOW  0x07FF
 #define ST7735_WHITE   0xFFFF
 
-//------------ST7735_Message----------
-// Two logically separate displays (top half and bottom half of the LCD)
-// At least 4 lines per display
-// Input: device			Species top or bottom
-// 				line				Specifies the line number (0 to 3)
-//				string 			A pinter null terminated ASCII string
-//				value				Number to display
-// Output: none
-void ST7735_Message (int device, int line, char *string, int32_t value);
+
 
 //------------ST7735_InitB------------
 // Initialization for ST7735B screens.
@@ -464,5 +456,15 @@ void Output_On(void);
 // Input:  16-bit packed color
 // Output: none
 void Output_Color(uint32_t newColor);
+
+//------------ST7735_Message----------
+// Two logically separate displays (top half and bottom half of the LCD)
+// At least 4 lines per display
+// Input: device			Species top or bottom
+// 				line				Specifies the line number (0 to 3)
+//				string 			A pinter null terminated ASCII string
+//				value				Number to display
+// Output: none
+void ST7735_Message (int device, int line, char *string, int32_t value);
 
 #endif

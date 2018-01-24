@@ -421,9 +421,14 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>Lab01.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\Lab01.s</FilePath>
+              <FileName>ST7735.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ST7735.c</FilePath>
+            </File>
+            <File>
+              <FileName>ADC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ADC.c</FilePath>
             </File>
           </Files>
         </Group>
