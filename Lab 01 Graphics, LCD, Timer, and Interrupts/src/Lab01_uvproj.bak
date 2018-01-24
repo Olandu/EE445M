@@ -430,6 +430,11 @@
               <FileType>1</FileType>
               <FilePath>.\ADC.c</FilePath>
             </File>
+            <File>
+              <FileName>OS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\OS.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
