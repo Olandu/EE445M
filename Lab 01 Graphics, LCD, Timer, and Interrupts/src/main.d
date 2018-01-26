@@ -5,3 +5,4 @@
 .\main.o: ST7735.h
 .\main.o: ADC.h
 .\main.o: OS.h
+.\main.o: UART.h

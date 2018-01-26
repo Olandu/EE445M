@@ -9,6 +9,7 @@
 #include "ST7735.h"
 #include "ADC.h"
 #include "OS.h"
+#include "UART.h"
 
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
@@ -20,8 +21,35 @@ void WaitForInterrupt(void);  // low power mode
 void dummy(void) { 
 	
 }
-int main(){
-	  PLL_Init(Bus80MHz); 										// Set system clock to 80MHz
+
+//---------------------OutCRLF---------------------
+// Output a CR,LF to UART to go to a new line
+// Input: none
+// Output: none
+void OutCRLF(void){
+  UART_OutChar(CR);
+  UART_OutChar(LF);
+}
+
+void UART_Test(void){
+  char string[20];  // global to assist in debugging
+  uint32_t n;
+	
+  OutCRLF();
+  UART_OutChar('-');
+  UART_OutChar('-');
+  UART_OutChar('>');
+  while(1){
+    UART_OutString("InString: ");
+    UART_InString(string,19);
+    UART_OutString(" OutString = "); UART_OutString(string); OutCRLF();
+
+    UART_OutString("InUDec: ");    n = UART_InUDec();
+    UART_OutString(" OutUDec = "); UART_OutUDec(n); OutCRLF();
+
+  }
+}
+void Init_LCD (void){
 	 ST7735_InitR(INITR_REDTAB);						// LCD Initialization
 	 ST7735_FillScreen(0x0000);							// Black screen
 	 ST7735_SetCursor (0, 0);
@@ -29,12 +57,18 @@ int main(){
 	 ST7735_SetCursor (0, 9);
 	 ST7735_OutString ("Device 2:");
 	 ST7735_DrawFastHLine(0, 80, 128, 0xffe0); // Horizontal line that separates the top and bottom display
-	 //UART_Init();														// UART Initialization which includes enabling of interrupts
-	
+}
+int main(){
+	 //PLL_Init(Bus80MHz); 										// Set system clock to 80MHz
+	 PLL_Init(Bus50MHz); 		
+	 Init_LCD();
+	 UART_Init();														// UART Initialization which includes enabling of interrupts
+	 UART_Test();
 	return 0;
 }
 
-int main2 (){	// Tests the dimensions of the two separate displays
+// Tests the dimensions of the two separate displays
+int main2 (){	
 	 ST7735_InitR(INITR_REDTAB);						// LCD Initialization
 	 ST7735_FillScreen(0x0000);
 	 ST7735_DrawFastHLine(0, 80, 128, 0xffe0);
@@ -70,7 +104,7 @@ int main2 (){	// Tests the dimensions of the two separate displays
 	 return 0;
 }
 
-// LCD Initialization
+// LCD Test
 int main1(void){
 	ST7735_InitR(INITR_REDTAB);						
 	ST7735_FillScreen(0x0000);
