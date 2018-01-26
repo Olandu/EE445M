@@ -3,10 +3,32 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\tejas\Documents\UT\EE 445M\EE 445M ValvanoWareTM4C123\Lab 01 Graphics, LCD, Timer, and Interrupts\src\Lab01.uvproj
+C:\Users\oland\OneDrive - The University of Texas at Austin\Documents\UT\Spring2018\EE445M_Realtime_OS\EE445M\Lab 01 Graphics, LCD, Timer, and Interrupts\src\Lab01.uvproj
 Project File Date:  01/24/2018
 
 <h2>Output:</h2>
-</pre>
-</body>
-</html>
+Build target 'Lab01'
+compiling ADC.c...
+linking...
+Program Size: Code=3120 RO-data=2052 RW-data=56 ZI-data=1376  
+".\Lab01.axf" - 0 Error(s), 0 Warning(s).
+e ends without a newline
+  }
+ST7735.c: 1 warning, 0 errors
+compiling ADC.c...
+compiling OS.c...
+compiling FIFO.c...
+linking...
+Program Size: Code=3120 RO-data=2052 RW-data=56 ZI-data=1376  
+".\Lab01.axf" - 0 Error(s), 1 Warning(s).
+ge duration
+        AddIndexFifo(ADCTx, numberOfSamples, int32_t, FIFOSUCCESS, FIFOFAIL);
+ADC.c(396): error:  #65: expected a ";"
+        AddIndexFifo(ADCTx, numberOfSamples, int32_t, FIFOSUCCESS, FIFOFAIL);
+ADC.c(395): warning:  #177-D: variable "ADCRxFifo" was declared but never referenced
+        AddIndexFifo(ADCRx, numberOfSamples, int32_t, FIFOSUCCESS, FIFOFAIL);
+ADC.c(396): warning:  #177-D: variable "ADCTxFifo" was declared but never referenced
+        AddIndexFifo(ADCTx, numberOfSamples, int32_t, FIFOSUCCESS, FIFOFAIL);
+ADC.c: 2 warnings, 4 errors
+".\Lab01.axf" - 4 Error(s), 2 Warning(s).
+Target not created

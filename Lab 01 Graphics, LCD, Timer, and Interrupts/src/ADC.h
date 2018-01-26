@@ -43,22 +43,28 @@
 void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period);
 
 //----------ADC_Open----------
-// Input: channelNum
-// Output: int
-int ADC_Open(uint32_t channelNum);
+// Input: channelNum  Initializes the specified channel
+// Output: None
+void ADC_Open(uint32_t channelNum);
 
 //----------ADC_In------------
-// Input: none
-// Output: uint16_t
+// Input:  None
+// Output: uint16_t ADC result
 uint16_t ADC_In (void);
 
-//----------ADC_Collect--------
-// Input: 
-// Output: 
-int ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t numberOfSamples);
-
-
 //----------ADC_Status--------
-// Input: 
-// Output: 
+// Input: None
+//Output: ADC Conversion status; 0 -> complete , 1->not complete
 int ADC_Status(void);
+
+//----------ADC_Collect--------
+// Input: channelNum       specifies which analog channel to sample
+//        fs               sampling frequency
+//				buffer           array to store sampled data
+//        numberOfSamples  specifies the size of the sample to collect from the ADC
+// Output: None
+// numberOfSample <= FIFO_SIZE (64)
+void ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t numberOfSamples);
+
+
+
