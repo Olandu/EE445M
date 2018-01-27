@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Lab01.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Lab01.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Fri Jan 26 19:30:00 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Sat Jan 27 00:15:49 2018
 <BR><P>
 <H3>Maximum Stack Usage =        216 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -136,7 +136,7 @@ Function Pointers
  <LI><a href="#[25]">Timer2B_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[30]">Timer3A_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[31]">Timer3B_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
- <LI><a href="#[4f]">Timer4A_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
+ <LI><a href="#[4f]">Timer4A_Handler</a> from os.o(i.Timer4A_Handler) referenced from startup.o(RESET)
  <LI><a href="#[50]">Timer4B_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[51]">Timer5A_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
  <LI><a href="#[52]">Timer5B_Handler</a> from startup.o(RESET) referenced from startup.o(RESET)
@@ -494,9 +494,6 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
 <P><STRONG><a name="[31]"></a>Timer3B_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup.o(RESET))
-<BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
-</UL>
-<P><STRONG><a name="[4f]"></a>Timer4A_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup.o(RESET))
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
 <P><STRONG><a name="[50]"></a>Timer4B_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup.o(RESET))
@@ -930,6 +927,11 @@ Global Symbols
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Init_LCD
 </UL>
 
+<P><STRONG><a name="[4f]"></a>Timer4A_Handler</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, os.o(i.Timer4A_Handler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Timer4A_Handler
+</UL>
+<BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
+</UL>
 <P><STRONG><a name="[b7]"></a>TxFifo_Get</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, uart.o(i.TxFifo_Get))
 <BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;copySoftwareToHardware
 </UL>

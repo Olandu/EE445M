@@ -60,7 +60,7 @@ void Init_LCD (void){
 }
 int main(){
 	 //PLL_Init(Bus80MHz); 										// Set system clock to 80MHz
-	uint32_t buffer[9];
+	 uint32_t buffer[9];
 	 PLL_Init(Bus50MHz); 		
 	 Init_LCD();
 	 UART_Init();														// UART Initialization which includes enabling of interrupts
@@ -72,7 +72,7 @@ int main(){
 		 OutCRLF();
 	 }
 	 //UART_Test();
-	return 0;
+	 return 0;
 }
 
 // Tests the dimensions of the two separate displays
