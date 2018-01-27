@@ -4,61 +4,25 @@
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
 C:\Users\oland\OneDrive - The University of Texas at Austin\Documents\UT\Spring2018\EE445M_Realtime_OS\EE445M\Lab 01 Graphics, LCD, Timer, and Interrupts\src\Lab01.uvproj
-Project File Date:  01/24/2018
+Project File Date:  01/26/2018
 
 <h2>Output:</h2>
-Build target 'Lab01'
+Rebuild target 'Lab01'
+assembling startup.s...
+compiling PLL.c...
 compiling main.c...
+compiling ST7735.c...
+compiling ADC.c...
+compiling OS.c...
+compiling UART.c...
 linking...
-Program Size: Code=4304 RO-data=2052 RW-data=72 ZI-data=1408  
+Program Size: Code=4860 RO-data=2052 RW-data=64 ZI-data=1152  
 ".\Lab01.axf" - 0 Error(s), 0 Warning(s).
-</pre>
-</body>
-</html>
-gram Size: Code=4516 RO-data=2052 RW-data=72 ZI-data=1408  
-".\Lab01.axf" - 0 Error(s), 0 Warning(s).
-Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab 01 Graphics, LCD, Timer, and Interrupts\\src\\Lab01.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-fo.o).
-.\Lab01.axf: Error: L6200E: Symbol RxFifo_Init multiply defined (by uart.o and fifo.o).
-.\Lab01.axf: Error: L6200E: Symbol RxFifo_Put multiply defined (by uart.o and fifo.o).
-.\Lab01.axf: Error: L6200E: Symbol RxFifo_Size multiply defined (by uart.o and fifo.o).
-.\Lab01.axf: Error: L6200E: Symbol TxFifo_Get multiply defined (by uart.o and fifo.o).
-.\Lab01.axf: Error: L6200E: Symbol TxFifo_Init multiply defined (by uart.o and fifo.o).
-.\Lab01.axf: Error: L6200E: Symbol TxFifo_Put multiply defined (by uart.o and fifo.o).
-.\Lab01.axf: Error: L6200E: Symbol TxFifo_Size multiply defined (by uart.o and fifo.o).
+RT.c...
+linking...
+.\Lab01.axf: Error: L6218E: Undefined symbol ADCFifo_Init (referred from adc.o).
 Not enough information to list image symbols.
-Not enough information to list the image map.
-Finished: 2 information, 0 warning and 10 error messages.
-".\Lab01.axf" - 10 Error(s), 1 Warning(s).
-Target not created
-L6200E: Symbol TxFifo_Init multiply defined (by uart.o and fifo.o).
-.\Lab01.axf: Error: L6200E: Symbol TxFifo_Put multiply defined (by uart.o and fifo.o).
-.\Lab01.axf: Error: L6200E: Symbol TxFifo_Size multiply defined (by uart.o and fifo.o).
-Not enough information to list image symbols.
-Not enough information to list the image map.
-Finished: 2 information, 0 warning and 10 error messages.
-".\Lab01.axf" - 10 Error(s), 5 Warning(s).
-Target not created
-_Get(&letter);
-UART.c(125): warning:  #223-D: function "RxFifo_Get" declared implicitly
-    while(RxFifo_Get(&letter) == FIFOFAIL){};
-UART.c(131): warning:  #223-D: function "TxFifo_Put" declared implicitly
-    while(TxFifo_Put(data) == FIFOFAIL){};
-UART.c(145): warning:  #223-D: function "TxFifo_Size" declared implicitly
-      if(TxFifo_Size() == 0){             // software TX FIFO is empty
-UART.c: 11 warnings, 7 errors
-".\Lab01.axf" - 7 Error(s), 11 Warning(s).
+Finished: 1 information, 0 warning and 1 error messages.
+".\Lab01.axf" - 1 Error(s), 1 Warning(s).
 Target not created
 
-Target not created
-RT.c(145): warning:  #223-D: function "TxFifo_Size" declared implicitly
-      if(TxFifo_Size() == 0){             // software TX FIFO is empty
-UART.c: 11 warnings, 7 errors
-".\Lab01.axf" - 7 Error(s), 12 Warning(s).
-Target not created
-compiling main.c...
-"main.c" - 0 Error(s), 0 Warning(s).

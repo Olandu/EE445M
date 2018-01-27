@@ -60,10 +60,18 @@ void Init_LCD (void){
 }
 int main(){
 	 //PLL_Init(Bus80MHz); 										// Set system clock to 80MHz
+	uint32_t buffer[9];
 	 PLL_Init(Bus50MHz); 		
 	 Init_LCD();
 	 UART_Init();														// UART Initialization which includes enabling of interrupts
-	 UART_Test();
+	// ADC Testing
+	 ADC_Collect (1, 10000, buffer, 9);
+	 ST7735_FillScreen (0x0000);
+	 for (int i = 0; i < 10; i++){
+		 UART_OutUDec (buffer[i]);
+		 OutCRLF();
+	 }
+	 //UART_Test();
 	return 0;
 }
 

@@ -63,12 +63,6 @@
                                             // Gating Control
 #define SYSCTL_RCGCGPIO_R1      0x00000002  // GPIO Port B Run Mode Clock
                                            // Gating Control
-#define FIFOSIZE   64         // size of the FIFOs (must be power of 2)
-#define FIFOSUCCESS 1         // return value on success
-#define FIFOFAIL    0         // return value on failure
-
-AddIndexFifo(ADC, FIFOSIZE, uint32_t, FIFOSUCCESS, FIFOFAIL)
-//AddIndexFifo(ADCTx, FIFOSIZE, uint32_t, FIFOSUCCESS, FIFOFAIL)
 	
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
@@ -131,7 +125,6 @@ void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period){
       SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R1; break;
     default: return;              //    0 to 11 are valid channels on the LM4F120
   }
-	ADCFifo_Init();
   delay = SYSCTL_RCGCGPIO_R;      // 2) allow time for clock to stabilize
   delay = SYSCTL_RCGCGPIO_R;
   switch(channelNum){
@@ -269,7 +262,7 @@ void ADC0_InitTimer0ATriggerSeq3PD3(uint32_t period){
 volatile uint32_t ADCvalue;
 void ADC0Seq3_Handler(void){
   ADC0_ISC_R = 0x08;          // acknowledge ADC sequence 3 completion
-  ADCFifo_Put(ADC0_SSFIFO3_R); // pass 12-bit result to foreground
+  ADCvalue = ADC0_SSFIFO3_R; // pass 12-bit result to foreground
 }
 
 //----------ADC_Open----------
@@ -406,12 +399,13 @@ int ADC_Status(void){
 // Output: None
 // numberOfSample <= FIFO_SIZE (64)
 void ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t numberOfSamples){
-	int idx = 0;
+	int idx = 0; uint32_t period = 0;
 	ADC_Open(channelNum);				// Open channel
-	TIMER2_TAILR_R = fs - 1;    // Change sampling rate
+	period = 50000000/fs;
+	TIMER2_TAILR_R = period - 1;    // Change sampling rate
 	while(idx < numberOfSamples){
 		if(ADC_Status == 0){
-		  ADCFifo_Get(&buffer[idx]);
+		  buffer[idx] = ADCvalue;
 		  idx++;
 		}
 	}
