@@ -222,7 +222,7 @@ void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period){
   ADC0_IM_R |= 0x08;             // enable SS3 interrupts
   ADC0_ACTSS_R |= 0x08;          // enable sample sequencer 3
   NVIC_PRI4_R = (NVIC_PRI4_R&0xFFFF00FF)|0x00004000; //priority 2
-  NVIC_EN0_R = 1<<17;              // enable interrupt 17 in NVIC
+  //NVIC_EN0_R = 1<<17;              // enable interrupt 17 in NVIC
 
 }
 void ADC0_InitTimer0ATriggerSeq3PD3(uint32_t period){
@@ -401,12 +401,14 @@ int ADC_Status(void){
 void ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t numberOfSamples){
 	int idx = 0; uint32_t period = 0;
 	ADC_Open(channelNum);				// Open channel
+	NVIC_EN0_R = 1<<17;         // enable ADC_Seq3 interrupt
 	period = 50000000/fs;
 	TIMER2_TAILR_R = period - 1;    // Change sampling rate
 	while(idx < numberOfSamples){
 		if(ADC_Status == 0){
-		  buffer[idx] = ADCvalue;
+		  buffer[idx] = ADC0_SSFIFO3_R;
 		  idx++;
 		}
 	}
+	NVIC_DIS0_R = 1<<17;  // disable ADC_Seq3 interrupt
 }

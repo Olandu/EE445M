@@ -18,6 +18,7 @@ void EndCritical(long sr);    // restore I bit to previous value
 void WaitForInterrupt(void);  // low power mode
 
 
+//toggle an LED every 100ms
 void dummy(void) { 
 	
 }
@@ -49,7 +50,7 @@ void UART_Test(void){
 
   }
 }
-void Init_LCD (void){
+void LCD_Init (void){
 	 ST7735_InitR(INITR_REDTAB);						// LCD Initialization
 	 ST7735_FillScreen(0x0000);							// Black screen
 	 ST7735_SetCursor (0, 0);
@@ -58,21 +59,27 @@ void Init_LCD (void){
 	 ST7735_OutString ("Device 2:");
 	 ST7735_DrawFastHLine(0, 80, 128, 0xffe0); // Horizontal line that separates the top and bottom display
 }
-int main(){
-	 //PLL_Init(Bus80MHz); 										// Set system clock to 80MHz
+
+void ADC_Test(void){
+	 // ADC Testing
 	 uint32_t buffer[9];
-	 PLL_Init(Bus50MHz); 		
-	 Init_LCD();
-	 UART_Init();														// UART Initialization which includes enabling of interrupts
-	// ADC Testing
 	 ADC_Collect (1, 10000, buffer, 9);
 	 ST7735_FillScreen (0x0000);
 	 for (int i = 0; i < 10; i++){
 		 UART_OutUDec (buffer[i]);
 		 OutCRLF();
 	 }
-	 //UART_Test();
-	 return 0;
+}
+int main(){
+	 //PLL_Init(Bus80MHz); 										// Set system clock to 80MHz
+	 PLL_Init(Bus50MHz);
+   ADC0_InitTimer0ATriggerSeq3(0,1000);	
+	 LCD_Init();
+	 UART_Init();			// UART Initialization which includes enabling of interrupts
+	 OS_AddPeriodicThread(dummy,5000000, 1);
+	while(1){
+		ADC_Test();
+	}
 }
 
 // Tests the dimensions of the two separate displays
@@ -110,20 +117,4 @@ int main2 (){
 	 ST7735_OutString ("Line 4");
 	 
 	 return 0;
-}
-
-// LCD Test
-int main1(void){
-	ST7735_InitR(INITR_REDTAB);						
-	ST7735_FillScreen(0x0000);
-	ST7735_DrawFastHLine(0, 80, 128, 0xffe0);
-	
-	ST7735_SetCursor (0, 0);
-	ST7735_OutString ("Device 1");
-	ST7735_SetCursor (0, 9);
-	ST7735_OutString ("Device 2");
-	
-	ST7735_Message(1,0,"ADCvalue:",25);
-	ST7735_Message(0,0,"ADCvalue:",128);
-	return 0;
 }
