@@ -16,6 +16,7 @@ int32_t OS_Counter = 0;
 //				 priority: determines the priority of task
 // Output: 1 if successful, 0 if this thread can not be added
 
+// background task 
 void (*PeriodicTask)(void);   // user function
 int OS_AddPeriodicThread(void(*task)(void), uint32_t period, uint32_t priority){
 	SYSCTL_RCGCTIMER_R |= 0x10;   // 0) activate TIMER4
@@ -48,7 +49,7 @@ void Timer4A_Handler(void){
 // Input:  None
 // Output: None
 void OS_ClearPeriodicTime(void){
-	OS_Counter = 0;
+	OS_Counter = 0;           
 }
 
 //---------- OS_ReadPeriodicTime------------

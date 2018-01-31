@@ -405,7 +405,7 @@ void ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t 
 	period = 50000000/fs;
 	TIMER2_TAILR_R = period - 1;    // Change sampling rate
 	while(idx < numberOfSamples){
-		if(ADC_Status == 0){
+		if(ADC_Status() == 0){
 		  buffer[idx] = ADC0_SSFIFO3_R;
 		  idx++;
 		}

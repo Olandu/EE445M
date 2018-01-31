@@ -440,6 +440,11 @@
               <FileType>1</FileType>
               <FilePath>.\UART.c</FilePath>
             </File>
+            <File>
+              <FileName>cmdLine.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\cmdLine.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
