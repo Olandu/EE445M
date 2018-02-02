@@ -111,7 +111,7 @@ void cmdLine_OptionB (void){
 		UART_OutString ("Choose either device \"1\" or \"2.\""); OutCRLF();
 		UART_OutString ("Device #: ");
 		device = UART_InUDec ();
-		while ((option < 1) || (option < 2)){
+		while ((device < 1) || (device > 2)){
 			OutCRLF(); OutCRLF();
 			UART_OutString ("Oops! You chose an invalid device. Try again!"); OutCRLF(); 
 			UART_OutString ("Choose either device \"1\" or \"2.\""); OutCRLF(); OutCRLF();  
@@ -125,10 +125,10 @@ void cmdLine_OptionB (void){
 		if (noSamples != lines){
 			for (int i = noSamples; i < lines + 1; i++){
 				ST7735_Message (device, i, "--------------------", buffer[i], 1);
+			}
 		}
 	}
 }
-	}
 
 void cmdLine_Start (void) {
   uint32_t n;
