@@ -398,14 +398,14 @@ int ADC_Status(void){
 //        numberOfSamples  specifies the size of the sample to collect from the ADC
 // Output: None
 // numberOfSample <= FIFO_SIZE (64)
-void ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t numberOfSamples){
+void ADC_Collect (uint32_t channelNum, uint32_t fs, int32_t buffer[], uint32_t numberOfSamples){
 	int idx = 0; uint32_t period = 0;
 	ADC_Open(channelNum);				// Open channel
 	NVIC_EN0_R = 1<<17;         // enable ADC_Seq3 interrupt
 	period = 50000000/fs;
 	TIMER2_TAILR_R = period - 1;    // Change sampling rate
 	while(idx < numberOfSamples){
-		if(ADC_Status == 0){
+		if(ADC_Status() == 0){
 		  buffer[idx] = ADC0_SSFIFO3_R;
 		  idx++;
 		}

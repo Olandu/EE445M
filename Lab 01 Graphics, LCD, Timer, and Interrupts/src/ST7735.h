@@ -465,6 +465,6 @@ void Output_Color(uint32_t newColor);
 //				string 			A pinter null terminated ASCII string
 //				value				Number to display
 // Output: none
-void ST7735_Message (int device, int line, char *string, int32_t value);
+void ST7735_Message (int device, int line, char *string, int32_t value, int clearLine);
 
 #endif
