@@ -40,7 +40,7 @@ void cmdLine_OptionA (void) {
 }
 
 void cmdLine_OptionB (void){
-	int32_t channelNum = -1, noSamples = -1, buffer[5] = {-1}, clearLine = 0;
+	int32_t channelNum = -1, noSamples = -1, buffer[5] = {-1}, device = 0;
 	uint32_t fs = 0;
 	char option;
 	
@@ -91,7 +91,7 @@ void cmdLine_OptionB (void){
 	}
 	OutCRLF(); OutCRLF(); 
 	UART_OutString ("What would you like to do with the samples?"); OutCRLF();
-	UART_OutString ("a.) Output to one of the LCD Displays"); OutCRLF();
+	UART_OutString ("a.) Output the samples to one of the LCD Displays"); OutCRLF();
   UART_OutString ("b.) Umm, nothing!"); OutCRLF(); OutCRLF();
 	UART_OutString ("Choose either option a or b."); OutCRLF();
 	UART_OutString ("Option: "); 
@@ -103,12 +103,32 @@ void cmdLine_OptionB (void){
 		UART_OutString ("Option: ");
 		option = UART_InChar ();
 	}
-	switch (option) {
-		case 'a': 
-			for (int i = 0; i < lines + 1; i++){
-			}
+	if (option == 'a'){
+		OutCRLF(); OutCRLF(); 
+		UART_OutString ("Available LCD devices:"); OutCRLF();
+		UART_OutString ("1.) Device 1"); OutCRLF();
+		UART_OutString ("2.) Device 2"); OutCRLF(); OutCRLF();
+		UART_OutString ("Choose either device \"1\" or \"2.\""); OutCRLF();
+		UART_OutString ("Device #: ");
+		device = UART_InUDec ();
+		while ((option < 1) || (option < 2)){
+			OutCRLF(); OutCRLF();
+			UART_OutString ("Oops! You chose an invalid device. Try again!"); OutCRLF(); 
+			UART_OutString ("Choose either device \"1\" or \"2.\""); OutCRLF(); OutCRLF();  
+			UART_OutString ("Option: ");
+			UART_OutString ("Device #: ");
+			device = UART_InUDec ();
+		}
+		for (int i = 0; i < noSamples; i++){
+			ST7735_Message (device, i, "ADC Value", buffer[i], 0);
+		}
+		if (noSamples != lines){
+			for (int i = noSamples; i < lines + 1; i++){
+				ST7735_Message (device, i, "--------------------", buffer[i], 1);
+		}
 	}
 }
+	}
 
 void cmdLine_Start (void) {
   uint32_t n;

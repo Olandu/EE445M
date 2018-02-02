@@ -19,23 +19,47 @@ compiling ADC.c...
 compiling OS.c...
 compiling UART.c...
 compiling cmdLine.c...
-cmdLine.c(43): warning:  #177-D: variable "clearLine" was declared but never referenced
-        int32_t channelNum = -1, noSamples = -1, buffer[5] = {-1}, clearLine = 0;
-cmdLine.c(114): warning:  #177-D: variable "n" was declared but never referenced
+cmdLine.c(134): warning:  #177-D: variable "n" was declared but never referenced
     uint32_t n;
-cmdLine.c: 2 warnings, 0 errors
+cmdLine.c: 1 warning, 0 errors
 linking...
-Program Size: Code=8560 RO-data=2136 RW-data=84 ZI-data=1156  
-".\Lab01.axf" - 0 Error(s), 3 Warning(s).
-</pre>
-</body>
-</html>
-s, 0 errors
-linking...
-Program Size: Code=8516 RO-data=2132 RW-data=80 ZI-data=1152  
-".\Lab01.axf" - 0 Error(s), 4 Warning(s).
-EE445M\\Lab 01 Graphics, LCD, Timer, and Interrupts\\src\\Lab01.axf" 
+Program Size: Code=9328 RO-data=2136 RW-data=84 ZI-data=1164  
+".\Lab01.axf" - 0 Error(s), 2 Warning(s).
+Load "C:\\Users\\tejas\\Documents\\GitHub\\EE445M\\Lab 01 Graphics, LCD, Timer, and Interrupts\\src\\Lab01.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
+</pre>
+</body>
+</html>
+g types
+        OutCRLF(); OutCRLF(); 
+cmdLine.c(160): error:  #260-D: explicit type is missing ("int" assumed)
+        OutCRLF(); OutCRLF(); 
+cmdLine.c(160): error:  #147: declaration is incompatible with "void OutCRLF(void)" (declared at line 116 of "UART.h")
+        OutCRLF(); OutCRLF(); 
+cmdLine.c(161): error:  #79: expected a type specifier
+        UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
+cmdLine.c(161): error:  #260-D: explicit type is missing ("int" assumed)
+        UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
+cmdLine.c(161): error:  #147: declaration is incompatible with "void UART_OutString(char *)" (declared at line 60 of "UART.h")
+        UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
+cmdLine.c(161): warning:  #1295-D: Deprecated declaration OutCRLF - give arg types
+        UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
+cmdLine.c(161): error:  #260-D: explicit type is missing ("int" assumed)
+        UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
+cmdLine.c(161): warning:  #1295-D: Deprecated declaration OutCRLF - give arg types
+        UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
+cmdLine.c(161): error:  #260-D: explicit type is missing ("int" assumed)
+        UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
+cmdLine.c(161): error:  #77-D: this declaration has no storage class or type specifier
+        UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
+cmdLine.c(161): error:  #148: variable "flag" has already been initialized
+        UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
+cmdLine.c(162): error:  #169: expected a declaration
+  }
+cmdLine.c(166): warning: At end of source:  #12-D: parsing restarts here after previous syntax error
+cmdLine.c: 6 warnings, 12 errors
+".\Lab01.axf" - 12 Error(s), 7 Warning(s).
+Target not created
