@@ -64,7 +64,7 @@ int ADC_Status(void);
 //        numberOfSamples  specifies the size of the sample to collect from the ADC
 // Output: None
 // numberOfSample <= FIFO_SIZE (64)
-void ADC_Collect (uint32_t channelNum, uint32_t fs, uint32_t buffer[], uint32_t numberOfSamples);
+void ADC_Collect (uint32_t channelNum, int32_t fs, int32_t buffer[], uint32_t numberOfSamples);
 
 
 

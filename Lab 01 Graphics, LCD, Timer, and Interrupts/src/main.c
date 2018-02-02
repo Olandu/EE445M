@@ -58,7 +58,7 @@ void LCD_Init (void){
 
 void ADC_Test(void){
 	 // ADC Testing
-	 uint32_t buffer[9];
+	 int32_t buffer[9];
 	 ADC_Collect (1, 1000, buffer, 9);
 	 ST7735_FillScreen (0x0000);
 	 for (int i = 0; i < 10; i++){
