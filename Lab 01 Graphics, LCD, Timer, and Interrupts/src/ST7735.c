@@ -1613,20 +1613,21 @@ void Output_Color(uint32_t newColor){ // Set color of future output
 }
 
 
-//------------ST7735_Message----------
-// Two logically separate displays (top half and bottom half of the LCD)
-// At least 4 lines per display
-// Input: device			Species top (0) or bottom (1)
-// 				line				Specifies the line number (0 to 3)
-//				string 			A pinter null terminated ASCII string
-//				value				Number to display
-// Output: none
-// Top (x,y): Title (0,0)
-//						Line 0/1/2/3 (0,2/3/4/5)
-// Bottom (x,y): Title (0,9)
-//							 Line 0/1/2/3 (0,11/12/13/14)	
-							
+///------------ST7735_Message----------
+/// <summary>
+/// Outputs message to one of the two logically separate displays (top half and bottom half of the LCD).
+/// There are 5 lines per display
+/// </summary>
 
+/// <param name = "device"> Species top (0) or bottom (1) </param>
+/// <param name = "line">   Specifies the line number (0 to 3) </param>
+///	<param name = "string"> A pointer to a null terminated ASCII string </param>
+///	<param name = "value">  Number to display </param>
+
+// Top (x,y): Title (0,0)
+//			  Line 0/1/2/3 (0,2/3/4/5)
+// Bottom (x,y): Title (0,9)
+//				 Line 0/1/2/3 (0,11/12/13/14)								
 void ST7735_Message (int device, int line, char *string, int32_t value, int clearLine){
 	int lineNum = 0;
 	if ((device == 1 || device == 2) && ((line >= 0) && (line <= 4))){

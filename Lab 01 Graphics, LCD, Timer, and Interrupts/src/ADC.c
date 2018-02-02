@@ -5,6 +5,8 @@
 // is complete.
 // Daniel Valvano
 // May 2, 2015
+// Modicifed by Tejasree Ramanuja and Chioma Okorie
+// February 2, 2018
 
 /* This example accompanies the book
    "Embedded Systems: Real Time Interfacing to Arm Cortex M Microcontrollers",
@@ -104,6 +106,13 @@ void WaitForInterrupt(void);  // low power mode
 // SS3 triggering event: Timer0A
 // SS3 1st sample source: programmable using variable 'channelNum' [0:11]
 // SS3 interrupts: enabled and promoted to controller
+
+///----------ADC0_InitTimer0ATriggerSeq3----------
+/// <summary>
+/// Initializes ADC channel and timer with the specified channel number and period
+/// </summary>
+/// <param name = "channelNum"> channel number to be initialized </param>
+/// <param name = "period"> timer interrupt rate </param> 
 void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period){
   volatile uint32_t delay;
   // **** GPIO pin initialization ****
@@ -265,9 +274,8 @@ void ADC0Seq3_Handler(void){
   ADCvalue = ADC0_SSFIFO3_R; // pass 12-bit result to foreground
 }
 
-//----------ADC_Open----------
-// Input: channelNum  Initializes the specified channel
-// Output: None
+///----------ADC_Open----------
+/// <param name = "channelNum"> Initializes the specified channel. </param>
 void ADC_Open(uint32_t channelNum){
 	volatile uint32_t delay;
   // **** GPIO pin initialization ****
@@ -368,9 +376,8 @@ void ADC_Open(uint32_t channelNum){
 	 ADC0_SSMUX3_R = channelNum;
 }
 
-//----------ADC_In------------
-// Input:  None
-// Output: uint16_t ADC result
+///----------ADC_In------------
+/// <returns> Result of a single ADC sample
 uint16_t ADC_In (void){ 	// Get the current ADC value
 	unsigned long result;
 	ADC0_PSSI_R = 0x0008;            // 1) initiate SS3
@@ -381,9 +388,8 @@ uint16_t ADC_In (void){ 	// Get the current ADC value
 }
 
 #define CONVERSION_COMPLETE 0
-//----------ADC_Status--------
-// Input: None
-//Output: ADC Conversion status; 0 -> complete , 1->not complete
+///----------ADC_Status--------
+/// <returns> Status of ADC Conversion; 0 -> complete , 1->not complete
 int ADC_Status(void){
 	if(ADC0_ISC_R == 0x0008){
 		return CONVERSION_COMPLETE;
@@ -391,13 +397,15 @@ int ADC_Status(void){
 	return 1; 
 }
 
-//----------ADC_Collect--------
-// Input: channelNum       specifies which analog channel to sample
-//        fs               sampling frequency
-//				buffer           array to store sampled data
-//        numberOfSamples  specifies the size of the sample to collect from the ADC
-// Output: None
-// numberOfSample <= FIFO_SIZE (64)
+///----------ADC_Collect--------
+/// <summary>
+/// returns multiple samples from the ADC
+/// </summary>
+///
+/// <param name = "channelNum"> specifies which analog channel to sample </param>
+/// <param name = "fs"> sampling frequency </param>
+///	<param name = "buffer"> array to store sampled data </param>
+/// <param name = "numberOfSamples"> specifies the size of the sample to collect from the ADC </param>
 void ADC_Collect (uint32_t channelNum, uint32_t fs, int32_t buffer[], uint32_t numberOfSamples){
 	int idx = 0; uint32_t period = 0;
 	ADC_Open(channelNum);				// Open channel

@@ -14,6 +14,9 @@ char option;
 
 int flag = 0, lines = 5;
 
+/// <summary>
+/// This functions executes when the user chooses to request one sample from the ADC
+/// </summary>
 void cmdLine_OptionA (void) {
 	int32_t channelNum = -1;
 	
@@ -39,6 +42,12 @@ void cmdLine_OptionA (void) {
 	OutCRLF(); OutCRLF();
 }
 
+
+/// <summary>
+/// This functions executes when the user chooses to request multiple samples from the ADC
+/// Also allows the user to issue command to the LCD
+/// User will specify channel number to sample, the sampling frequency, and LCD device #1 to view the output
+/// </summary>
 void cmdLine_OptionB (void){
 	int32_t channelNum = -1, noSamples = -1, buffer[5] = {-1}, device = 0;
 	uint32_t fs = 0;
@@ -92,7 +101,7 @@ void cmdLine_OptionB (void){
 	OutCRLF(); OutCRLF(); 
 	UART_OutString ("What would you like to do with the samples?"); OutCRLF();
 	UART_OutString ("a.) Output the samples to one of the LCD Displays"); OutCRLF();
-  UART_OutString ("b.) Umm, nothing!"); OutCRLF(); OutCRLF();
+    UART_OutString ("b.) Umm, nothing!"); OutCRLF(); OutCRLF();
 	UART_OutString ("Choose either option a or b."); OutCRLF();
 	UART_OutString ("Option: "); 
 	option = UART_InChar();
@@ -130,6 +139,8 @@ void cmdLine_OptionB (void){
 	}
 }
 
+
+/// This functions allows the user to request either 1 or multiple samples from the ADC
 void cmdLine_Start (void) {
   uint32_t n;
 	if (!flag){
