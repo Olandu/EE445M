@@ -7,6 +7,8 @@
 #include "../inc/tm4c123gh6pm.h"
 #include "OS.h"
 
+#define PF1                     (*((volatile uint32_t *)0x40025008))
+	
 int32_t OS_Counter = 0;
 
 
@@ -43,10 +45,30 @@ int OS_AddPeriodicThread(void(*task)(void), uint32_t period, uint32_t priority){
 	return 1;
 }
 
+#define NVIC_ST_CTRL_COUNT      0x00010000  // Count flag
+#define NVIC_ST_CTRL_CLK_SRC    0x00000004  // Clock Source
+#define NVIC_ST_CTRL_INTEN      0x00000002  // Interrupt enable
+#define NVIC_ST_CTRL_ENABLE     0x00000001  // Counter mode
+#define NVIC_ST_RELOAD_M        0x00FFFFFF  // Counter load value
+// Initialize SysTick with busy wait running at bus clock.
+volatile uint32_t Time1, elapsedTime;
+void SysTick_Init(void){
+  NVIC_ST_CTRL_R = 0;                   // disable SysTick during setup
+  NVIC_ST_RELOAD_R = NVIC_ST_RELOAD_M;  // maximum reload value
+  NVIC_ST_CURRENT_R = 0;                // any write to current clears it
+                                        // enable SysTick with core clock
+  NVIC_ST_CTRL_R = NVIC_ST_CTRL_ENABLE+NVIC_ST_CTRL_CLK_SRC;
+}
+
 void Timer4A_Handler(void){
   TIMER4_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER4A timeout
+	//Time1 = NVIC_ST_CURRENT_R&0x00FFFFFF;
+	//PF1 ^= 0x02;
+	//PF1 ^= 0x02;
 	OS_Counter ++;
   (*PeriodicTask)();                // execute user task
+	//PF1 ^= 0x02;
+	//elapsedTime = (Time1 - NVIC_ST_CURRENT_R)&0x00FFFFFF;
 }
 
 ///---------- OS_ClearPeriodicTime------------

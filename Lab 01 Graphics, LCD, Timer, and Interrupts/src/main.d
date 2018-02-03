@@ -7,3 +7,4 @@
 .\main.o: OS.h
 .\main.o: UART.h
 .\main.o: cmdLine.h
+.\main.o: SysTick.h

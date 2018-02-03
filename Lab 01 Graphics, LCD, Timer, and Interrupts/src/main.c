@@ -11,25 +11,24 @@
 #include "OS.h"
 #include "UART.h"
 #include "cmdLine.h"
+#include "SysTick.h"
 
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 long StartCritical (void);    // previous I bit, disable interrupts
 void EndCritical(long sr);    // restore I bit to previous value
 void WaitForInterrupt(void);  // low power mode
-
 #define PF1                     (*((volatile uint32_t *)0x40025008))
 
-//toggle an LED every 100ms
-void dummy(void) { 
-	UART_OutUDec(OS_ReadPeriodicTime()); 
-	OutCRLF();
-	PF1 ^= 0x02;
-}
 
+void dummy(void) { 
+	//UART_OutUDec(OS_ReadPeriodicTime()); 
+	//OutCRLF();
+}
 
 void UART_Test(void){
   char string[20];  // global to assist in debugging
+
   uint32_t n;
 	
   OutCRLF();
@@ -81,17 +80,18 @@ void GPIO_PortF_Init(void){
 }
 
 int main(){
-	 //PLL_Init(Bus80MHz); 										// Set system clock to 80MHz
-	 PLL_Init(Bus50MHz);
+	 PLL_Init(Bus80MHz);
    ADC0_InitTimer0ATriggerSeq3(1,0);
+	 SysTick_Init();             // initialize SysTick timer
 	 GPIO_PortF_Init();
 	 LCD_Init();
 	 UART_Init();															// UART Initialization which includes enabling of interrupts
-	 //OS_AddPeriodicThread(dummy,10000000, 1);
-	 //cmdLine_Start();
+	 PF1 = 0;
+	 OS_AddPeriodicThread(dummy,8000000, 1);  // 100ms
 	while(1){
 		//ADC_Test();
-		cmdLine_Start();
+		//cmdLine_Start();
+		PF1 ^= 0x02;
 	}
 }
 

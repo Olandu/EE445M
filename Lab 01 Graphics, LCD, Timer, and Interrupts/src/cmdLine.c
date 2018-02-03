@@ -142,7 +142,6 @@ void cmdLine_OptionB (void){
 
 /// This functions allows the user to request either 1 or multiple samples from the ADC
 void cmdLine_Start (void) {
-  uint32_t n;
 	if (!flag){
   OutCRLF();
 	// Make a new function out of this
@@ -172,7 +171,4 @@ void cmdLine_Start (void) {
 	OutCRLF(); OutCRLF(); 
 	UART_OutString ("Your request has been successfully serviced. Bye!"); OutCRLF(); OutCRLF();  flag = 1;
 }
-
-
-
 
