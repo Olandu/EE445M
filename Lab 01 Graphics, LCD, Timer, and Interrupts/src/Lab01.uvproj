@@ -445,6 +445,11 @@
               <FileType>1</FileType>
               <FilePath>.\cmdLine.c</FilePath>
             </File>
+            <File>
+              <FileName>SysTick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SysTick.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

@@ -374,16 +374,19 @@ void ADC_Open(uint32_t channelNum){
       break;
   }								// 
 	 ADC0_SSMUX3_R = channelNum;
+
 }
 
 ///----------ADC_In------------
 /// <returns> Result of a single ADC sample
 uint16_t ADC_In (void){ 	// Get the current ADC value
 	unsigned long result;
+	
 	ADC0_PSSI_R = 0x0008;            // 1) initiate SS3
   while((ADC0_RIS_R&0x08)==0){};   // 2) wait for conversion done
   result = ADC0_SSFIFO3_R&0xFFF;   // 3) read result
   ADC0_ISC_R = 0x0008;             // 4) acknowledge completion
+	
   return result;
 }
 
