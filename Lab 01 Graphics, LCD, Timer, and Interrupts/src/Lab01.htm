@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Lab01.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Lab01.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Feb 05 15:05:22 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Tue Feb 06 19:09:45 2018
 <BR><P>
-<H3>Maximum Stack Usage =        256 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        248 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; cmdLine_Start &rArr; cmdLine_OptionC &rArr; ST7735_Message &rArr; ST7735_OutString &rArr; ST7735_OutChar &rArr; ST7735_DrawString &rArr; ST7735_DrawCharS &rArr; ST7735_FillRect &rArr; setAddrWindow
 <P>
@@ -683,7 +683,7 @@ Global Symbols
 <P><STRONG><a name="[ea]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[8a]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 256 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 248 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; cmdLine_Start &rArr; cmdLine_OptionC &rArr; ST7735_Message &rArr; ST7735_OutString &rArr; ST7735_OutChar &rArr; ST7735_DrawString &rArr; ST7735_DrawCharS &rArr; ST7735_FillRect &rArr; setAddrWindow
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -944,7 +944,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
 </UL>
 
-<P><STRONG><a name="[ae]"></a>ST7735_Message</STRONG> (Thumb, 126 bytes, Stack size 32 bytes, st7735.o(i.ST7735_Message))
+<P><STRONG><a name="[ae]"></a>ST7735_Message</STRONG> (Thumb, 116 bytes, Stack size 32 bytes, st7735.o(i.ST7735_Message))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = ST7735_Message &rArr; ST7735_OutString &rArr; ST7735_OutChar &rArr; ST7735_DrawString &rArr; ST7735_DrawCharS &rArr; ST7735_FillRect &rArr; setAddrWindow
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutString
@@ -1111,7 +1111,7 @@ Global Symbols
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutUDec
 </UL>
 
-<P><STRONG><a name="[bf]"></a>cmdLine_OptionA</STRONG> (Thumb, 158 bytes, Stack size 16 bytes, cmdline.o(i.cmdLine_OptionA))
+<P><STRONG><a name="[bf]"></a>cmdLine_OptionA</STRONG> (Thumb, 104 bytes, Stack size 16 bytes, cmdline.o(i.cmdLine_OptionA))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = cmdLine_OptionA &rArr; UART_OutUDec &rArr;  UART_OutUDec (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutUDec
@@ -1124,7 +1124,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmdLine_Start
 </UL>
 
-<P><STRONG><a name="[c1]"></a>cmdLine_OptionB</STRONG> (Thumb, 378 bytes, Stack size 24 bytes, cmdline.o(i.cmdLine_OptionB))
+<P><STRONG><a name="[c1]"></a>cmdLine_OptionB</STRONG> (Thumb, 216 bytes, Stack size 24 bytes, cmdline.o(i.cmdLine_OptionB))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = cmdLine_OptionB &rArr; ADC_Collect &rArr; ADC_Open
 </UL>
 <BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutUDec
@@ -1136,8 +1136,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmdLine_Start
 </UL>
 
-<P><STRONG><a name="[c2]"></a>cmdLine_OptionC</STRONG> (Thumb, 276 bytes, Stack size 56 bytes, cmdline.o(i.cmdLine_OptionC))
-<BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = cmdLine_OptionC &rArr; ST7735_Message &rArr; ST7735_OutString &rArr; ST7735_OutChar &rArr; ST7735_DrawString &rArr; ST7735_DrawCharS &rArr; ST7735_FillRect &rArr; setAddrWindow
+<P><STRONG><a name="[c2]"></a>cmdLine_OptionC</STRONG> (Thumb, 222 bytes, Stack size 48 bytes, cmdline.o(i.cmdLine_OptionC))
+<BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = cmdLine_OptionC &rArr; ST7735_Message &rArr; ST7735_OutString &rArr; ST7735_OutChar &rArr; ST7735_DrawString &rArr; ST7735_DrawCharS &rArr; ST7735_FillRect &rArr; setAddrWindow
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_InUDec
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_InString
@@ -1148,8 +1148,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmdLine_Start
 </UL>
 
-<P><STRONG><a name="[c3]"></a>cmdLine_Start</STRONG> (Thumb, 250 bytes, Stack size 8 bytes, cmdline.o(i.cmdLine_Start))
-<BR><BR>[Stack]<UL><LI>Max Depth = 256<LI>Call Chain = cmdLine_Start &rArr; cmdLine_OptionC &rArr; ST7735_Message &rArr; ST7735_OutString &rArr; ST7735_OutChar &rArr; ST7735_DrawString &rArr; ST7735_DrawCharS &rArr; ST7735_FillRect &rArr; setAddrWindow
+<P><STRONG><a name="[c3]"></a>cmdLine_Start</STRONG> (Thumb, 170 bytes, Stack size 8 bytes, cmdline.o(i.cmdLine_Start))
+<BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = cmdLine_Start &rArr; cmdLine_OptionC &rArr; ST7735_Message &rArr; ST7735_OutString &rArr; ST7735_OutChar &rArr; ST7735_DrawString &rArr; ST7735_DrawCharS &rArr; ST7735_FillRect &rArr; setAddrWindow
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmdLine_OptionC
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmdLine_OptionB
@@ -1176,7 +1176,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[8b]"></a>main</STRONG> (Thumb, 54 bytes, Stack size 0 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 256 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 248 + Unknown Stack Size
 <LI>Call Chain = main &rArr; cmdLine_Start &rArr; cmdLine_OptionC &rArr; ST7735_Message &rArr; ST7735_OutString &rArr; ST7735_OutChar &rArr; ST7735_DrawString &rArr; ST7735_DrawCharS &rArr; ST7735_FillRect &rArr; setAddrWindow
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmdLine_Start
