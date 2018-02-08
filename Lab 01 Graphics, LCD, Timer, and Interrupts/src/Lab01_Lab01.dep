@@ -20,7 +20,7 @@ I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C87C24)
 I (ST7735.h)(0x5A7A4FB1)
 I (../inc/tm4c123gh6pm.h)(0x5A7A449F)
 I (UART.h)(0x5A7A44A0)
-F (.\ADC.c)(0x5A7BAD86)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\adc.o --omf_browse .\adc.crf --depend .\adc.d)
+F (.\ADC.c)(0x5A7CBBC9)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\adc.o --omf_browse .\adc.crf --depend .\adc.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C87C24)
 I (../inc/tm4c123gh6pm.h)(0x5A7A449F)
 I (FIFO.h)(0x5A7A44A0)

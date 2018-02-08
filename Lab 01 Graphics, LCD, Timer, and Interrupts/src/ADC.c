@@ -258,6 +258,7 @@ void ADC_Open(uint32_t channelNum){
       SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R1; break;
     default: return;              //    0 to 11 are valid channels on the LM4F120
   }
+	SYSCTL_RCGCADC_R |= 0x01;     // activate ADC0
   delay = SYSCTL_RCGCGPIO_R;      // 2) allow time for clock to stabilize
   delay = SYSCTL_RCGCGPIO_R;
   switch(channelNum){
@@ -334,21 +335,17 @@ void ADC_Open(uint32_t channelNum){
       GPIO_PORTB_AMSEL_R |= 0x20; // 6.11) enable analog functionality on PB5
       break;
   }		
-	DisableInterrupts();
-  SYSCTL_RCGCADC_R |= 0x01;     // activate ADC0
-	delay = SYSCTL_RCGCADC_R;
-	delay = SYSCTL_RCGCADC_R;
-	ADC0_PC_R = 0x01;         // configure for 125K samples/sec
-  ADC0_SSPRI_R = 0x3210;    // sequencer 0 is highest, sequencer 3 is lowest
-  ADC0_ACTSS_R &= ~0x08;    // disable sample sequencer 3
-  ADC0_EMUX_R = (ADC0_EMUX_R&0xFFFF0FFF)+0x5000; // timer trigger event
-	//ADC0_EMUX_R &= ~0xF000;         // 10) seq3 is software trigger
-  ADC0_SSMUX3_R = channelNum;
-  ADC0_SSCTL3_R = 0x06;          // set flag and end                       
-  ADC0_IM_R |= 0x08;             // enable SS3 interrupts
-	//ADC0_IM_R &= ~0x0008;           // 13) disable SS3 interrupts
-  ADC0_ACTSS_R |= 0x08;          // enable sample sequencer 3
-	EnableInterrupts();
+	
+	ADC0_PC_R &= ~0xF;              // 7) clear max sample rate field
+  ADC0_PC_R |= 0x1;               //    configure for 125K samples/sec
+  ADC0_SSPRI_R = 0x0123;          // 8) Sequencer 3 is highest priority
+  ADC0_ACTSS_R &= ~0x0008;        // 9) disable sample sequencer 3
+  ADC0_EMUX_R &= ~0xF000;         // 10) seq3 is software trigger
+  ADC0_SSMUX3_R &= ~0x000F;       // 11) clear SS3 field
+  ADC0_SSMUX3_R += 9;             //    set channel
+  ADC0_SSCTL3_R = 0x0006;         // 12) no TS0 D0, yes IE0 END0
+  ADC0_IM_R &= ~0x0008;           // 13) disable SS3 interrupts
+  ADC0_ACTSS_R |= 0x0008;         // 14) enable sample sequencer 3
 }
 
 ///----------ADC_In------------
