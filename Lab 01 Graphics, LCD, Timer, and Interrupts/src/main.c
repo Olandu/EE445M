@@ -48,8 +48,7 @@ void dummy(void) {
 }
 
 int main(){
-	 PLL_Init(Bus50MHz);
-   ADC0_InitTimer0ATriggerSeq3(1,0);
+	 PLL_Init(Bus80MHz);
 	 SysTick_Init();             // initialize SysTick timer
 	 GPIO_PortF_Init();
 	 LCD_Init();

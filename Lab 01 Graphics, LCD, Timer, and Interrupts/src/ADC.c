@@ -214,14 +214,14 @@ void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period){
   SYSCTL_RCGCADC_R |= 0x01;     // activate ADC0 
   SYSCTL_RCGCTIMER_R |= 0x04;   // activate timer0 
   delay = SYSCTL_RCGCTIMER_R;   // allow time to finish activating
-  TIMER2_CTL_R = 0x00000000;    // disable timer0A during setup
-  TIMER2_CTL_R |= 0x00000020;   // enable timer0A trigger to ADC
+  TIMER2_CTL_R = 0x00000000;    // disable timer2A during setup
+  TIMER2_CTL_R |= 0x00000020;   // enable timer2A trigger to ADC
   TIMER2_CFG_R = 0;             // configure for 32-bit timer mode
   TIMER2_TAMR_R = 0x00000002;   // configure for periodic mode, default down-count settings
   TIMER2_TAPR_R = 0;            // prescale value for trigger
   TIMER2_TAILR_R = period-1;    // start value for trigger
   TIMER2_IMR_R = 0x00000000;    // disable all interrupts
-  TIMER2_CTL_R |= 0x00000001;   // enable timer0A 32-b, periodic, no interrupts
+  TIMER2_CTL_R |= 0x00000001;   // enable timer2A 32-b, periodic, no interrupts
   ADC0_PC_R = 0x01;         // configure for 125K samples/sec
   ADC0_SSPRI_R = 0x3210;    // sequencer 0 is highest, sequencer 3 is lowest
   ADC0_ACTSS_R &= ~0x08;    // disable sample sequencer 3
@@ -231,47 +231,8 @@ void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period){
   ADC0_IM_R |= 0x08;             // enable SS3 interrupts
   ADC0_ACTSS_R |= 0x08;          // enable sample sequencer 3
   NVIC_PRI4_R = (NVIC_PRI4_R&0xFFFF00FF)|0x00004000; //priority 2
-  //NVIC_EN0_R = 1<<17;              // enable interrupt 17 in NVIC
-
-}
-void ADC0_InitTimer0ATriggerSeq3PD3(uint32_t period){
-  volatile uint32_t delay;
-  SYSCTL_RCGCADC_R |= 0x01;     // 1) activate ADC0 
-  SYSCTL_RCGCGPIO_R |= 0x08;    // Port D clock
-  delay = SYSCTL_RCGCGPIO_R;    // allow time for clock to stabilize
-  GPIO_PORTD_DIR_R &= ~0x08;    // make PD3 input
-  GPIO_PORTD_AFSEL_R |= 0x08;   // enable alternate function on PD3
-  GPIO_PORTD_DEN_R &= ~0x08;    // disable digital I/O on PD3
-  GPIO_PORTD_AMSEL_R |= 0x08;   // enable analog functionality on PD3
-  ADC0_PC_R = 0x01;             // 2) configure for 125K samples/sec
-  ADC0_SSPRI_R = 0x3210;        // 3) sequencer 0 is highest, sequencer 3 is lowest
-  SYSCTL_RCGCTIMER_R |= 0x01;   // 4) activate timer0 
-  delay = SYSCTL_RCGCGPIO_R;
-  TIMER0_CTL_R = 0x00000000;    // disable timer0A during setup
-  TIMER0_CTL_R |= 0x00000020;   // enable timer0A trigger to ADC
-  TIMER0_CFG_R = 0;             // configure for 32-bit timer mode
-  TIMER0_TAMR_R = 0x00000002;   // configure for periodic mode, default down-count settings
-  TIMER0_TAPR_R = 0;            // prescale value for trigger
-  TIMER0_TAILR_R = period-1;    // start value for trigger
-  TIMER0_IMR_R = 0x00000000;    // disable all interrupts
-  TIMER0_CTL_R |= 0x00000001;   // enable timer0A 32-b, periodic, no interrupts
-  ADC0_ACTSS_R &= ~0x08;        // 5) disable sample sequencer 3
-  ADC0_EMUX_R = (ADC0_EMUX_R&0xFFFF0FFF)+0x5000; // 6) timer trigger event
-  ADC0_SSMUX3_R = 4;            // 7) PD4 is channel 4
-  ADC0_SSCTL3_R = 0x06;         // 8) set flag and end                       
-  ADC0_IM_R |= 0x08;            // 9) enable SS3 interrupts
-  ADC0_ACTSS_R |= 0x08;         // 10) enable sample sequencer 3
-  NVIC_PRI4_R = (NVIC_PRI4_R&0xFFFF00FF)|0x00004000; // 11)priority 2
-  NVIC_EN0_R = 1<<17;           // 12) enable interrupt 17 in NVIC
-
-}
-
-
-
-volatile uint32_t ADCvalue;
-void ADC0Seq3_Handler(void){
-  ADC0_ISC_R = 0x08;          // acknowledge ADC sequence 3 completion
-  ADCvalue = ADC0_SSFIFO3_R; // pass 12-bit result to foreground
+  NVIC_EN0_R = 1<<17;              // enable interrupt 17 in NVIC
+	EnableInterrupts();
 }
 
 ///----------ADC_Open----------
@@ -372,32 +333,41 @@ void ADC_Open(uint32_t channelNum){
       GPIO_PORTB_DEN_R &= ~0x20;  // 5.11) disable digital I/O on PB5
       GPIO_PORTB_AMSEL_R |= 0x20; // 6.11) enable analog functionality on PB5
       break;
-  }								// 
-	 ADC0_SSMUX3_R = channelNum;
-
+  }		
+	DisableInterrupts();
+  SYSCTL_RCGCADC_R |= 0x01;     // activate ADC0
+	delay = SYSCTL_RCGCADC_R;
+	delay = SYSCTL_RCGCADC_R;
+	ADC0_PC_R = 0x01;         // configure for 125K samples/sec
+  ADC0_SSPRI_R = 0x3210;    // sequencer 0 is highest, sequencer 3 is lowest
+  ADC0_ACTSS_R &= ~0x08;    // disable sample sequencer 3
+  ADC0_EMUX_R = (ADC0_EMUX_R&0xFFFF0FFF)+0x5000; // timer trigger event
+	//ADC0_EMUX_R &= ~0xF000;         // 10) seq3 is software trigger
+  ADC0_SSMUX3_R = channelNum;
+  ADC0_SSCTL3_R = 0x06;          // set flag and end                       
+  ADC0_IM_R |= 0x08;             // enable SS3 interrupts
+	//ADC0_IM_R &= ~0x0008;           // 13) disable SS3 interrupts
+  ADC0_ACTSS_R |= 0x08;          // enable sample sequencer 3
+	EnableInterrupts();
 }
 
 ///----------ADC_In------------
 /// <returns> Result of a single ADC sample
 uint16_t ADC_In (void){ 	// Get the current ADC value
 	unsigned long result;
-	
 	ADC0_PSSI_R = 0x0008;            // 1) initiate SS3
   while((ADC0_RIS_R&0x08)==0){};   // 2) wait for conversion done
   result = ADC0_SSFIFO3_R&0xFFF;   // 3) read result
-  ADC0_ISC_R = 0x0008;             // 4) acknowledge completion
-	
+  ADC0_ISC_R = 0x0008;             // 4) acknowledge completion	
   return result;
 }
 
-#define CONVERSION_COMPLETE 0
-///----------ADC_Status--------
-/// <returns> Status of ADC Conversion; 0 -> complete , 1->not complete
-int ADC_Status(void){
-	if(ADC0_ISC_R == 0x0008){
-		return CONVERSION_COMPLETE;
-	}
-	return 1; 
+volatile uint8_t CONVERSION_COMPLETE;
+volatile uint32_t ADCvalue;
+void ADC0Seq3_Handler(void){
+  ADC0_ISC_R = 0x08;          // acknowledge ADC sequence 3 completion
+  ADCvalue = ADC0_SSFIFO3_R; // pass 12-bit result to foreground
+	CONVERSION_COMPLETE = 1; // conversion is complete
 }
 
 ///----------ADC_Collect--------
@@ -410,16 +380,16 @@ int ADC_Status(void){
 ///	<param name = "buffer"> array to store sampled data </param>
 /// <param name = "numberOfSamples"> specifies the size of the sample to collect from the ADC </param>
 void ADC_Collect (uint32_t channelNum, uint32_t fs, int32_t buffer[], uint32_t numberOfSamples){
-	int idx = 0; uint32_t period = 0;
-	ADC_Open(channelNum);				// Open channel
-	NVIC_EN0_R = 1<<17;         // enable ADC_Seq3 interrupt
-	period = 50000000/fs;
-	TIMER2_TAILR_R = period - 1;    // Change sampling rate
+	int idx = 0; 
+	uint32_t period = 50000000/fs;
+  ADC0_InitTimer0ATriggerSeq3(channelNum,period);
 	while(idx < numberOfSamples){
-		if(ADC_Status() == 0){
-		  buffer[idx] = ADC0_SSFIFO3_R;
+		if(CONVERSION_COMPLETE){
+		  buffer[idx] = ADCvalue;
 		  idx++;
+			CONVERSION_COMPLETE = 0;
 		}
 	}
 	NVIC_DIS0_R = 1<<17;  // disable ADC_Seq3 interrupt
+	TIMER2_CTL_R = 0x00000000;    // disable timer2A
 }

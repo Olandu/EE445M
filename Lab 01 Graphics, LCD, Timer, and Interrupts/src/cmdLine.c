@@ -61,8 +61,15 @@ void cmdLine_OptionB (void){
 		channelNum = UART_InUDec();
 	}
 	OutCRLF(); OutCRLF(); 
-	UART_OutString ("ADC Sampling frequency (Hz): ");
+	UART_OutString ("Choose a sampling frequency between 100 and 10000 inclusive"); OutCRLF(); 
+	UART_OutString ("ADC Sampling frequency(Hz): ");
 	fs = UART_InUDec();
+	while ((fs < 100) || (fs > 10000)){
+		OutCRLF(); OutCRLF(); 
+		UART_OutString ("Invalid frequency. Try again!"); OutCRLF(); 
+		UART_OutString ("ADC Sampling frequency(Hz): ");
+		fs = UART_InUDec();
+	}
 	UART_OutString ("  Hz");
 	OutCRLF(); OutCRLF();
 	UART_OutString ("Number of samples (Max = 1000): ");

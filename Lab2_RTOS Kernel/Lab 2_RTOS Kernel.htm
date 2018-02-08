@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Lab 2_RTOS Kernel.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Lab 2_RTOS Kernel.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Tue Feb 06 18:36:21 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Wed Feb 07 19:21:16 2018
 <BR><P>
 <H3>Maximum Stack Usage =         32 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -21,7 +21,6 @@ Functions with no stack information
  <LI><a href="#[93]">__user_initial_stackheap</a>
  <LI><a href="#[9a]">OS_DisableInterrupts</a>
  <LI><a href="#[c9]">OS_EnableInterrupts</a>
- <LI><a href="#[c]">SysTick_Handler</a>
  <LI><a href="#[b]">PendSV_Handler</a>
  <LI><a href="#[9d]">StartOS</a>
 </UL>
@@ -128,7 +127,7 @@ Function Pointers
  <LI><a href="#[47]">SSI3_Handler</a> from startup_tm4c123.o(RESET) referenced from startup_tm4c123.o(RESET)
  <LI><a href="#[9]">SVC_Handler</a> from startup_tm4c123.o(RESET) referenced from startup_tm4c123.o(RESET)
  <LI><a href="#[29]">SysCtl_Handler</a> from startup_tm4c123.o(RESET) referenced from startup_tm4c123.o(RESET)
- <LI><a href="#[c]">SysTick_Handler</a> from osasm.o(.text) referenced from startup_tm4c123.o(RESET)
+ <LI><a href="#[c]">SysTick_Handler</a> from os.o(i.SysTick_Handler) referenced from startup_tm4c123.o(RESET)
  <LI><a href="#[7f]">Thread1b</a> from lab2.o(i.Thread1b) referenced from lab2.o(i.main)
  <LI><a href="#[80]">Thread2b</a> from lab2.o(i.Thread2b) referenced from lab2.o(i.main)
  <LI><a href="#[81]">Thread3b</a> from lab2.o(i.Thread3b) referenced from lab2.o(i.main)
@@ -723,9 +722,6 @@ Global Symbols
 
 <P><STRONG><a name="[c9]"></a>OS_EnableInterrupts</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, osasm.o(.text), UNUSED)
 
-<P><STRONG><a name="[c]"></a>SysTick_Handler</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, osasm.o(.text))
-<BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
-</UL>
 <P><STRONG><a name="[b]"></a>PendSV_Handler</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, osasm.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
 </UL>
@@ -826,6 +822,9 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_AddThread
 </UL>
 
+<P><STRONG><a name="[c]"></a>SysTick_Handler</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, os.o(i.SysTick_Handler))
+<BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
+</UL>
 <P><STRONG><a name="[7f]"></a>Thread1b</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, lab2.o(i.Thread1b))
 <BR>[Address Reference Count : 1]<UL><LI> lab2.o(i.main)
 </UL>

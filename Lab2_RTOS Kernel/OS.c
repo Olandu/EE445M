@@ -62,6 +62,9 @@ void OS_Init(void){
   NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0x00FFFFFF)|0xE0000000; // priority 7
 }
 
+void SysTick_Handler(void){
+	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
+}
 
 void SetInitialStack(int i){
   tcbs[i].sp = &Stacks[i][STACKSIZE-16]; // thread stack pointer
@@ -139,7 +142,7 @@ void OS_bSignal(Sema4Type *semaPt){
 // In Lab 3, you can ignore the stackSize fields
 unsigned long NumThreads = 0;
 int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priority){
-	if(NumThreads == NUMTHREADS){
+	if(NumThreads >= NUMTHREADS){
 		return 0; // thread can not be added
 	}
 	int32_t status;
@@ -249,6 +252,7 @@ void OS_Kill(void){
 // input:  none
 // output: none
 void OS_Suspend(void){
+	// NVIC_ST_CURRENT_R = 0;      // any write to current clears it
 	 NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
 }
  

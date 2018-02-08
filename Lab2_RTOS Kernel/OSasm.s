@@ -32,10 +32,9 @@
         EXPORT  OS_DisableInterrupts
         EXPORT  OS_EnableInterrupts
         EXPORT  StartOS
-        EXPORT  SysTick_Handler
 		EXPORT  PendSV_Handler
 			
-;NVIC_INT_CTRL   EQU     0xE000ED04                              ; Interrupt control state register.
+NVIC_INT_CTRL   EQU     0xE000ED04                              ; Interrupt control state register.
 NVIC_SYSPRI14   EQU     0xE000ED22                              ; PendSV priority register (position 14).
 NVIC_SYSPRI15   EQU     0xE000ED23                              ; Systick priority register (position 15).
 NVIC_LEVEL14    EQU           0xEF                              ; Systick priority value (second lowest).
@@ -54,19 +53,6 @@ OS_EnableInterrupts
         CPSIE   I
         BX      LR
 
-
-SysTick_Handler                ; 1) Saves R0-R3,R12,LR,PC,PSR
-    CPSID   I                  ; 2) Prevent interrupt during switch
-    PUSH    {R4-R11}           ; 3) Save remaining regs r4-11
-    LDR     R0, =RunPt         ; 4) R0=pointer to RunPt, old thread
-    LDR     R1, [R0]           ;    R1 = RunPt
-    STR     SP, [R1]           ; 5) Save SP into TCB
-    LDR     R1, [R1,#4]        ; 6) R1 = RunPt->next
-    STR     R1, [R0]           ;    RunPt = R1
-    LDR     SP, [R1]           ; 7) new thread SP; SP = RunPt->sp;
-    POP     {R4-R11}           ; 8) restore regs r4-11
-    CPSIE   I                  ; 9) tasks run with interrupts enabled
-    BX      LR                 ; 10) restore R0-R3,R12,LR,PC,PSR
 
 PendSV_Handler
     CPSID   I                  ; Prevent interruption during context switch
