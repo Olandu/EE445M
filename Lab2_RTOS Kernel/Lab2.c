@@ -63,6 +63,10 @@ unsigned short MaxWithI1;
 #define PE1  (*((volatile unsigned long *)0x40024008))
 #define PE2  (*((volatile unsigned long *)0x40024010))
 #define PE3  (*((volatile unsigned long *)0x40024020))
+#define PF0                     (*((volatile uint32_t *)0x40025004))
+#define PF1                     (*((volatile uint32_t *)0x40025008))
+#define PF2                     (*((volatile uint32_t *)0x40025010))
+
 
 void PortE_Init(void){ 
   SYSCTL_RCGCGPIO_R |= 0x10;       // activate port E
@@ -73,6 +77,20 @@ void PortE_Init(void){
   GPIO_PORTE_PCTL_R = ~0x0000FFFF;
   GPIO_PORTE_AMSEL_R &= ~0x0F;;      // disable analog functionality on PF
 }
+
+void GPIO_PortF_Init(void){   
+	
+  SYSCTL_RCGCGPIO_R |= 0x20;     // 1) activate Port F
+  while((SYSCTL_PRGPIO_R & 0x20)!=0x20){}; // wait to finish activating     
+  GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;// 2a) unlock GPIO Port F Commit Register
+  GPIO_PORTF_CR_R = 0x0F;        // 2b) enable commit for PF0-PF3    
+  GPIO_PORTF_AMSEL_R &= ~0x0F;   // 3) disable analog functionality on PF0-PF3     
+  GPIO_PORTF_PCTL_R &= ~0x000FFFF;// 4) configure PF0-PF3 as GPIO
+  GPIO_PORTF_DIR_R = 0x0F;       // 5) make PF0-3 output                       
+  GPIO_PORTF_AFSEL_R &= ~0x0F;        // 6) disable alt funct on PF0-PF3
+  GPIO_PORTF_DEN_R = 0x0F;       // 7) enable digital I/O on PF0-PF3
+}
+
 //------------------Task 1--------------------------------
 // 2 kHz sampling ADC channel 1, using software start trigger
 // background thread executed at 2 kHz
@@ -367,7 +385,8 @@ unsigned long Count5;   // number of times thread5 loops
 void Thread1(void){
   Count1 = 0;          
   for(;;){
-    PE0 ^= 0x01;       // heartbeat
+    PF0 ^= 0x01;       // heartbeat
+		PE0 ^= 0x01;
     Count1++;
     OS_Suspend();      // cooperative multitasking
   }
@@ -375,7 +394,8 @@ void Thread1(void){
 void Thread2(void){
   Count2 = 0;          
   for(;;){
-    PE1 ^= 0x02;       // heartbeat
+    PF1 ^= 0x02;       // heartbeat
+		PE1 ^= 0x02;
     Count2++;
     OS_Suspend();      // cooperative multitasking
   }
@@ -383,16 +403,18 @@ void Thread2(void){
 void Thread3(void){
   Count3 = 0;          
   for(;;){
-    PE2 ^= 0x04;       // heartbeat
-   // PE3 ^= 0x08;
+    PF2 ^= 0x04;       // heartbeat
+    PE2 ^= 0x04;
     Count3++;
     OS_Suspend();      // cooperative multitasking
   }
 }
 
-int Testmain1(void){  // Testmain1
+
+int main(void){  // Testmain1
   OS_Init();          // initialize, disable interrupts
   PortE_Init();       // profile user threads
+	GPIO_PortF_Init();
   NumCreated = 0 ;
   NumCreated += OS_AddThread(&Thread1,128,1); 
   NumCreated += OS_AddThread(&Thread2,128,2); 
@@ -431,7 +453,7 @@ void Thread3b(void){
     Count3++;
   }
 }
-int main(void){  // Testmain2
+int Testmain2(void){  // Testmain2
   OS_Init();           // initialize, disable interrupts
   PortE_Init();       // profile user threads
   NumCreated = 0 ;

@@ -49,22 +49,6 @@ tcbType tcbs[NUMTHREADS];
 tcbType *RunPt;
 int32_t Stacks[NUMTHREADS][STACKSIZE];
 
-// ******** OS_Init ************
-// initialize operating system, disable interrupts until OS_Launch
-// initialize OS controlled I/O: serial, ADC, systick, LaunchPad I/O and timers 
-// input:  none
-// output: none
-void OS_Init(void){
-	OS_DisableInterrupts();
-  PLL_Init(Bus50MHz);         // set processor clock to 50 MHz
-  NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
-  NVIC_ST_CURRENT_R = 0;      // any write to current clears it
-  NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0x00FFFFFF)|0xE0000000; // priority 7
-}
-
-void SysTick_Handler(void){
-	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
-}
 
 void SetInitialStack(int i){
   tcbs[i].sp = &Stacks[i][STACKSIZE-16]; // thread stack pointer
@@ -85,51 +69,51 @@ void SetInitialStack(int i){
   Stacks[i][STACKSIZE-16] = 0x04040404;  // R4
 }
 
-// ******** OS_InitSemaphore ************
-// initialize semaphore 
-// input:  pointer to a semaphore
+
+// ******** OS_Init ************
+// initialize operating system, disable interrupts until OS_Launch
+// initialize OS controlled I/O: serial, ADC, systick, LaunchPad I/O and timers 
+// input:  none
 // output: none
-void OS_InitSemaphore(Sema4Type *semaPt, long value){
-	
+void OS_Init(void){
+	OS_DisableInterrupts();
+  PLL_Init(Bus80MHz);         // set processor clock to 50 MHz
+  NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
+  NVIC_ST_CURRENT_R = 0;      // any write to current clears it
+  NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0x00FFFFFF)|0xE0000000; // priority 7
 }
 
-// ******** OS_Wait ************
-// decrement semaphore 
-// Lab2 spinlock
-// Lab3 block if less than zero
-// input:  pointer to a counting semaphore
-// output: none
-void OS_Wait(Sema4Type *semaPt){
-	
+void SysTick_Handler(void){
+	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
+	//NVIC_INT_CTRL_R = 0x02000000;    // Clear PendSV
 }
 
-// ******** OS_Signal ************
-// increment semaphore 
-// Lab2 spinlock
-// Lab3 wakeup blocked thread if appropriate 
-// input:  pointer to a counting semaphore
-// output: none
-void OS_Signal(Sema4Type *semaPt){
-	
+//******** OS_Launch *************** 
+// start the scheduler, enable interrupts
+// Inputs: number of 12.5ns clock cycles for each time slice
+//         you may select the units of this parameter
+// Outputs: none (does not return)
+// In Lab 2, you can ignore the theTimeSlice field
+// In Lab 3, you should implement the user-defined TimeSlice field
+// It is ok to limit the range of theTimeSlice to match the 24-bit SysTick
+void OS_Launch(unsigned long theTimeSlice){
+	NVIC_ST_RELOAD_R = theTimeSlice - 1; // reload value
+  NVIC_ST_CTRL_R = 0x00000007; // enable, core clock and interrupt arm
+	StartOS();
 }
 
-// ******** OS_bWait ************
-// Lab2 spinlock, set to 0
-// Lab3 block if less than zero
-// input:  pointer to a binary semaphore
+// ******** OS_Suspend ************
+// suspend execution of currently running thread
+// scheduler will choose another thread to execute
+// Can be used to implement cooperative multitasking 
+// Same function as OS_Sleep(0)
+// input:  none
 // output: none
-void OS_bWait(Sema4Type *semaPt){
-	
+void OS_Suspend(void){
+	 NVIC_ST_CURRENT_R = 0;      // any write to current clears it
+	 //NVIC_INT_CTRL_R = 0x10000000;    // set PendSV (see p9 160 of the datasheet)
+	 NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
 }
-
-// ******** OS_bSignal ************
-// Lab2 spinlock, set to 1
-// Lab3 wakeup blocked thread if appropriate 
-// input:  pointer to a binary semaphore
-// output: none
-void OS_bSignal(Sema4Type *semaPt){
-
-}	
 
 //******** OS_AddThread *************** 
 // add a foregound thread to the scheduler
@@ -226,6 +210,54 @@ int OS_AddSW2Task(void(*task)(void), unsigned long priority){
 	return 0; //needs to be changed
 }
 
+
+// ******** OS_InitSemaphore ************
+// initialize semaphore 
+// input:  pointer to a semaphore
+// output: none
+void OS_InitSemaphore(Sema4Type *semaPt, long value){
+	
+}
+
+// ******** OS_Wait ************
+// decrement semaphore 
+// Lab2 spinlock
+// Lab3 block if less than zero
+// input:  pointer to a counting semaphore
+// output: none
+void OS_Wait(Sema4Type *semaPt){
+	
+}
+
+// ******** OS_Signal ************
+// increment semaphore 
+// Lab2 spinlock
+// Lab3 wakeup blocked thread if appropriate 
+// input:  pointer to a counting semaphore
+// output: none
+void OS_Signal(Sema4Type *semaPt){
+	
+}
+
+// ******** OS_bWait ************
+// Lab2 spinlock, set to 0
+// Lab3 block if less than zero
+// input:  pointer to a binary semaphore
+// output: none
+void OS_bWait(Sema4Type *semaPt){
+	
+}
+
+// ******** OS_bSignal ************
+// Lab2 spinlock, set to 1
+// Lab3 wakeup blocked thread if appropriate 
+// input:  pointer to a binary semaphore
+// output: none
+void OS_bSignal(Sema4Type *semaPt){
+
+}	
+
+
 // ******** OS_Sleep ************
 // place this thread into a dormant state
 // input:  number of msec to sleep
@@ -242,18 +274,6 @@ void OS_Sleep(unsigned long sleepTime){
 // output: none
 void OS_Kill(void){
 	
-}
-
-// ******** OS_Suspend ************
-// suspend execution of currently running thread
-// scheduler will choose another thread to execute
-// Can be used to implement cooperative multitasking 
-// Same function as OS_Sleep(0)
-// input:  none
-// output: none
-void OS_Suspend(void){
-	// NVIC_ST_CURRENT_R = 0;      // any write to current clears it
-	 NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
 }
  
 // ******** OS_Fifo_Init ************
@@ -376,17 +396,4 @@ unsigned long OS_MsTime(void){
 	return time_ms;
 }
 
-//******** OS_Launch *************** 
-// start the scheduler, enable interrupts
-// Inputs: number of 12.5ns clock cycles for each time slice
-//         you may select the units of this parameter
-// Outputs: none (does not return)
-// In Lab 2, you can ignore the theTimeSlice field
-// In Lab 3, you should implement the user-defined TimeSlice field
-// It is ok to limit the range of theTimeSlice to match the 24-bit SysTick
-void OS_Launch(unsigned long theTimeSlice){
-	NVIC_ST_RELOAD_R = theTimeSlice - 1; // reload value
-  NVIC_ST_CTRL_R = 0x00000007; // enable, core clock and interrupt arm
-	StartOS();
-}
 

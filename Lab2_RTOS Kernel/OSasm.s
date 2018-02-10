@@ -33,15 +33,7 @@
         EXPORT  OS_EnableInterrupts
         EXPORT  StartOS
 		EXPORT  PendSV_Handler
-			
-NVIC_INT_CTRL   EQU     0xE000ED04                              ; Interrupt control state register.
-NVIC_SYSPRI14   EQU     0xE000ED22                              ; PendSV priority register (position 14).
-NVIC_SYSPRI15   EQU     0xE000ED23                              ; Systick priority register (position 15).
-NVIC_LEVEL14    EQU           0xEF                              ; Systick priority value (second lowest).
-NVIC_LEVEL15    EQU           0xFF                              ; PendSV priority value (lowest).
-NVIC_PENDSVSET  EQU     0x10000000                              ; Value to trigger PendSV exception.
-NVIC_ST_RELOAD  EQU     0xE000E014
-NVIC_ST_CURRENT EQU     0xE000E018
+
 
 
 OS_DisableInterrupts
