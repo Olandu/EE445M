@@ -360,7 +360,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--C99</MiscControls>
-              <Define></Define>
+              <Define>rvmdk PART_LM4F120H5QR</Define>
               <Undefine></Undefine>
               <IncludePath>..;..\..\..</IncludePath>
             </VariousControls>
@@ -425,15 +425,50 @@
               <FileType>2</FileType>
               <FilePath>.\OSasm.s</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Library</GroupName>
-          <Files>
             <File>
-              <FileName>driverlib.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\ValvanoWareTM4C123\driverlib\rvmdk\driverlib.lib</FilePath>
+              <FileName>cr4_fft_64_stm32.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\cr4_fft_64_stm32.s</FilePath>
+            </File>
+            <File>
+              <FileName>PID_stm32.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\PID_stm32.s</FilePath>
+            </File>
+            <File>
+              <FileName>ADC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>Interpreter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Interpreter.c</FilePath>
+            </File>
+            <File>
+              <FileName>PLL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\PLL.c</FilePath>
+            </File>
+            <File>
+              <FileName>ST7735.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ST7735.c</FilePath>
+            </File>
+            <File>
+              <FileName>UART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UART.c</FilePath>
+            </File>
+            <File>
+              <FileName>ADC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\ADC.h</FilePath>
+            </File>
+            <File>
+              <FileName>FIFO.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\FIFO.h</FilePath>
             </File>
           </Files>
         </Group>

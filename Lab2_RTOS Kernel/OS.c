@@ -215,8 +215,8 @@ int OS_AddSW2Task(void(*task)(void), unsigned long priority){
 // initialize semaphore 
 // input:  pointer to a semaphore
 // output: none
-void OS_InitSemaphore(Sema4Type *semaPt, long value){
-	
+void OS_InitSemaphore(Sema4Type *semaPt, long value){	//Occurs once at the start
+	(*semaPt).Value = value;
 }
 
 // ******** OS_Wait ************
@@ -225,8 +225,14 @@ void OS_InitSemaphore(Sema4Type *semaPt, long value){
 // Lab3 block if less than zero
 // input:  pointer to a counting semaphore
 // output: none
-void OS_Wait(Sema4Type *semaPt){
-	
+void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
+	OS_DisableInterrupts();
+	while ((*semaPt).Value == 0){ // Spin-lock...does nothing until the semaphore counter goes above 0
+		OS_EnableInterrupts();			// Allow interrupts to occur while the thread is spinning to not let the software hang
+		OS_DisableInterrupts();
+	}
+	(*semaPt).Value = (*semaPt).Value - 1;
+	OS_EnableInterrupts();
 }
 
 // ******** OS_Signal ************
@@ -235,8 +241,10 @@ void OS_Wait(Sema4Type *semaPt){
 // Lab3 wakeup blocked thread if appropriate 
 // input:  pointer to a counting semaphore
 // output: none
-void OS_Signal(Sema4Type *semaPt){
-	
+void OS_Signal(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
+ int32_t status = StartCritical();
+ (*semaPt).Value++;
+	EndCritical(status);
 }
 
 // ******** OS_bWait ************
@@ -245,7 +253,13 @@ void OS_Signal(Sema4Type *semaPt){
 // input:  pointer to a binary semaphore
 // output: none
 void OS_bWait(Sema4Type *semaPt){
-	
+	OS_DisableInterrupts();
+	while((*semaPt).Value == 0){
+		OS_EnableInterrupts();
+		OS_DisableInterrupts();
+	}
+	(*semaPt).Value = 0;
+	OS_EnableInterrupts();
 }
 
 // ******** OS_bSignal ************
@@ -254,7 +268,9 @@ void OS_bWait(Sema4Type *semaPt){
 // input:  pointer to a binary semaphore
 // output: none
 void OS_bSignal(Sema4Type *semaPt){
-
+	int32_t status = StartCritical();
+	(*semaPt).Value = 1;
+	EndCritical(status);
 }	
 
 
