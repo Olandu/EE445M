@@ -29,6 +29,7 @@
         PRESERVE8
 
         EXTERN  RunPt            ; currently running thread
+		EXTERN  NextRunPt        ; point to next thread to run
         EXPORT  OS_DisableInterrupts
         EXPORT  OS_EnableInterrupts
         EXPORT  StartOS
@@ -52,8 +53,12 @@ PendSV_Handler
     LDR     R0, =RunPt         ; R0=pointer to RunPt, old thread
     LDR     R1, [R0]		   ; RunPt->stackPointer = SP;
     STR     SP, [R1]           ; save SP of process being switched out
-    LDR     R1, [R1,#4]        ; 6) R1 = RunPt->next
+	
+	LDR		R1, =NextRunPt
+	LDR		R1,[R1]			   ; R1 = NextRunPt
+    ;LDR     R1, [R1,#4]        ; 6) R1 = RunPt->next
     STR     R1, [R0]           ;    RunPt = R1
+	
     LDR     SP, [R1]           ; 7) new thread SP; SP = RunPt->sp;
     POP     {R4-R11}           ; restore regs r4-11 
     CPSIE   I				   ; tasks run with I=0

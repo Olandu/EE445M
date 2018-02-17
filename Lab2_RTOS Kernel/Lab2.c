@@ -411,12 +411,12 @@ void Thread3(void){
 }
 
 
-int main(void){  // Testmain1
+int Testmain1(void){  // Testmain1
   OS_Init();          // initialize, disable interrupts
   PortE_Init();       // profile user threads
 	GPIO_PortF_Init();
   NumCreated = 0 ;
-  NumCreated += OS_AddThread(&Thread1,128,1); 
+	NumCreated += OS_AddThread(&Thread1,128,1); 
   NumCreated += OS_AddThread(&Thread2,128,2); 
   NumCreated += OS_AddThread(&Thread3,128,3); 
   // Count1 Count2 Count3 should be equal or off by one at all times
@@ -519,7 +519,7 @@ void BackgroundThread5c(void){   // called when Select button pushed
   NumCreated += OS_AddThread(&Thread4c,128,3); 
 }
       
-int Testmain3(void){   // Testmain3
+int main(void){   // Testmain3
   Count4 = 0;          
   OS_Init();           // initialize, disable interrupts
 // Count2 + Count5 should equal Count1
