@@ -35,8 +35,13 @@ void EndCritical(int32_t primask);
 void StartOS(void);
 
 
+//function prototypes in os.c
+void OS_SysTime_Init(void);
+
+#define OS_SysTimeReload   0xFFFFFFFF
 #define NUMTHREADS  10        // maximum number of threads
 #define STACKSIZE   128       // number of 32-bit words in stack
+
 struct tcb{
   int32_t *sp;                // pointer to stack (valid for threads not running
   struct tcb *next;           // linked-list pointer
@@ -51,7 +56,7 @@ tcbType *RunPt;
 tcbType *NextRunPt;
 int32_t Stacks[NUMTHREADS][STACKSIZE];
 
-int32_t free_tcb[NUMTHREADS] = {-1};
+int32_t free_tcbs[NUMTHREADS]; // free tcbs
 
 void SetInitialStack(int i){
   tcbs[i].sp = &Stacks[i][STACKSIZE-16]; // thread stack pointer
@@ -78,11 +83,13 @@ void SetInitialStack(int i){
 // initialize OS controlled I/O: serial, ADC, systick, LaunchPad I/O and timers 
 // input:  none
 // output: none
-void Timer3_Init(unsigned long period);
 void OS_Init(void){
 	OS_DisableInterrupts();
   PLL_Init(Bus80MHz);         // set processor clock to 50 MHz
-	Timer3_Init(TIME_1MS);
+	for(int i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)
+		free_tcbs[i] = -1;
+	}
+	OS_SysTime_Init();
   NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
   NVIC_ST_CURRENT_R = 0;      // any write to current clears it
   NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0x00FFFFFF)|0xE0000000; // priority 7
@@ -117,10 +124,20 @@ void OS_Suspend(void){
 	 NVIC_INT_CTRL_R = 0x04000000; // trigger SysTick
 }
 
+
+// ******** Sleep_Timer ************
+void WakeUpThreads(void){
+	for(int i=0;i<NUMTHREADS;i++){
+		if(tcbs[i].sleep){
+			tcbs[i].sleep--;
+		}
+	}
+}
 // ******** Scheduler ************
 void SysTick_Handler(void){
 	//don't use RunPt here because we want to first save the current sp before switching
 	// this is done in PendSV_handler (OSasm.s)
+	WakeUpThreads();
 	NextRunPt = RunPt->next;
 	while(NextRunPt->sleep){
 		NextRunPt = RunPt->next;
@@ -145,8 +162,8 @@ int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priori
 	// find free tcb
 	int freetcb_idx;
 	for( freetcb_idx = 0; freetcb_idx < NUMTHREADS; freetcb_idx++){
-		if(free_tcb[freetcb_idx] == -1){
-			free_tcb[freetcb_idx] = freetcb_idx;
+		if(free_tcbs[freetcb_idx] == -1){
+			free_tcbs[freetcb_idx] = freetcb_idx;
 			break;
 		}
 	}
@@ -290,14 +307,14 @@ void SW2_init (unsigned long priority){
 }
 
 void SW1_Debounce(void){
-	OS_Sleep(5); // sleep for 5ms
+	OS_Sleep(10); // sleep for 10ms
 	GPIO_PORTF_ICR_R = 0x10;      // (e) clear flag4
   GPIO_PORTF_IM_R |= 0x10;      // (f) arm interrupt on PF4
 	OS_Kill();
 }
 
 void SW2_Debounce(void){
-	OS_Sleep(5); // sleep for 5ms
+	OS_Sleep(10); // sleep for 10ms
 	GPIO_PORTF_ICR_R = 0x01;      // (e) clear flag0
   GPIO_PORTF_IM_R |= 0x01;      // (f) arm interrupt on PF0
 	OS_Kill();
@@ -388,9 +405,10 @@ void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronizatio
 	OS_DisableInterrupts();
 	while ((*semaPt).Value == 0){ // Spin-lock...does nothing until the semaphore counter goes above 0
 		OS_EnableInterrupts();			// Allow interrupts to occur while the thread is spinning to not let the software hang
+		OS_Suspend();
 		OS_DisableInterrupts();
 	}
-	(*semaPt).Value = (*semaPt).Value - 1;
+	(*semaPt).Value --;
 	OS_EnableInterrupts();
 }
 
@@ -432,33 +450,6 @@ void OS_bSignal(Sema4Type *semaPt){
 	EndCritical(status);
 }	
 
-// ******** Sleep_TimerInit ************
-void Timer3_Init(unsigned long period){
-  SYSCTL_RCGCTIMER_R |= 0x08;   // 0) activate TIMER3
-  TIMER3_CTL_R = 0x00000000;    // 1) disable TIMER3A during setup
-  TIMER3_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
-  TIMER3_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
-  TIMER3_TAILR_R = period-1;    // 4) reload value
-  TIMER3_TAPR_R = 0;            // 5) bus clock resolution
-  TIMER3_ICR_R = 0x00000001;    // 6) clear TIMER3A timeout flag
-  TIMER3_IMR_R = 0x00000001;    // 7) arm timeout interrupt
-  NVIC_PRI8_R = (NVIC_PRI8_R&0x00FFFFFF)|0x20000000; // 8) priority 1
-// interrupts enabled in the main program after all devices initialized
-// vector number 51, interrupt number 35
-  NVIC_EN1_R = 1<<(35-32);      // 9) enable IRQ 35 in NVIC
-  TIMER3_CTL_R = 0x00000001;    // 10) enable TIMER3A
-}
-
-void Timer3A_Handler(void){
-  TIMER3_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER3A timeout
-	//decrement count for sleeping threads
-	for(int i=0;i<NUMTHREADS;i++){
-		if(tcbs[i].sleep){
-			tcbs[i].sleep--;
-		}
-	}
-}
-
 // ******** OS_Sleep ************
 // place this thread into a dormant state
 // input:  number of msec to sleep
@@ -466,7 +457,9 @@ void Timer3A_Handler(void){
 // You are free to select the time resolution for this function
 // OS_Sleep(0) implements cooperative multitasking
 void OS_Sleep(unsigned long sleepTime){
+	OS_DisableInterrupts();
 	RunPt ->sleep = sleepTime;
+	OS_EnableInterrupts();
 	OS_Suspend();
 }
 
@@ -476,58 +469,16 @@ void OS_Sleep(unsigned long sleepTime){
 // output: none
 // Note: there is always atleast one thread running
 void OS_Kill(void){
+	OS_DisableInterrupts();
 	tcbType *prev = RunPt;
 	while(prev->next != RunPt){ //traverse linked-list to find previous pointer
 		prev = prev->next;
 	}
 	prev->next = RunPt->next;		//remove current running thread from the circular linked list
-	free_tcb[RunPt->os_tcb_Id] = -1; // remember which tcb is free
+	free_tcbs[RunPt->os_tcb_Id] = -1; // remember which tcb is free
 	NumThreads--;
+	OS_EnableInterrupts();
 	OS_Suspend(); //switch to the next task to run
-}
-
-// ******** OS_Time ************
-// return the system time 
-// Inputs:  none
-// Outputs: time in 12.5ns units, 0 to 4294967295
-// The time resolution should be less than or equal to 1us, and the precision 32 bits
-// It is ok to change the resolution and precision of this function as long as 
-//   this function and OS_TimeDifference have the same resolution and precision 
-unsigned long OS_Time(void){
-	unsigned long OS_Time;
-	return OS_Time;
-}
-
-// ******** OS_TimeDifference ************
-// Calculates difference between two times
-// Inputs:  two times measured with OS_Time
-// Outputs: time difference in 12.5ns units 
-// The time resolution should be less than or equal to 1us, and the precision at least 12 bits
-// It is ok to change the resolution and precision of this function as long as 
-//   this function and OS_Time have the same resolution and precision 
-unsigned long OS_TimeDifference(unsigned long start, unsigned long stop){
-	unsigned long OS_TimeDifference;
-	return OS_TimeDifference;
-}
-
-// ******** OS_ClearMsTime ************
-// sets the system time to zero (from Lab 1)
-// Inputs:  none
-// Outputs: none
-// You are free to change how this works
-void OS_ClearMsTime(void){
-	
-}
-
-// ******** OS_MsTime ************
-// reads the current time in msec (from Lab 1)
-// Inputs:  none
-// Outputs: time in ms units
-// You are free to select the time resolution for this function
-// It is ok to make the resolution to match the first call to OS_AddPeriodicThread
-unsigned long OS_MsTime(void){
-	unsigned long time_ms;
-	return time_ms;
 }
 
 
@@ -605,4 +556,66 @@ void OS_MailBox_Send(unsigned long data){
 unsigned long OS_MailBox_Recv(void){
 	unsigned long Mailbox_Data;
 	return Mailbox_Data;
+}
+
+// ******** OS_Time ************
+// return the system time 
+// Inputs:  none
+// Outputs: time in 12.5ns units, 0 to 4294967295
+// The time resolution should be less than or equal to 1us, and the precision 32 bits
+// It is ok to change the resolution and precision of this function as long as 
+//   this function and OS_TimeDifference have the same resolution and precision 
+unsigned long OS_Time(void){
+	unsigned long OS_Time;
+	return OS_Time;
+}
+
+// ******** OS_TimeDifference ************
+// Calculates difference between two times
+// Inputs:  two times measured with OS_Time
+// Outputs: time difference in 12.5ns units 
+// The time resolution should be less than or equal to 1us, and the precision at least 12 bits
+// It is ok to change the resolution and precision of this function as long as 
+//   this function and OS_Time have the same resolution and precision 
+unsigned long OS_TimeDifference(unsigned long start, unsigned long stop){
+	unsigned long OS_TimeDifference;
+	return OS_TimeDifference;
+}
+
+// ******** OS_ClearMsTime ************
+// sets the system time to zero (from Lab 1)
+// Inputs:  none
+// Outputs: none
+// You are free to change how this works
+void OS_ClearMsTime(void){
+	
+}
+
+// ******** OS_MsTime ************
+// reads the current time in msec (from Lab 1)
+// Inputs:  none
+// Outputs: time in ms units
+// You are free to select the time resolution for this function
+// It is ok to make the resolution to match the first call to OS_AddPeriodicThread
+unsigned long OS_MsTime(void){
+	unsigned long time_ms;
+	return time_ms;
+}
+
+
+//not complete yet
+void OS_SysTime_Init(void){
+  SYSCTL_RCGCTIMER_R |= 0x08;   // 0) activate TIMER3
+  TIMER3_CTL_R = 0x00000000;    // 1) disable TIMER3A during setup
+  TIMER3_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
+  TIMER3_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
+  TIMER3_TAILR_R = OS_SysTimeReload;    // 4) reload value
+  TIMER3_TAPR_R = 0;            // 5) bus clock resolution
+  TIMER3_ICR_R = 0x00000001;    // 6) clear TIMER3A timeout flag
+  TIMER3_IMR_R = 0x00000001;    // 7) arm timeout interrupt
+  NVIC_PRI8_R = (NVIC_PRI8_R&0x00FFFFFF)|0x20000000; // 8) priority 1
+// interrupts enabled in the main program after all devices initialized
+// vector number 51, interrupt number 35
+  //NVIC_EN1_R = 1<<(35-32);      // 9) enable IRQ 35 in NVIC
+  TIMER3_CTL_R = 0x00000001;    // 10) enable TIMER3A
 }
