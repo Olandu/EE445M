@@ -26,6 +26,9 @@
 #define NVIC_INT_CTRL_PENDSTSET 0x04000000  // Set pending SysTick interrupt
 #define NVIC_SYS_PRI3_R         (*((volatile uint32_t *)0xE000ED20))  // Sys. Handlers 12 to 15 Priority
 
+#define PF0                     (*((volatile uint32_t *)0x40025004))
+#define PF4                     (*((volatile uint32_t *)0x40025040))
+
 
 // function definitions in osasm.s
 void OS_DisableInterrupts(void); // Disable interrupts
@@ -39,8 +42,16 @@ void StartOS(void);
 void Timer3_MS(unsigned long period);
 
 #define SysTimeReload   0xFFFFFFFF
+
 #define NUMTHREADS  10        // maximum number of threads
 #define STACKSIZE   128       // number of 32-bit words in stack
+
+#define FSIZE 10    
+uint32_t PutI;      // index of where to put next
+uint32_t GetI;      // index of where to get next
+uint32_t Fifo[FSIZE];
+int32_t CurrentSize;// 0 means FIFO empty, FSIZE means full
+uint32_t LostData;  // number of lost pieces of data
 
 unsigned long SystemTime_Ms;
 
@@ -245,6 +256,7 @@ int OS_AddPeriodicThread(void(*task)(void),
 void (*SW1_EventThread) (void);
 unsigned long SW1Added = 0;
 unsigned long SW1_Priority;
+unsigned long LastPF4;
 void SW1_init (unsigned long priority){
 	SYSCTL_RCGCGPIO_R |= 0x00000020; 	// (a) activate clock for port F
   while((SYSCTL_PRGPIO_R & 0x00000020) == 0){};
@@ -267,13 +279,14 @@ void SW1_init (unsigned long priority){
 	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF); // clear priority
 	NVIC_PRI7_R = (NVIC_PRI7_R | priority); 
   NVIC_EN0_R = 0x40000000;      		// (h) enable interrupt 30 in NVIC 
-	
+	LastPF4 = PF4;
 	SW1_Priority = priority;
 }
 
 void (*SW2_EventThread) (void);
 unsigned long SW2Added = 0;
 unsigned long SW2_Priority;
+unsigned long LastPF0;
 void SW2_init (unsigned long priority){
 	SYSCTL_RCGCGPIO_R |= 0x00000020; 	// (a) activate clock for port F
   while((SYSCTL_PRGPIO_R & 0x00000020) == 0){};
@@ -296,19 +309,21 @@ void SW2_init (unsigned long priority){
 	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF); // clear priority
 	NVIC_PRI7_R = (NVIC_PRI7_R | priority); 
   NVIC_EN0_R = 0x40000000;      		// (h) enable interrupt 30 in NVIC 
-	
+	LastPF0 = PF0;
 	SW2_Priority = priority;
 }
 
 void SW1_Debounce(void){
 	OS_Sleep(10); // sleep for 10ms
+	LastPF4 = PF4;
 	GPIO_PORTF_ICR_R = 0x10;      // (e) clear flag4
   GPIO_PORTF_IM_R |= 0x10;      // (f) arm interrupt on PF4
 	OS_Kill();
 }
 
 void SW2_Debounce(void){
-	OS_Sleep(10); // sleep for 10ms
+	OS_Sleep(10); // sleep for 
+	LastPF0 = PF0;
 	GPIO_PORTF_ICR_R = 0x01;      // (e) clear flag0
   GPIO_PORTF_IM_R |= 0x01;      // (f) arm interrupt on PF0
 	OS_Kill();
@@ -317,12 +332,16 @@ void SW2_Debounce(void){
 void GPIOPortF_Handler(void){
 	if(GPIO_PORTF_RIS_R & 0x10){    // SW1 pressed
 		GPIO_PORTF_IM_R &= ~0x10;     // disarm interrupt on PF4 
-		(*SW1_EventThread)();
+		if(LastPF4){
+			(*SW1_EventThread)();
+		}
 		OS_AddThread(&SW1_Debounce,128,SW1_Priority);
 	}
 	if(GPIO_PORTF_RIS_R & 0x01){		// SW2 pressed
-		GPIO_PORTF_IM_R &= ~0x01;     // disarm interrupt on PF0 
-		(*SW2_EventThread)();
+		GPIO_PORTF_IM_R &= ~0x01;     // disarm interrupt on PF0
+		if(LastPF0){
+			(*SW2_EventThread)();
+		}
 		OS_AddThread(&SW2_Debounce,128,SW2_Priority);
 	}
 }
@@ -502,8 +521,10 @@ void OS_Kill(void){
 	prev->next = RunPt->next;		//remove current running thread from the circular linked list
 	free_tcbs[RunPt->os_tcb_Id] = -1; // remember which tcb is free
 	NumThreads--;
-	OS_EnableInterrupts();
 	OS_Suspend(); //switch to the next task to run
+	OS_EnableInterrupts();
+	for(;;){
+	}
 }
 
 

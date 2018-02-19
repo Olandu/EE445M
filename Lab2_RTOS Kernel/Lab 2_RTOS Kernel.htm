@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Lab 2_RTOS Kernel.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Lab 2_RTOS Kernel.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Feb 19 13:26:56 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Feb 19 17:35:30 2018
 <BR><P>
 <H3>Maximum Stack Usage =         32 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -20,7 +20,7 @@ Functions with no stack information
  <LI><a href="#[d9]">WaitForInterrupt</a>
  <LI><a href="#[98]">__user_initial_stackheap</a>
  <LI><a href="#[a4]">OS_DisableInterrupts</a>
- <LI><a href="#[a8]">OS_EnableInterrupts</a>
+ <LI><a href="#[a9]">OS_EnableInterrupts</a>
  <LI><a href="#[b]">PendSV_Handler</a>
  <LI><a href="#[ab]">StartOS</a>
 </UL>
@@ -722,7 +722,7 @@ Global Symbols
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Init
 </UL>
 
-<P><STRONG><a name="[a8]"></a>OS_EnableInterrupts</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, osasm.o(.text))
+<P><STRONG><a name="[a9]"></a>OS_EnableInterrupts</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, osasm.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Wait
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Sleep
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Kill
@@ -794,7 +794,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> lab2.o(i.main)
 </UL>
-<P><STRONG><a name="[2b]"></a>GPIOPortF_Handler</STRONG> (Thumb, 92 bytes, Stack size 8 bytes, os.o(i.GPIOPortF_Handler))
+<P><STRONG><a name="[2b]"></a>GPIOPortF_Handler</STRONG> (Thumb, 104 bytes, Stack size 8 bytes, os.o(i.GPIOPortF_Handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32 + Unknown Stack Size
 <LI>Call Chain = GPIOPortF_Handler &rArr; OS_AddThread
 </UL>
@@ -847,13 +847,10 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Thread2c
 </UL>
 
-<P><STRONG><a name="[a7]"></a>OS_Kill</STRONG> (Thumb, 68 bytes, Stack size 8 bytes, os.o(i.OS_Kill))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
-<LI>Call Chain = OS_Kill
-</UL>
-<BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_EnableInterrupts
+<P><STRONG><a name="[a7]"></a>OS_Kill</STRONG> (Thumb, 68 bytes, Stack size 0 bytes, os.o(i.OS_Kill))
+<BR><BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_EnableInterrupts
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_DisableInterrupts
-<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Suspend
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Suspend
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Thread4c
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SW2_Debounce
@@ -883,16 +880,16 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
 <LI>Call Chain = OS_Sleep
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_EnableInterrupts
+<BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_EnableInterrupts
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_DisableInterrupts
-<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Suspend
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Suspend
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Thread4c
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SW2_Debounce
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SW1_Debounce
 </UL>
 
-<P><STRONG><a name="[a9]"></a>OS_Suspend</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, os.o(i.OS_Suspend))
+<P><STRONG><a name="[a8]"></a>OS_Suspend</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, os.o(i.OS_Suspend))
 <BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Wait
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Sleep
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Kill
@@ -902,9 +899,9 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
 <LI>Call Chain = OS_Wait
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_EnableInterrupts
+<BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_EnableInterrupts
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_DisableInterrupts
-<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Suspend
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Suspend
 </UL>
 <BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Thread5c
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Thread2c
@@ -928,8 +925,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;copyHardwareToSoftware
 </UL>
 
-<P><STRONG><a name="[80]"></a>SW1_Debounce</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, os.o(i.SW1_Debounce))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16 + Unknown Stack Size
+<P><STRONG><a name="[80]"></a>SW1_Debounce</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, os.o(i.SW1_Debounce))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
 <LI>Call Chain = SW1_Debounce &rArr; OS_Sleep
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Sleep
@@ -937,12 +934,12 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> os.o(i.GPIOPortF_Handler)
 </UL>
-<P><STRONG><a name="[9f]"></a>SW1_init</STRONG> (Thumb, 214 bytes, Stack size 0 bytes, os.o(i.SW1_init))
+<P><STRONG><a name="[9f]"></a>SW1_init</STRONG> (Thumb, 222 bytes, Stack size 0 bytes, os.o(i.SW1_init))
 <BR><BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_AddSW1Task
 </UL>
 
-<P><STRONG><a name="[81]"></a>SW2_Debounce</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, os.o(i.SW2_Debounce))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16 + Unknown Stack Size
+<P><STRONG><a name="[81]"></a>SW2_Debounce</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, os.o(i.SW2_Debounce))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
 <LI>Call Chain = SW2_Debounce &rArr; OS_Sleep
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Sleep
@@ -978,8 +975,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Sleep
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Kill
 </UL>
-<BR>[Address Reference Count : 2]<UL><LI> lab2.o(i.BackgroundThread5c)
-<LI> lab2.o(i.main)
+<BR>[Address Reference Count : 2]<UL><LI> lab2.o(i.main)
+<LI> lab2.o(i.BackgroundThread5c)
 </UL>
 <P><STRONG><a name="[82]"></a>Thread5c</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, lab2.o(i.Thread5c))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
