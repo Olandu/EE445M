@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Lab 2_RTOS Kernel.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Lab 2_RTOS Kernel.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Sat Feb 17 23:17:20 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Feb 19 13:26:56 2018
 <BR><P>
 <H3>Maximum Stack Usage =         32 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -143,7 +143,7 @@ Function Pointers
  <LI><a href="#[23]">Timer1B_Handler</a> from startup_tm4c123.o(RESET) referenced from startup_tm4c123.o(RESET)
  <LI><a href="#[24]">Timer2A_Handler</a> from startup_tm4c123.o(RESET) referenced from startup_tm4c123.o(RESET)
  <LI><a href="#[25]">Timer2B_Handler</a> from startup_tm4c123.o(RESET) referenced from startup_tm4c123.o(RESET)
- <LI><a href="#[30]">Timer3A_Handler</a> from startup_tm4c123.o(RESET) referenced from startup_tm4c123.o(RESET)
+ <LI><a href="#[30]">Timer3A_Handler</a> from os.o(i.Timer3A_Handler) referenced from startup_tm4c123.o(RESET)
  <LI><a href="#[31]">Timer3B_Handler</a> from startup_tm4c123.o(RESET) referenced from startup_tm4c123.o(RESET)
  <LI><a href="#[4f]">Timer4A_Handler</a> from os.o(i.Timer4A_Handler) referenced from startup_tm4c123.o(RESET)
  <LI><a href="#[50]">Timer4B_Handler</a> from startup_tm4c123.o(RESET) referenced from startup_tm4c123.o(RESET)
@@ -481,9 +481,6 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
 </UL>
 <P><STRONG><a name="[25]"></a>Timer2B_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_tm4c123.o(RESET))
-<BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
-</UL>
-<P><STRONG><a name="[30]"></a>Timer3A_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_tm4c123.o(RESET))
 <BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
 </UL>
 <P><STRONG><a name="[31]"></a>Timer3B_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_tm4c123.o(RESET))
@@ -835,18 +832,18 @@ Global Symbols
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIOPortF_Handler
 </UL>
 
-<P><STRONG><a name="[a3]"></a>OS_Init</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, os.o(i.OS_Init))
+<P><STRONG><a name="[a3]"></a>OS_Init</STRONG> (Thumb, 66 bytes, Stack size 8 bytes, os.o(i.OS_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
 <LI>Call Chain = OS_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PLL_Init
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_DisableInterrupts
-<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_SysTime_Init
+<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer3_MS
 </UL>
 <BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[af]"></a>OS_InitSemaphore</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, os.o(i.OS_InitSemaphore))
+<P><STRONG><a name="[ae]"></a>OS_InitSemaphore</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, os.o(i.OS_InitSemaphore))
 <BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Thread2c
 </UL>
 
@@ -899,10 +896,6 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Wait
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Sleep
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Kill
-</UL>
-
-<P><STRONG><a name="[a6]"></a>OS_SysTime_Init</STRONG> (Thumb, 62 bytes, Stack size 0 bytes, os.o(i.OS_SysTime_Init))
-<BR><BR>[Called By]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Init
 </UL>
 
 <P><STRONG><a name="[ad]"></a>OS_Wait</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, os.o(i.OS_Wait))
@@ -961,11 +954,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_AddThread
 </UL>
 
-<P><STRONG><a name="[c]"></a>SysTick_Handler</STRONG> (Thumb, 48 bytes, Stack size 4 bytes, os.o(i.SysTick_Handler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = SysTick_Handler
-</UL>
-<BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WakeUpThreads
-</UL>
+<P><STRONG><a name="[c]"></a>SysTick_Handler</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, os.o(i.SysTick_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
 </UL>
 <P><STRONG><a name="[85]"></a>Thread2c</STRONG> (Thumb, 72 bytes, Stack size 0 bytes, lab2.o(i.Thread2c))
@@ -973,7 +962,7 @@ Global Symbols
 <LI>Call Chain = Thread2c &rArr; OS_AddThread
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Wait
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_InitSemaphore
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_InitSemaphore
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_AddThread
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_AddPeriodicThread
 </UL>
@@ -989,8 +978,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Sleep
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Kill
 </UL>
-<BR>[Address Reference Count : 2]<UL><LI> lab2.o(i.main)
-<LI> lab2.o(i.BackgroundThread5c)
+<BR>[Address Reference Count : 2]<UL><LI> lab2.o(i.BackgroundThread5c)
+<LI> lab2.o(i.main)
 </UL>
 <P><STRONG><a name="[82]"></a>Thread5c</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, lab2.o(i.Thread5c))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
@@ -1000,6 +989,17 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> lab2.o(i.Thread2c)
 </UL>
+<P><STRONG><a name="[30]"></a>Timer3A_Handler</STRONG> (Thumb, 24 bytes, Stack size 4 bytes, os.o(i.Timer3A_Handler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = Timer3A_Handler
+</UL>
+<BR>[Calls]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WakeUpThreads
+</UL>
+<BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
+</UL>
+<P><STRONG><a name="[a6]"></a>Timer3_MS</STRONG> (Thumb, 70 bytes, Stack size 0 bytes, os.o(i.Timer3_MS))
+<BR><BR>[Called By]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Init
+</UL>
+
 <P><STRONG><a name="[4f]"></a>Timer4A_Handler</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, os.o(i.Timer4A_Handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Timer4A_Handler
 </UL>
@@ -1023,8 +1023,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
 </UL>
-<P><STRONG><a name="[ae]"></a>WakeUpThreads</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, os.o(i.WakeUpThreads))
-<BR><BR>[Called By]<UL><LI><a href="#[c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
+<P><STRONG><a name="[af]"></a>WakeUpThreads</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, os.o(i.WakeUpThreads))
+<BR><BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer3A_Handler
 </UL>
 
 <P><STRONG><a name="[91]"></a>main</STRONG> (Thumb, 96 bytes, Stack size 8 bytes, lab2.o(i.main))

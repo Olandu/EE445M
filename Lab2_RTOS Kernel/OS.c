@@ -36,11 +36,13 @@ void StartOS(void);
 
 
 //function prototypes in os.c
-void OS_SysTime_Init(void);
+void Timer3_MS(unsigned long period);
 
-#define OS_SysTimeReload   0xFFFFFFFF
+#define SysTimeReload   0xFFFFFFFF
 #define NUMTHREADS  10        // maximum number of threads
 #define STACKSIZE   128       // number of 32-bit words in stack
+
+unsigned long SystemTime_Ms;
 
 struct tcb{
   int32_t *sp;                // pointer to stack (valid for threads not running
@@ -89,7 +91,7 @@ void OS_Init(void){
 	for(int i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)
 		free_tcbs[i] = -1;
 	}
-	OS_SysTime_Init();
+	Timer3_MS(TIME_1MS);
   NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
   NVIC_ST_CURRENT_R = 0;      // any write to current clears it
   NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0x00FFFFFF)|0xE0000000; // priority 7
@@ -125,19 +127,11 @@ void OS_Suspend(void){
 }
 
 
-// ******** Sleep_Timer ************
-void WakeUpThreads(void){
-	for(int i=0;i<NUMTHREADS;i++){
-		if(tcbs[i].sleep){
-			tcbs[i].sleep--;
-		}
-	}
-}
+
 // ******** Scheduler ************
 void SysTick_Handler(void){
 	//don't use RunPt here because we want to first save the current sp before switching
 	// this is done in PendSV_handler (OSasm.s)
-	WakeUpThreads();
 	NextRunPt = RunPt->next;
 	while(NextRunPt->sleep){
 		NextRunPt = RunPt->next;
@@ -450,6 +444,37 @@ void OS_bSignal(Sema4Type *semaPt){
 	EndCritical(status);
 }	
 
+
+void Timer3_MS(unsigned long period){
+  SYSCTL_RCGCTIMER_R |= 0x08;   // 0) activate TIMER3
+  TIMER3_CTL_R = 0x00000000;    // 1) disable TIMER3A during setup
+  TIMER3_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
+  TIMER3_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
+  TIMER3_TAILR_R = period-1;    // 4) reload value
+  TIMER3_TAPR_R = 0;            // 5) bus clock resolution
+  TIMER3_ICR_R = 0x00000001;    // 6) clear TIMER3A timeout flag
+  TIMER3_IMR_R = 0x00000001;    // 7) arm timeout interrupt
+  NVIC_PRI8_R = (NVIC_PRI8_R&0x00FFFFFF)|0x20000000; // 8) priority 1
+// interrupts enabled in the main program after all devices initialized
+// vector number 51, interrupt number 35
+  NVIC_EN1_R = 1<<(35-32);      // 9) enable IRQ 35 in NVIC
+  TIMER3_CTL_R = 0x00000001;    // 10) enable TIMER3A
+}
+
+// ******** Sleep_Timer ************
+void WakeUpThreads(void){
+	for(int i=0;i<NUMTHREADS;i++){
+		if((tcbs[i].sleep)&&(free_tcbs[i] != -1)){
+			tcbs[i].sleep--;
+		}
+	}
+}
+
+void Timer3A_Handler(void){
+  TIMER3_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER3A timeout
+	SystemTime_Ms++;
+  WakeUpThreads();                // execute user task
+}
 // ******** OS_Sleep ************
 // place this thread into a dormant state
 // input:  number of msec to sleep
@@ -566,8 +591,7 @@ unsigned long OS_MailBox_Recv(void){
 // It is ok to change the resolution and precision of this function as long as 
 //   this function and OS_TimeDifference have the same resolution and precision 
 unsigned long OS_Time(void){
-	unsigned long OS_Time;
-	return OS_Time;
+	return SystemTime_Ms;
 }
 
 // ******** OS_TimeDifference ************
@@ -578,8 +602,7 @@ unsigned long OS_Time(void){
 // It is ok to change the resolution and precision of this function as long as 
 //   this function and OS_Time have the same resolution and precision 
 unsigned long OS_TimeDifference(unsigned long start, unsigned long stop){
-	unsigned long OS_TimeDifference;
-	return OS_TimeDifference;
+	return start - stop;
 }
 
 // ******** OS_ClearMsTime ************
@@ -588,7 +611,7 @@ unsigned long OS_TimeDifference(unsigned long start, unsigned long stop){
 // Outputs: none
 // You are free to change how this works
 void OS_ClearMsTime(void){
-	
+	SystemTime_Ms  = 0;
 }
 
 // ******** OS_MsTime ************
@@ -598,24 +621,5 @@ void OS_ClearMsTime(void){
 // You are free to select the time resolution for this function
 // It is ok to make the resolution to match the first call to OS_AddPeriodicThread
 unsigned long OS_MsTime(void){
-	unsigned long time_ms;
-	return time_ms;
-}
-
-
-//not complete yet
-void OS_SysTime_Init(void){
-  SYSCTL_RCGCTIMER_R |= 0x08;   // 0) activate TIMER3
-  TIMER3_CTL_R = 0x00000000;    // 1) disable TIMER3A during setup
-  TIMER3_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
-  TIMER3_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
-  TIMER3_TAILR_R = OS_SysTimeReload;    // 4) reload value
-  TIMER3_TAPR_R = 0;            // 5) bus clock resolution
-  TIMER3_ICR_R = 0x00000001;    // 6) clear TIMER3A timeout flag
-  TIMER3_IMR_R = 0x00000001;    // 7) arm timeout interrupt
-  NVIC_PRI8_R = (NVIC_PRI8_R&0x00FFFFFF)|0x20000000; // 8) priority 1
-// interrupts enabled in the main program after all devices initialized
-// vector number 51, interrupt number 35
-  //NVIC_EN1_R = 1<<(35-32);      // 9) enable IRQ 35 in NVIC
-  TIMER3_CTL_R = 0x00000001;    // 10) enable TIMER3A
+	return SystemTime_Ms;
 }
