@@ -486,6 +486,9 @@ void Thread5c(void){
     OS_Wait(&Readyc);
     Count5++;   // Count2 + Count5 should equal Count1 
     Lost = Count1-Count5-Count2;
+		int i;
+		if(Count5 == 6929)
+			 i = 1;
   }
 }
 void Thread2c(void){
@@ -526,7 +529,7 @@ int main(void){   // Testmain3
 // Count2 + Count5 should equal Count1
   NumCreated = 0 ;
   OS_AddSW1Task(&BackgroundThread5c,2);
-  NumCreated += OS_AddThread(&Thread2c,128,2); 
+	NumCreated += OS_AddThread(&Thread2c,128,2); 
   NumCreated += OS_AddThread(&Thread3c,128,3); 
   NumCreated += OS_AddThread(&Thread4c,128,3); 
   OS_Launch(TIME_2MS); // doesn't return, interrupts enabled in here

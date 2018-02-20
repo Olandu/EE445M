@@ -60,6 +60,7 @@ struct tcb{
   struct tcb *next;           // linked-list pointer
 	int os_tcb_Id;
 	int sleep;
+	int status;
 	//unsigned long priority;
 	//struct Sema4 *blocked;
 };
@@ -69,7 +70,6 @@ tcbType *RunPt;
 tcbType *NextRunPt;
 int32_t Stacks[NUMTHREADS][STACKSIZE];
 
-int32_t free_tcbs[NUMTHREADS]; // free tcbs
 
 void SetInitialStack(int i){
   tcbs[i].sp = &Stacks[i][STACKSIZE-16]; // thread stack pointer
@@ -100,12 +100,14 @@ void OS_Init(void){
 	OS_DisableInterrupts();
   PLL_Init(Bus80MHz);         // set processor clock to 50 MHz
 	for(int i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)
-		free_tcbs[i] = -1;
+		tcbs[i].status = -1;
 	}
 	Timer3_MS(TIME_1MS);
   NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
   NVIC_ST_CURRENT_R = 0;      // any write to current clears it
   NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0x00FFFFFF)|0xE0000000; // priority 7
+	NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0xFF00FFFF)|0x00D00000; // priority 6
+	RunPt = &tcbs[0]; 
 }
 
 //******** OS_Launch *************** 
@@ -145,7 +147,7 @@ void SysTick_Handler(void){
 	// this is done in PendSV_handler (OSasm.s)
 	NextRunPt = RunPt->next;
 	while(NextRunPt->sleep){
-		NextRunPt = RunPt->next;
+		NextRunPt = NextRunPt->next;
 	}
 	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
 }
@@ -164,34 +166,38 @@ int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priori
 	if(NumThreads >= NUMTHREADS){
 		return 0; // thread can not be added
 	}
+	status = StartCritical();
 	// find free tcb
-	int freetcb_idx;
-	for( freetcb_idx = 0; freetcb_idx < NUMTHREADS; freetcb_idx++){
-		if(free_tcbs[freetcb_idx] == -1){
-			free_tcbs[freetcb_idx] = freetcb_idx;
+	int freetcb;
+	for( freetcb = 0; freetcb < NUMTHREADS; freetcb++){
+		if(tcbs[freetcb].status == -1){
 			break;
 		}
 	}
-  status = StartCritical();
 	if(NumThreads == 0){
 		tcbs[NumThreads].next = &tcbs[0];
 		RunPt = &tcbs[0];
 	}
 	else{ //traverse linked list of tcb and find the last thread
+		if(RunPt->status == -1){
+			EndCritical(status);
+			return 0;
+		}
 		struct tcb *searchPt = RunPt;
 		while(searchPt->next != RunPt){
 			searchPt = searchPt->next;
 		}
-		searchPt->next = &tcbs[freetcb_idx];
+		searchPt->next = &tcbs[freetcb];
 		searchPt = searchPt->next;
 		searchPt->next = RunPt;
 	}
-	SetInitialStack(freetcb_idx);
-	Stacks[freetcb_idx][STACKSIZE-2] = (int32_t)(task); // PC
+	SetInitialStack(freetcb);
+	Stacks[freetcb][STACKSIZE-2] = (int32_t)(task); // PC
 	//set inittial state of tcb fields
-	tcbs[freetcb_idx].sleep = 0;
+	tcbs[freetcb].sleep = 0;
+	tcbs[freetcb].status = 0; // tcb is in use (not free)
 	// set tcb_id???
-	tcbs[freetcb_idx].os_tcb_Id = freetcb_idx;
+	tcbs[freetcb].os_tcb_Id = freetcb;
 	NumThreads++;
 	EndCritical(status);
 	return 1;     //successful
@@ -199,7 +205,8 @@ int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priori
 
 //******** OS_PeriodicThreadInit *************** 
 void (*PeriodicThread1)(void); 
-void PeriodicThread1_init(void(*task)(void), uint32_t period, uint32_t priority){
+void PeriodicThread1_init(void(*task)(void), uint32_t period, uint32_t priority){long sr;
+	sr = StartCritical();
 	SYSCTL_RCGCTIMER_R |= 0x10;   // 0) activate TIMER4
   PeriodicThread1 = task;          // user function
   TIMER4_CTL_R = 0x00000000;    // 1) disable TIMER4A during setup
@@ -216,6 +223,7 @@ void PeriodicThread1_init(void(*task)(void), uint32_t period, uint32_t priority)
 // vector number 51, interrupt number 35
   NVIC_EN2_R = 1<<(70-64);      // 9) enable IRQ 70 in NVIC 
   TIMER4_CTL_R = 0x00000001;    // 10) enable TIMER4A
+	EndCritical(sr);
 }
 
 void Timer4A_Handler(void){
@@ -253,6 +261,35 @@ int OS_AddPeriodicThread(void(*task)(void),
 
 
 //******** OS_EventThreadInit *************** 
+
+static void GPIOArm(void){
+  GPIO_PORTF_ICR_R = 0x10;      // (e) clear flag4
+  GPIO_PORTF_IM_R |= 0x10;      // (f) arm interrupt on PF4 *** No IME bit as mentioned in Book ***
+  NVIC_PRI7_R = (NVIC_PRI7_R&0xFF00FFFF)|0x00A00000; // (g) priority 5
+  NVIC_EN0_R = 0x40000000;      // (h) enable interrupt 30 in NVIC  
+}
+
+static void Timer0Arm(void){
+  TIMER0_CTL_R = 0x00000000;    // 1) disable TIMER0A during setup
+  TIMER0_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
+  TIMER0_TAMR_R = 0x0000001;    // 3) 1-SHOT mode
+  TIMER0_TAILR_R = 160000;      // 4) 10ms reload value
+  TIMER0_TAPR_R = 0;            // 5) bus clock resolution
+  TIMER0_ICR_R = 0x00000001;    // 6) clear TIMER0A timeout flag
+  TIMER0_IMR_R = 0x00000001;    // 7) arm timeout interrupt
+  NVIC_PRI4_R = (NVIC_PRI4_R&0x00FFFFFF)|0x80000000; // 8) priority 4
+// interrupts enabled in the main program after all devices initialized
+// vector number 35, interrupt number 19
+  NVIC_EN0_R = 1<<19;           // 9) enable IRQ 19 in NVIC
+  TIMER0_CTL_R = 0x00000001;    // 10) enable TIMER0A
+}
+
+// Interrupt 10 ms after rising edge of PF4
+void Timer0A_Handler(void){
+  TIMER0_IMR_R = 0x00000000;    // disarm timeout interrupt
+  GPIOArm();   // start GPIO
+}
+
 void (*SW1_EventThread) (void);
 unsigned long SW1Added = 0;
 unsigned long SW1_Priority;
@@ -279,9 +316,12 @@ void SW1_init (unsigned long priority){
 	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF); // clear priority
 	NVIC_PRI7_R = (NVIC_PRI7_R | priority); 
   NVIC_EN0_R = 0x40000000;      		// (h) enable interrupt 30 in NVIC 
-	LastPF4 = PF4;
-	SW1_Priority = priority;
+	//LastPF4 = PF4;
+	SW1_Priority = priority;	
+	//GPIOArm();
+	//SYSCTL_RCGCTIMER_R |= 0x01;   // 0) activate TIMER0
 }
+
 
 void (*SW2_EventThread) (void);
 unsigned long SW2Added = 0;
@@ -313,6 +353,8 @@ void SW2_init (unsigned long priority){
 	SW2_Priority = priority;
 }
 
+
+
 void SW1_Debounce(void){
 	OS_Sleep(10); // sleep for 10ms
 	LastPF4 = PF4;
@@ -332,16 +374,13 @@ void SW2_Debounce(void){
 void GPIOPortF_Handler(void){
 	if(GPIO_PORTF_RIS_R & 0x10){    // SW1 pressed
 		GPIO_PORTF_IM_R &= ~0x10;     // disarm interrupt on PF4 
-		if(LastPF4){
-			(*SW1_EventThread)();
-		}
+		(*SW1_EventThread)();
 		OS_AddThread(&SW1_Debounce,128,SW1_Priority);
+		//Timer0Arm();
 	}
 	if(GPIO_PORTF_RIS_R & 0x01){		// SW2 pressed
 		GPIO_PORTF_IM_R &= ~0x01;     // disarm interrupt on PF0
-		if(LastPF0){
-			(*SW2_EventThread)();
-		}
+		(*SW2_EventThread)();
 		OS_AddThread(&SW2_Debounce,128,SW2_Priority);
 	}
 }
@@ -365,6 +404,7 @@ int OS_AddSW1Task(void(*task)(void), unsigned long priority){
 	else{
 		SW1_EventThread = task;
 		SW1_init(priority); // initialize SW1
+		SW1Added  = 1;
 		return 1; //add SW1 thread
 	}
 }
@@ -388,6 +428,7 @@ int OS_AddSW2Task(void(*task)(void), unsigned long priority){
 	else{
 		SW2_EventThread = task;
 		SW2_init(priority); // initialize SW2
+		SW2Added = 1;
 		return 1; //add SW2 thread
 	}
 }
@@ -416,7 +457,7 @@ void OS_InitSemaphore(Sema4Type *semaPt, long value){	//Occurs once at the start
 // output: none
 void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
 	OS_DisableInterrupts();
-	while ((*semaPt).Value == 0){ // Spin-lock...does nothing until the semaphore counter goes above 0
+	while ((*semaPt).Value <= 0){ // Spin-lock...does nothing until the semaphore counter goes above 0
 		OS_EnableInterrupts();			// Allow interrupts to occur while the thread is spinning to not let the software hang
 		OS_Suspend();
 		OS_DisableInterrupts();
@@ -432,9 +473,9 @@ void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronizatio
 // input:  pointer to a counting semaphore
 // output: none
 void OS_Signal(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
- int32_t status = StartCritical();
+	OS_DisableInterrupts();
  (*semaPt).Value++;
-	EndCritical(status);
+	OS_EnableInterrupts();
 }
 
 // ******** OS_bWait ************
@@ -446,6 +487,7 @@ void OS_bWait(Sema4Type *semaPt){
 	OS_DisableInterrupts();
 	while((*semaPt).Value == 0){
 		OS_EnableInterrupts();
+		OS_Suspend();
 		OS_DisableInterrupts();
 	}
 	(*semaPt).Value = 0;
@@ -464,7 +506,8 @@ void OS_bSignal(Sema4Type *semaPt){
 }	
 
 
-void Timer3_MS(unsigned long period){
+void Timer3_MS(unsigned long period){long sr;
+	sr = StartCritical();
   SYSCTL_RCGCTIMER_R |= 0x08;   // 0) activate TIMER3
   TIMER3_CTL_R = 0x00000000;    // 1) disable TIMER3A during setup
   TIMER3_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
@@ -478,12 +521,13 @@ void Timer3_MS(unsigned long period){
 // vector number 51, interrupt number 35
   NVIC_EN1_R = 1<<(35-32);      // 9) enable IRQ 35 in NVIC
   TIMER3_CTL_R = 0x00000001;    // 10) enable TIMER3A
+	EndCritical(sr);
 }
 
 // ******** Sleep_Timer ************
 void WakeUpThreads(void){
 	for(int i=0;i<NUMTHREADS;i++){
-		if((tcbs[i].sleep)&&(free_tcbs[i] != -1)){
+		if((tcbs[i].sleep)&&(tcbs[i].status != -1)){
 			tcbs[i].sleep--;
 		}
 	}
@@ -503,8 +547,8 @@ void Timer3A_Handler(void){
 void OS_Sleep(unsigned long sleepTime){
 	OS_DisableInterrupts();
 	RunPt ->sleep = sleepTime;
-	OS_EnableInterrupts();
 	OS_Suspend();
+	OS_EnableInterrupts();
 }
 
 // ******** OS_Kill ************
@@ -519,12 +563,11 @@ void OS_Kill(void){
 		prev = prev->next;
 	}
 	prev->next = RunPt->next;		//remove current running thread from the circular linked list
-	free_tcbs[RunPt->os_tcb_Id] = -1; // remember which tcb is free
+	tcbs[RunPt->os_tcb_Id].status = -1; // remember which tcb is free
 	NumThreads--;
 	OS_Suspend(); //switch to the next task to run
 	OS_EnableInterrupts();
-	for(;;){
-	}
+	for(;;){}
 }
 
 
