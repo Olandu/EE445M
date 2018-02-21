@@ -210,7 +210,7 @@ void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period){
       GPIO_PORTB_AMSEL_R |= 0x20; // 6.11) enable analog functionality on PB5
       break;
   }
-  DisableInterrupts();
+  //DisableInterrupts();
   SYSCTL_RCGCADC_R |= 0x01;     // activate ADC0 
   SYSCTL_RCGCTIMER_R |= 0x04;   // activate timer0 
   delay = SYSCTL_RCGCTIMER_R;   // allow time to finish activating
@@ -231,19 +231,13 @@ void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period){
   ADC0_IM_R |= 0x08;             // enable SS3 interrupts
   ADC0_ACTSS_R |= 0x08;          // enable sample sequencer 3
   NVIC_PRI4_R = (NVIC_PRI4_R&0xFFFF00FF)|0x00004000; //priority 2
-  //NVIC_EN0_R = 1<<17;              // enable interrupt 17 in NVIC
-}
-
-volatile uint32_t ADCvalue;
-void ADC0Seq3_Handler(void){
-  ADC0_ISC_R = 0x08;          // acknowledge ADC sequence 3 completion
-  ADCvalue = ADC0_SSFIFO3_R; // pass 12-bit result to foreground
+  NVIC_EN0_R = 1<<17;              // enable interrupt 17 in NVIC
 }
 
 ///----------ADC_Init----------
 /// <param name = "channelNum"> Initializes the specified channel. </param>
 void ADC_Init(uint32_t channelNum){volatile uint32_t delay;
-	 switch(channelNum){             // 1) activate clock
+	switch(channelNum){             // 1) activate clock
     case 0:
     case 1:
     case 2:
@@ -261,7 +255,6 @@ void ADC_Init(uint32_t channelNum){volatile uint32_t delay;
       SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R1; break;
     default: return;              //    0 to 11 are valid channels on the LM4F120
   }
-	SYSCTL_RCGCADC_R |= 0x01;     // activate ADC0
   delay = SYSCTL_RCGCGPIO_R;      // 2) allow time for clock to stabilize
   delay = SYSCTL_RCGCGPIO_R;
   switch(channelNum){
@@ -337,28 +330,33 @@ void ADC_Init(uint32_t channelNum){volatile uint32_t delay;
       GPIO_PORTB_DEN_R &= ~0x20;  // 5.11) disable digital I/O on PB5
       GPIO_PORTB_AMSEL_R |= 0x20; // 6.11) enable analog functionality on PB5
       break;
-  }		
-	
-	ADC0_PC_R &= ~0xF;              // 7) clear max sample rate field
+  }
+  SYSCTL_RCGCADC_R |= 0x00000001; // 7) activate ADC0 (actually doesn't work)
+  delay = SYSCTL_RCGCGPIO_R;         // 8) allow time for clock to stabilize
+  delay = SYSCTL_RCGCGPIO_R;
+	delay = SYSCTL_RCGCGPIO_R;         // 8) allow time for clock to stabilize
+  ADC0_PC_R &= ~0xF;              // 9) clear max sample rate field
   ADC0_PC_R |= 0x1;               //    configure for 125K samples/sec
-  ADC0_SSPRI_R = 0x0123;          // 8) Sequencer 3 is highest priority
-  ADC0_ACTSS_R &= ~0x0008;        // 9) disable sample sequencer 3
-  ADC0_EMUX_R &= ~0xF000;         // 10) seq3 is software trigger
-  ADC0_SSMUX3_R &= ~0x000F;       // 11) clear SS3 field
-  ADC0_SSMUX3_R += 9;             //    set channel
-  ADC0_SSCTL3_R = 0x0006;         // 12) no TS0 D0, yes IE0 END0
-  ADC0_IM_R &= ~0x0008;           // 13) disable SS3 interrupts
-  ADC0_ACTSS_R |= 0x0008;         // 14) enable sample sequencer 3
+  ADC0_SSPRI_R = 0x3210;          // 10) Sequencer 3 is lowest priority
+  ADC0_ACTSS_R &= ~0x0004;        // 11) disable sample sequencer 2
+  ADC0_EMUX_R &= ~0x0F00;         // 12) seq2 is software trigger
+  ADC0_SSMUX2_R &= ~0x000F;       // 13) clear SS2 field
+  ADC0_SSMUX2_R += channelNum;    //     set channel
+  ADC0_SSCTL2_R = 0x0006;         // 14) no TS0 D0, yes IE0 END0
+  ADC0_IM_R &= ~0x0004;           // 15) disable SS2 interrupts
+  ADC0_ACTSS_R |= 0x0004;         // 16) enable sample sequencer 2
 }
 
 ///----------ADC_In------------
 /// <returns> Result of a single ADC sample
 uint16_t ADC_In (void){ 	// Get the current ADC value
 	unsigned long result;
-	ADC0_PSSI_R = 0x0008;            // 1) initiate SS3
-  while((ADC0_RIS_R&0x08)==0){};   // 2) wait for conversion done
-  result = ADC0_SSFIFO3_R&0xFFF;   // 3) read result
-  ADC0_ISC_R = 0x0008;             // 4) acknowledge completion
+	
+	ADC0_PSSI_R = 0x0004;            // 1) initiate SS3
+  while((ADC0_RIS_R&0x04)==0){};   // 2) wait for conversion done
+  result = ADC0_SSFIFO2_R&0xFFF;   // 3) read result
+  ADC0_ISC_R = 0x0004;             // 4) acknowledge completion
+		
   return result;
 }
 
@@ -384,9 +382,17 @@ int ADC_Status(void){
 void (*ProducerTask)(unsigned long);
 void ADC_Collect (uint32_t channelNum, uint32_t fs, void(*task)(unsigned long)){
 	uint32_t period = 0;
-	NVIC_EN0_R = 1<<17;         // enable ADC_Seq3 interrupt
+//	NVIC_EN0_R = 1<<17;         // enable ADC_Seq3 interrupt
 	period = 80000000/fs;
 	ProducerTask = task;
 	ADC0_InitTimer0ATriggerSeq3(channelNum,period);
 	//NVIC_DIS0_R = 1<<17;  // disable ADC_Seq3 interrupt
+}
+
+
+volatile uint32_t ADCvalue;
+void ADC0Seq3_Handler(void){
+  ADC0_ISC_R = 0x08;          // acknowledge ADC sequence 3 completion
+  ADCvalue = ADC0_SSFIFO3_R; // pass 12-bit result to foreground
+	(*ProducerTask)(ADCvalue);
 }

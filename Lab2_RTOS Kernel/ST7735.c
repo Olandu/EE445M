@@ -1630,11 +1630,13 @@ void Output_Color(uint32_t newColor){ // Set color of future output
 //				 Line 0/1/2/3 (0,11/12/13/14)								
 void ST7735_Message (int device, int line, char *string, int32_t value){
 	int lineNum = 0;
-	if ((device == 1 || device == 2) && ((line >= 0) && (line <= 4))){
-		if (device == 1) lineNum = 2; else lineNum = 11;				// Device1_Line 0 starts at y = 2 and Device2_Line starts at y = 11
+	if ((device == 0 || device == 1) && ((line >= 0) && (line <= 4))){
+		if (device == 0) lineNum = 2; else lineNum = 11;				// Device1_Line 0 starts at y = 2 and Device2_Line starts at y = 11
 		ST7735_SetCursor (0,lineNum + line);
 		ST7735_FillRect (0, (lineNum + line)*10, 128, 7, 0x0000);
 		ST7735_OutString (string);
+		ST7735_OutString(" ");
+		ST7735_OutUDec(value);
 	} else {
 		OutCRLF();
 		UART_OutString ("Invalid  \"device\" or \"line\" argument.");
