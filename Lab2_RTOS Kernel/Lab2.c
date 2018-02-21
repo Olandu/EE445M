@@ -336,7 +336,7 @@ void Interpreter(void);    // just a prototype, link to your interpreter
 
 
 //*******************final user main DEMONTRATE THIS TO TA**********
-int realmain(void){ 
+int main(void){    // realmain
   OS_Init();           // initialize, disable interrupts
   PortE_Init();
   DataLost = 0;        // lost data between producer and consumer
@@ -357,7 +357,7 @@ int realmain(void){
 
   NumCreated = 0 ;
 // create initial foreground threads
-  NumCreated += OS_AddThread(&Interpreter,128,2); 
+//  NumCreated += OS_AddThread(&Interpreter,128,2); 
   NumCreated += OS_AddThread(&Consumer,128,1); 
   NumCreated += OS_AddThread(&PID,128,3);  // Lab 3, make this lowest priority
  
@@ -625,7 +625,7 @@ void BackgroundThread8Producer(void){   // called periodically
   }
   Count1++;
 }
-int main(void){   // Testmain8
+int Testmain8(void){   // Testmain8
   Count1 = 0;     DataLost = 0;  
   Expected8 = 0;  Error8 = 0;
   OS_Init();           // initialize, disable interrupts

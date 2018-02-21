@@ -42,7 +42,7 @@
 // channelNum must be 0-11 (inclusive) corresponding to Ain0 through Ain11
 void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period);
 
-//----------ADC_Open----------
+//----------ADC_Init----------
 // Input: channelNum  Initializes the specified channel
 // Output: None
 void ADC_Init(uint32_t channelNum);
@@ -51,6 +51,7 @@ void ADC_Init(uint32_t channelNum);
 // Input:  None
 // Output: uint16_t ADC result
 uint16_t ADC_In (void);
+
 
 //----------ADC_Status--------
 // Input: None

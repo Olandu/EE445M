@@ -658,7 +658,7 @@ unsigned long OS_Time(void){
 // It is ok to change the resolution and precision of this function as long as 
 //   this function and OS_Time have the same resolution and precision 
 unsigned long OS_TimeDifference(unsigned long start, unsigned long stop){
-	return start - stop;
+	return stop - start;
 }
 
 // ******** OS_ClearMsTime ************

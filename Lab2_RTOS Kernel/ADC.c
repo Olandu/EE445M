@@ -232,10 +232,7 @@ void ADC0_InitTimer0ATriggerSeq3(uint8_t channelNum, uint32_t period){
   ADC0_ACTSS_R |= 0x08;          // enable sample sequencer 3
   NVIC_PRI4_R = (NVIC_PRI4_R&0xFFFF00FF)|0x00004000; //priority 2
   //NVIC_EN0_R = 1<<17;              // enable interrupt 17 in NVIC
-
 }
-
-
 
 volatile uint32_t ADCvalue;
 void ADC0Seq3_Handler(void){
@@ -243,12 +240,10 @@ void ADC0Seq3_Handler(void){
   ADCvalue = ADC0_SSFIFO3_R; // pass 12-bit result to foreground
 }
 
-///----------ADC_Open----------
+///----------ADC_Init----------
 /// <param name = "channelNum"> Initializes the specified channel. </param>
-void ADC_Init(uint32_t channelNum){
-	volatile uint32_t delay;
-  // **** GPIO pin initialization ****
-  switch(channelNum){             // 1) activate clock
+void ADC_Init(uint32_t channelNum){volatile uint32_t delay;
+	 switch(channelNum){             // 1) activate clock
     case 0:
     case 1:
     case 2:
@@ -266,6 +261,7 @@ void ADC_Init(uint32_t channelNum){
       SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R1; break;
     default: return;              //    0 to 11 are valid channels on the LM4F120
   }
+	SYSCTL_RCGCADC_R |= 0x01;     // activate ADC0
   delay = SYSCTL_RCGCGPIO_R;      // 2) allow time for clock to stabilize
   delay = SYSCTL_RCGCGPIO_R;
   switch(channelNum){
@@ -341,8 +337,18 @@ void ADC_Init(uint32_t channelNum){
       GPIO_PORTB_DEN_R &= ~0x20;  // 5.11) disable digital I/O on PB5
       GPIO_PORTB_AMSEL_R |= 0x20; // 6.11) enable analog functionality on PB5
       break;
-  }								// 
-	 ADC0_SSMUX3_R = channelNum;
+  }		
+	
+	ADC0_PC_R &= ~0xF;              // 7) clear max sample rate field
+  ADC0_PC_R |= 0x1;               //    configure for 125K samples/sec
+  ADC0_SSPRI_R = 0x0123;          // 8) Sequencer 3 is highest priority
+  ADC0_ACTSS_R &= ~0x0008;        // 9) disable sample sequencer 3
+  ADC0_EMUX_R &= ~0xF000;         // 10) seq3 is software trigger
+  ADC0_SSMUX3_R &= ~0x000F;       // 11) clear SS3 field
+  ADC0_SSMUX3_R += 9;             //    set channel
+  ADC0_SSCTL3_R = 0x0006;         // 12) no TS0 D0, yes IE0 END0
+  ADC0_IM_R &= ~0x0008;           // 13) disable SS3 interrupts
+  ADC0_ACTSS_R |= 0x0008;         // 14) enable sample sequencer 3
 }
 
 ///----------ADC_In------------

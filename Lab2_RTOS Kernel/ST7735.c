@@ -1635,10 +1635,6 @@ void ST7735_Message (int device, int line, char *string, int32_t value){
 		ST7735_SetCursor (0,lineNum + line);
 		ST7735_FillRect (0, (lineNum + line)*10, 128, 7, 0x0000);
 		ST7735_OutString (string);
-//		if (!clearLine){
-//		ST7735_OutString ("  ");
-//		ST7735_OutUDec(value);
-//		}
 	} else {
 		OutCRLF();
 		UART_OutString ("Invalid  \"device\" or \"line\" argument.");
