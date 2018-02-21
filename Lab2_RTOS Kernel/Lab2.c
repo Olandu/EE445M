@@ -29,6 +29,7 @@
 #include "ADC.h"
 //#include "UART2.h"
 #include "UART.h"
+#include "Interpreter.h"
 #include <string.h> 
 #define Lab2 1
 #define Lab3 0
@@ -324,7 +325,9 @@ unsigned long myId = OS_Id();
 // Interpreter is a foreground thread, accepts input from serial port, outputs to serial port
 // inputs:  none
 // outputs: none
-void Interpreter(void);    // just a prototype, link to your interpreter
+void Interpreter(void){
+	cmdLine_Start (DataLost, PIDWork, FilterWork);
+}  // just a prototype, link to your interpreter
 // add the following commands, leave other commands, if they make sense
 // 1) print performance measures 
 //    time-jitter, number of data points lost, number of calculations performed
@@ -357,7 +360,7 @@ int main(void){    // realmain
 
   NumCreated = 0 ;
 // create initial foreground threads
-//  NumCreated += OS_AddThread(&Interpreter,128,2); 
+  NumCreated += OS_AddThread(&Interpreter,128,2); 
   NumCreated += OS_AddThread(&Consumer,128,1); 
   NumCreated += OS_AddThread(&PID,128,3);  // Lab 3, make this lowest priority
  

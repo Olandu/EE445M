@@ -9,4 +9,6 @@
 #define __Interpreter_H  1
 
 void Interpreter(void);
+
+void cmdLine_Start(int DataLost, int PIDWork, int FilterWork);
 #endif
