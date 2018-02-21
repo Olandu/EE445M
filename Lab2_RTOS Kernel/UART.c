@@ -100,7 +100,7 @@ void UART_Init(void){
                                         // UART0=priority 2
   NVIC_PRI1_R = (NVIC_PRI1_R&0xFFFF00FF)|0x00004000; // bits 13-15
   NVIC_EN0_R = NVIC_EN0_INT5;           // enable interrupt 5 in NVIC
-  EnableInterrupts();
+  //EnableInterrupts();
 }
 // copy from hardware RX FIFO to software RX FIFO
 // stop when hardware RX FIFO is empty or software RX FIFO is full

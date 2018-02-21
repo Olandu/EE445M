@@ -381,17 +381,12 @@ int ADC_Status(void){
 /// <param name = "fs"> sampling frequency </param>
 ///	<param name = "buffer"> array to store sampled data </param>
 /// <param name = "numberOfSamples"> specifies the size of the sample to collect from the ADC </param>
-void ADC_Collect (uint32_t channelNum, uint32_t fs, int32_t buffer[], uint32_t numberOfSamples){
-	int idx = 0; uint32_t period = 0;
-	ADC_Init(channelNum);				// Open channel
+void (*ProducerTask)(unsigned long);
+void ADC_Collect (uint32_t channelNum, uint32_t fs, void(*task)(unsigned long)){
+	uint32_t period = 0;
 	NVIC_EN0_R = 1<<17;         // enable ADC_Seq3 interrupt
-	period = 50000000/fs;
-	TIMER2_TAILR_R = period - 1;    // Change sampling rate
-	while(idx < numberOfSamples){
-		if(ADC_Status() == 0){
-		  buffer[idx] = ADC0_SSFIFO3_R;
-		  idx++;
-		}
-	}
-	NVIC_DIS0_R = 1<<17;  // disable ADC_Seq3 interrupt
+	period = 80000000/fs;
+	ProducerTask = task;
+	ADC0_InitTimer0ATriggerSeq3(channelNum,period);
+	//NVIC_DIS0_R = 1<<17;  // disable ADC_Seq3 interrupt
 }
