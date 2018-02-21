@@ -297,7 +297,7 @@ unsigned long LastPF4;
 void SW1_init (unsigned long priority){
 	SYSCTL_RCGCGPIO_R |= 0x00000020; 	// (a) activate clock for port F
   while((SYSCTL_PRGPIO_R & 0x00000020) == 0){};
-	GPIO_PORTF_LOCK_R = 0x4C4F434B; // unlock GPIO Port F
+//	GPIO_PORTF_LOCK_R = 0x4C4F434B; // unlock GPIO Port F
   GPIO_PORTF_DIR_R &= ~0x10;    		// (c) make PF4 in (built-in button)
   GPIO_PORTF_AFSEL_R &= ~0x10;  		//     disable alt funct on PF4
   GPIO_PORTF_DEN_R |= 0x10;     		//     enable digital I/O on PF4   
@@ -357,15 +357,13 @@ void SW2_init (unsigned long priority){
 
 void SW1_Debounce(void){
 	OS_Sleep(10); // sleep for 10ms
-	LastPF4 = PF4;
 	GPIO_PORTF_ICR_R = 0x10;      // (e) clear flag4
   GPIO_PORTF_IM_R |= 0x10;      // (f) arm interrupt on PF4
 	OS_Kill();
 }
 
 void SW2_Debounce(void){
-	OS_Sleep(10); // sleep for 
-	LastPF0 = PF0;
+	OS_Sleep(10); // sleep for 10ms
 	GPIO_PORTF_ICR_R = 0x01;      // (e) clear flag0
   GPIO_PORTF_IM_R |= 0x01;      // (f) arm interrupt on PF0
 	OS_Kill();
