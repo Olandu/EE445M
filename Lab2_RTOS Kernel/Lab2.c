@@ -325,8 +325,11 @@ unsigned long myId = OS_Id();
 // Interpreter is a foreground thread, accepts input from serial port, outputs to serial port
 // inputs:  none
 // outputs: none
+int CountInterpreter = 0;
 void Interpreter(void){
-	cmdLine_Start (DataLost, PIDWork, FilterWork);
+	while(1){
+		cmdLine_Start (DataLost, PIDWork, FilterWork);
+	}
 }  // just a prototype, link to your interpreter
 // add the following commands, leave other commands, if they make sense
 // 1) print performance measures 
@@ -339,7 +342,7 @@ void Interpreter(void){
 
 
 //*******************final user main DEMONTRATE THIS TO TA**********
-int main(void){    // realmain
+int realmain(void){    // realmain
   OS_Init();           // initialize, disable interrupts
   PortE_Init();
   DataLost = 0;        // lost data between producer and consumer
@@ -628,7 +631,7 @@ void BackgroundThread8Producer(void){   // called periodically
   }
   Count1++;
 }
-int Testmain8(void){   // Testmain8
+int main(void){   // Testmain8
   Count1 = 0;     DataLost = 0;  
   Expected8 = 0;  Error8 = 0;
   OS_Init();           // initialize, disable interrupts
