@@ -467,4 +467,5 @@ void Output_Color(uint32_t newColor);
 // Output: none
 void ST7735_Message (int device, int line, char *string, int32_t value);
 
+void LCD_Init (void);
 #endif

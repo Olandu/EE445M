@@ -93,6 +93,7 @@
 #include "ST7735.h"
 #include "../inc/tm4c123gh6pm.h"
 #include "UART.h"
+#include "os.h"
 
 // 16 rows (0 to 15) and 21 characters (0 to 20)
 // Requires (11 + size*size*6*8) bytes of transmission for each character
@@ -1612,7 +1613,17 @@ void Output_Color(uint32_t newColor){ // Set color of future output
   ST7735_SetTextColor(newColor);
 }
 
-
+Sema4Type ST7735Free;
+void LCD_Init (void){
+	 ST7735_InitR(INITR_REDTAB);						// LCD Initialization
+	 ST7735_FillScreen(0x0000);							// Black screen
+	 ST7735_SetCursor (0, 0);
+	 ST7735_OutString ("Device 1:");
+	 ST7735_SetCursor (0, 9);
+	 ST7735_OutString ("Device 2:");
+	 ST7735_DrawFastHLine(0, 80, 128, 0xffe0); // Horizontal line that separates the top and bottom display
+	 OS_InitSemaphore(&ST7735Free, 1);
+}
 ///------------ST7735_Message----------
 /// <summary>
 /// Outputs message to one of the two logically separate displays (top half and bottom half of the LCD).
@@ -1627,9 +1638,10 @@ void Output_Color(uint32_t newColor){ // Set color of future output
 // Top (x,y): Title (0,0)
 //			  Line 0/1/2/3 (0,2/3/4/5)
 // Bottom (x,y): Title (0,9)
-//				 Line 0/1/2/3 (0,11/12/13/14)								
+//				 Line 0/1/2/3 (0,11/12/13/14)	
 void ST7735_Message (int device, int line, char *string, int32_t value){
 	int lineNum = 0;
+	OS_bWait(&ST7735Free); 
 	if ((device == 0 || device == 1) && ((line >= 0) && (line <= 4))){
 		if (device == 0) lineNum = 2; else lineNum = 11;				// Device1_Line 0 starts at y = 2 and Device2_Line starts at y = 11
 		ST7735_SetCursor (0,lineNum + line);
@@ -1641,5 +1653,5 @@ void ST7735_Message (int device, int line, char *string, int32_t value){
 		OutCRLF();
 		UART_OutString ("Invalid  \"device\" or \"line\" argument.");
 	} 
-	
+	OS_bSignal(&ST7735Free);
 }

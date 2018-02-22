@@ -85,16 +85,6 @@ void SetInitialStack(int i){
   Stacks[i][STACKSIZE-16] = 0x04040404;  // R4
 }
 
-
-void LCD_Init (void){
-	 ST7735_InitR(INITR_REDTAB);						// LCD Initialization
-	 ST7735_FillScreen(0x0000);							// Black screen
-	 ST7735_SetCursor (0, 0);
-	 ST7735_OutString ("Device 1:");
-	 ST7735_SetCursor (0, 9);
-	 ST7735_OutString ("Device 2:");
-	 ST7735_DrawFastHLine(0, 80, 128, 0xffe0); // Horizontal line that separates the top and bottom display
-}
 void OtherInits(void){
 	 LCD_Init();
 	 UART_Init();	
@@ -108,6 +98,7 @@ void OS_Init(void){
 	OS_DisableInterrupts();
   PLL_Init(Bus80MHz);         // set processor clock to 50 MHz
 	OtherInits();
+	SystemTime_Ms = 0;
 	for(int i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)
 		tcbs[i].status = -1;
 	}

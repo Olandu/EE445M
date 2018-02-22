@@ -190,6 +190,7 @@ unsigned long myId = OS_Id();
 // Adds another foreground task
 // background threads execute once and return
 void SW1Push(void){
+	unsigned long Time = OS_MsTime();
   if(OS_MsTime() > 20){ // debounce
     if(OS_AddThread(&ButtonWork,100,2)){
       NumCreated++; 
@@ -342,7 +343,7 @@ void Interpreter(void){
 
 
 //*******************final user main DEMONTRATE THIS TO TA**********
-int realmain(void){    // realmain
+int  main(void){    // realmain
   OS_Init();           // initialize, disable interrupts
   PortE_Init();
   DataLost = 0;        // lost data between producer and consumer
@@ -631,7 +632,7 @@ void BackgroundThread8Producer(void){   // called periodically
   }
   Count1++;
 }
-int main(void){   // Testmain8
+int Testmain8(void){   // Testmain8
   Count1 = 0;     DataLost = 0;  
   Expected8 = 0;  Error8 = 0;
   OS_Init();           // initialize, disable interrupts
