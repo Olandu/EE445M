@@ -315,7 +315,7 @@ void SW2_init (unsigned long priority){
 }
 
 void SW1_Debounce(void){
-	OS_Sleep(10); // sleep for 10ms
+	OS_Sleep(20); // sleep for 20ms
 	GPIO_PORTF_ICR_R = 0x10;      // (e) clear flag4
   GPIO_PORTF_IM_R |= 0x10;      // (f) arm interrupt on PF4
 	OS_Kill();

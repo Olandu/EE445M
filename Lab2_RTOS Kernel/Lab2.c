@@ -191,12 +191,12 @@ unsigned long myId = OS_Id();
 // background threads execute once and return
 void SW1Push(void){
 	unsigned long Time = OS_MsTime();
-  if(OS_MsTime() > 20){ // debounce
+  //if(OS_MsTime() > 20){ // debounce
     if(OS_AddThread(&ButtonWork,100,2)){
       NumCreated++; 
     }
-    OS_ClearMsTime();  // at least 20ms between touches
-  }
+ //   OS_ClearMsTime();  // at least 20ms between touches
+ // }
 }
 //************SW2Push*************
 // Called when SW2 Button pushed, Lab 3 only
