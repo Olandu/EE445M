@@ -3,7 +3,12 @@
 // Jonathan W. Valvano 2/20/17, valvano@mail.utexas.edu
 // EE445M/EE380L.12
 // Modified by Chioma Okorie and Tejasree Ramanuja
-
+/**
+ * @file os.h
+ * @brief Real Time Operating System for EE445M Lab2
+ * @author Chioma Okorie
+ * @author Tejasree Ramanuja
+*/
 #include <stdint.h>
 #include "OS.h"
 #include "PLL.h"
@@ -16,6 +21,7 @@
 #define TIME_2MS    (2*TIME_1MS)  
 #define TIME_500US  (TIME_1MS/2)  
 #define TIME_250US  (TIME_1MS/5)  
+#define PERIOD TIME_500US
 
 
 #define NVIC_ST_CTRL_R          (*((volatile uint32_t *)0xE000E010))
@@ -30,7 +36,12 @@
 
 #define PF0                     (*((volatile uint32_t *)0x40025004))
 #define PF4                     (*((volatile uint32_t *)0x40025040))
-
+#define PF1                     (*((volatile uint32_t *)0x40025008))
+#define PE1  (*((volatile unsigned long *)0x40024008))
+	
+#define SysTimeReload   0xFFFFFFFF
+#define NUMTHREADS  10        // maximum number of threads
+#define STACKSIZE   128       // number of 32-bit words in stack
 
 // function definitions in osasm.s
 void OS_DisableInterrupts(void); // Disable interrupts
@@ -42,13 +53,10 @@ void StartOS(void);
 
 //function prototypes in os.c
 void Timer3_MS(unsigned long period);
-
-#define SysTimeReload   0xFFFFFFFF
-
-#define NUMTHREADS  10        // maximum number of threads
-#define STACKSIZE   128       // number of 32-bit words in stack
+void Timer0A_Init(void);
 
 unsigned long SystemTime_Ms;
+
 
 struct tcb{
   int32_t *sp;                // pointer to stack (valid for threads not running
@@ -89,11 +97,19 @@ void OtherInits(void){
 	 LCD_Init();
 	 UART_Init();	
 }
+
+
 // ******** OS_Init ************
 // initialize operating system, disable interrupts until OS_Launch
 // initialize OS controlled I/O: serial, ADC, systick, LaunchPad I/O and timers 
 // input:  none
 // output: none
+/** @brief  OS_Initialization
+ *	initialize operating system, disable interrupts until OS_Launch
+ *	initialize OS controlled I/O: serial, ADC, systick, LaunchPad I/O and timers 
+ *  @param  none
+ *  @return none
+*/
 void OS_Init(void){
 	OS_DisableInterrupts();
   PLL_Init(Bus80MHz);         // set processor clock to 50 MHz
@@ -103,6 +119,7 @@ void OS_Init(void){
 		tcbs[i].status = -1;
 	}
 	Timer3_MS(TIME_1MS);
+	Timer0A_Init();
   NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
   NVIC_ST_CURRENT_R = 0;      // any write to current clears it
   NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0x00FFFFFF)|0xD0000000; // priority 6
@@ -118,6 +135,12 @@ void OS_Init(void){
 // In Lab 2, you can ignore the theTimeSlice field
 // In Lab 3, you should implement the user-defined TimeSlice field
 // It is ok to limit the range of theTimeSlice to match the 24-bit SysTick
+/** @brief  OS_Launch
+ *	start the scheduler, enable interrupts
+ *	TimeSlice field is ignored in lab2 
+ *  @param  number of 12.5ns clock cycles for each time slice
+ *  @return none
+*/
 void OS_Launch(unsigned long theTimeSlice){
 	NVIC_ST_RELOAD_R = theTimeSlice - 1; // reload value
   NVIC_ST_CTRL_R = 0x00000007; // enable, core clock and interrupt arm
@@ -133,6 +156,14 @@ void OS_Launch(unsigned long theTimeSlice){
 // output: none
 //Note: This function no longer triggers PendSV directly
 //This is done because we want a sleeping task to be able to suspend itself (Systick has higher priority)
+/** @brief  OS_Suspend
+ *	suspend execution of currently running thread
+ *	scheduler will choose another thread to execute
+ *  Can be used to implement cooperative multitasking 
+ *  Same function as OS_Sleep(0)
+ *  @param  none
+ *  @return none
+*/
 void OS_Suspend(void){
 	 NVIC_ST_CURRENT_R = 0;      // any write to current clears it
 	 //NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
@@ -141,15 +172,25 @@ void OS_Suspend(void){
 
 
 
-// ******** Scheduler ************
+// ******** SysTick_Handler ************
+/** @brief  SysTick_Handler
+ *	Determines which task to run next
+ *	Performs context switch
+ *  Lab2 uses a preemptive round robin scheduler
+ *  @param  none
+ *  @return none
+*/
 void SysTick_Handler(void){
 	//don't use RunPt here because we want to first save the current sp before switching
 	// this is done in PendSV_handler (OSasm.s)
+	PF1 ^= 0x02;
+	PF1 ^= 0x02;
 	NextRunPt = RunPt->next;
 	while(NextRunPt->sleep){
 		NextRunPt = NextRunPt->next;
 	}
 	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
+	PF1 ^= 0x02;
 }
 
 //******** OS_AddThread *************** 
@@ -161,6 +202,14 @@ void SysTick_Handler(void){
 // stack size must be divisable by 8 (aligned to double word boundary)
 // In Lab 2, you can ignore both the stackSize and priority fields
 // In Lab 3, you can ignore the stackSize fields
+/** @brief  OS_AddThread
+ *	add a foregound thread to the scheduler
+ *	stackSize and priority fields are ignored in this lab
+ *  @param  pointer to a void/void foreground task
+ *  @param  number of bytes allocated for its stack
+ *  @param  priority, 0 is highest, 5 is the lowest
+ *  @return 1 if successful, 0 if this thread can not be added
+*/
 unsigned long NumThreads = 0;
 int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priority){int32_t status;
 	if(NumThreads >= NUMTHREADS){
@@ -205,6 +254,12 @@ int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priori
 
 //******** OS_PeriodicThreadInit *************** 
 void (*PeriodicThread1)(void); 
+/** @brief  PeriodicThread1_init
+ *	Initializes a periodic task
+ *  @param  period given in system time units (12.5ns)
+ *  @param  priority of the background periodic task
+ *  @return none
+*/
 void PeriodicThread1_init(uint32_t period, uint32_t priority){long sr;
 	sr = StartCritical();
 	SYSCTL_RCGCTIMER_R |= 0x10;   // 0) activate TIMER4
@@ -225,6 +280,11 @@ void PeriodicThread1_init(uint32_t period, uint32_t priority){long sr;
 	EndCritical(sr);
 }
 
+/** @brief  Timer4A_Handler
+ *	Executes periodic background task
+ *  @param  none
+ *  @return none
+*/
 void Timer4A_Handler(void){
   TIMER4_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER4A timeout
   (*PeriodicThread1)();                // execute user task
@@ -247,20 +307,35 @@ void Timer4A_Handler(void){
 // In lab 3, this command will be called 0 1 or 2 times
 // In lab 3, there will be up to four background threads, and this priority field 
 //           determines the relative priority of these four threads
+/** @brief  OS_AddPeriodicThread
+ *	add a background periodic task and initializes the periodic timer
+ *  typically this function receives the highest priority
+ *  You are free to select the time resolution for this function
+ *  It is assumed that the user task will run to completion and return
+ *  This task can not spin, block, loop, sleep, or kill
+ *  This task can call OS_Signal  OS_bSignal	 OS_AddThread
+ *  This task does not have a Thread ID
+ *  @param  pointer to a void/void background function
+ *  @param  period given in system time units (12.5ns)
+ *  @param  priority 0 is the highest, 5 is the lowest
+ *  @return 1 if successful, 0 if this thread can not be added
+*/
 int OS_AddPeriodicThread(void(*task)(void), 
-   unsigned long period, unsigned long priority){
-		 
+   unsigned long period, unsigned long priority){ 
 		PeriodicThread1_init(period,priority);
 		PeriodicThread1 = task;
 		return 1;
-	
 }
 
 
 //******** OS_EventThreadInit *************** 
-
 void (*SW1_EventThread) (void);
 unsigned long SW1_Priority;
+/** @brief  SW1_init
+ *	Initializes the TM4C123 built-in SW1
+ *  @param  priority of the background periodic task
+ *  @return none
+*/
 void SW1_init (unsigned long priority){unsigned long volatile delay;
 	SYSCTL_RCGCGPIO_R |= 0x00000020; 	// (a) activate clock for port F
   delay = SYSCTL_RCGCGPIO_R;
@@ -314,6 +389,12 @@ void SW2_init (unsigned long priority){
 	SW2_Priority = priority;
 }
 
+/** @brief  SW1_Debounce
+ *	This thread is added when the user presses a switch
+ *  Used for switch debouncing
+ *  @param  none
+ *  @return none
+*/
 void SW1_Debounce(void){
 	OS_Sleep(20); // sleep for 20ms
 	GPIO_PORTF_ICR_R = 0x10;      // (e) clear flag4
@@ -328,6 +409,11 @@ void SW2_Debounce(void){
 	OS_Kill();
 }
 
+/** @brief  GPIOPortF_Handler
+ *	Executes event task when the user presses the built-in Switch on the TM4C123 Microcontroller
+ *  @param  none
+ *  @return none
+*/
 void GPIOPortF_Handler(void){
 	if(GPIO_PORTF_RIS_R & 0x10){    // SW1 pressed
 		(*SW1_EventThread)();
@@ -358,6 +444,18 @@ void GPIOPortF_Handler(void){
 // In lab 2, the priority field can be ignored
 // In lab 3, there will be up to four background threads, and this priority field 
 //           determines the relative priority of these four threads
+/** @brief  OS_AddSW1Task
+ *	add a background periodic task and initializes the periodic timer
+ *  typically this function receives the highest priority
+ *  You are free to select the time resolution for this function
+ *  It is assumed that the user task will run to completion and return
+ *  This task can not spin, block, loop, sleep, or kill
+ *  This task can call OS_Signal  OS_bSignal	 OS_AddThread
+ *  This task does not have a Thread ID
+ *  @param  pointer to a void/void background function
+ *  @param  priority 0 is the highest, 5 is the lowest
+ *  @return 1 if successful, 0 if this thread can not be added
+*/
 int OS_AddSW1Task(void(*task)(void), unsigned long priority){
 		SW1_EventThread = task;
 		SW1_init(priority); // initialize SW1
@@ -387,6 +485,10 @@ int OS_AddSW2Task(void(*task)(void), unsigned long priority){
 // returns the thread ID for the currently running thread
 // Inputs: none
 // Outputs: Thread ID, number greater than zero 
+/** @brief  OS_Id
+ *  @param  none
+ *  @return thread ID for the currently running thread
+*/
 unsigned long OS_Id(void){
 	return RunPt->Id;
 }
@@ -395,6 +497,11 @@ unsigned long OS_Id(void){
 // initialize semaphore 
 // input:  pointer to a semaphore
 // output: none
+/** @brief  OS_InitSemaphore
+ *  initialize semaphore
+ *  @param  pointer to a semaphore
+ *  @return none
+*/
 void OS_InitSemaphore(Sema4Type *semaPt, long value){	//Occurs once at the start
 	(*semaPt).Value = value;
 }
@@ -405,6 +512,13 @@ void OS_InitSemaphore(Sema4Type *semaPt, long value){	//Occurs once at the start
 // Lab3 block if less than zero
 // input:  pointer to a counting semaphore
 // output: none
+/** @brief  OS_Wait
+ *  decrement semaphore
+ *  Lab2 spinlock
+ *  Lab3 block if less than zero
+ *  @param  pointer to a counting semaphore
+ *  @return none
+*/
 void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
 	OS_DisableInterrupts();
 	while ((*semaPt).Value <= 0){ // Spin-lock...does nothing until the semaphore counter goes above 0
@@ -422,6 +536,13 @@ void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronizatio
 // Lab3 wakeup blocked thread if appropriate 
 // input:  pointer to a counting semaphore
 // output: none
+/** @brief  OS_Signal
+ *  increment semaphore
+ *  Lab2 spinlock
+ *  Lab3 wakeup blocked thread if appropriate
+ *  @param  pointer to a counting semaphore
+ *  @return none
+*/
 void OS_Signal(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
 	OS_DisableInterrupts();
  (*semaPt).Value++;
@@ -433,6 +554,13 @@ void OS_Signal(Sema4Type *semaPt){ // Called at run time to provide synchronizat
 // Lab3 block if less than zero
 // input:  pointer to a binary semaphore
 // output: none
+/** @brief  OS_bWait
+ *  sets semaphore to 0
+ *  Lab2 spinlock
+ *  Lab3 block if less than zero
+ *  @param  pointer to a binary semaphore
+ *  @return none
+*/
 void OS_bWait(Sema4Type *semaPt){
 	OS_DisableInterrupts();
 	while((*semaPt).Value == 0){
@@ -449,20 +577,32 @@ void OS_bWait(Sema4Type *semaPt){
 // Lab3 wakeup blocked thread if appropriate 
 // input:  pointer to a binary semaphore
 // output: none
+/** @brief  OS_bSignal
+ *  sets semaphore to 1
+ *  Lab2 spinlock
+ *  Lab3 wakeup blocked thread if appropriate
+ *  @param  pointer to a binary semaphore
+ *  @return none
+*/
 void OS_bSignal(Sema4Type *semaPt){
 	int32_t status = StartCritical();
 	(*semaPt).Value = 1;
 	EndCritical(status);
 }	
 
-
+/** @brief  Timer3_MS
+ *	Initializes a periodic timer (1 MS)
+ *  @param  period given in system time units (12.5ns)
+ *  @return none
+*/
 void Timer3_MS(unsigned long period){long sr;
 	sr = StartCritical();
   SYSCTL_RCGCTIMER_R |= 0x08;   // 0) activate TIMER3
   TIMER3_CTL_R = 0x00000000;    // 1) disable TIMER3A during setup
   TIMER3_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
   TIMER3_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
-  TIMER3_TAILR_R = period-1;    // 4) reload value
+  TIMER3_TAILR_R = period -1;    // 4) reload value
+//	TIMER3_TAILR_R = SysTimeReload -1;
   TIMER3_TAPR_R = 0;            // 5) bus clock resolution
   TIMER3_ICR_R = 0x00000001;    // 6) clear TIMER3A timeout flag
   TIMER3_IMR_R = 0x00000001;    // 7) arm timeout interrupt
@@ -474,7 +614,12 @@ void Timer3_MS(unsigned long period){long sr;
 	EndCritical(sr);
 }
 
-// ******** Sleep_Timer ************
+// ******** WakeUpThreads ************
+/** @brief  WakeUpThreads
+ *	Iterates the tcb and decrements sleep counter for sleeping threads
+ *  @param  none
+ *  @return none
+*/
 void WakeUpThreads(void){
 	for(int i=0;i<NUMTHREADS;i++){
 		if((tcbs[i].sleep)&&(tcbs[i].status != -1)){
@@ -483,6 +628,11 @@ void WakeUpThreads(void){
 	}
 }
 
+/** @brief  Timer3A_Handler
+ *	Updates the systime millisecond timer and executes WakeUpThreads()
+ *  @param  none
+ *  @return none
+*/
 void Timer3A_Handler(void){
   TIMER3_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER3A timeout
 	SystemTime_Ms++;
@@ -494,6 +644,13 @@ void Timer3A_Handler(void){
 // output: none
 // You are free to select the time resolution for this function
 // OS_Sleep(0) implements cooperative multitasking
+/** @brief  OS_Sleep
+ *	place this thread into a dormant state
+ *  You are free to select the time resolution for this function
+ *  OS_Sleep(0) implements cooperative multitasking
+ *  @param  number of msec to sleep
+ *  @return none
+*/
 void OS_Sleep(unsigned long sleepTime){
 	OS_DisableInterrupts();
 	RunPt ->sleep = sleepTime;
@@ -506,6 +663,11 @@ void OS_Sleep(unsigned long sleepTime){
 // input:  none
 // output: none
 // Note: there is always atleast one thread running
+/** @brief  OS_Kill
+ *	kill the currently running thread, release its TCB and stack
+ *  @param  none
+ *  @return none
+*/
 void OS_Kill(void){
 	OS_DisableInterrupts();
 	tcbType *prev = RunPt;
@@ -537,6 +699,12 @@ Sema4Type CurrentFIFOSize;// 0 means FIFO empty, FSIZE means full
 // In Lab 3, you can put whatever restrictions you want on size
 //    e.g., 4 to 64 elements
 //    e.g., must be a power of 2,4,8,16,32,64,128
+/** @brief  OS_Fifo_Init
+ *	Initialize the Fifo to be empty
+ *  the size field in this lab was ignored
+ *  @param  Fifo size
+ *  @return none
+*/
 void OS_Fifo_Init(unsigned long size){long sr;  
   sr = StartCritical();        
 	PutPt = GetPt = &Fifo[0];
@@ -552,6 +720,12 @@ void OS_Fifo_Init(unsigned long size){long sr;
 //          false if data not saved, because it was full
 // Since this is called by interrupt handlers 
 //  this function can not disable or enable interrupts
+/** @brief  OS_Fifo_Put
+ *	Enter one data sample into the Fifo
+ *  Called from the background, so no waiting 
+ *  @param  data
+ *  @return 1 if data is properly saved, 0 if data not saved because Fifo was full
+*/
 int OS_Fifo_Put(unsigned long data){
 		if(CurrentFIFOSize.Value == FSIZE){
 			return FIFOFAIL;
@@ -572,6 +746,12 @@ int OS_Fifo_Put(unsigned long data){
 // Called in foreground, will spin/block if empty
 // Inputs:  none
 // Outputs: data 
+/** @brief  OS_Fifo_Get
+ *	Remove one data sample from the Fifo
+ *  Called in foreground, will spin/block if empty
+ *  @param  none
+ *  @return data
+*/
 unsigned long OS_Fifo_Get(void){
 	unsigned long data;
 	OS_Wait(&CurrentFIFOSize);
@@ -595,19 +775,18 @@ unsigned long OS_Fifo_Get(void){
 //          greater than zero if a call to OS_Fifo_Get will return right away
 //          zero or less than zero if the Fifo is empty 
 //          zero or less than zero if a call to OS_Fifo_Get will spin or block
+/** @brief  OS_Fifo_Size
+ *	Check the status of the Fifo
+ *  @param  none
+ *  @return returns the number of elements in the Fifo
+*/
 long OS_Fifo_Size(void){
 	long Fifo_Size;
 	Fifo_Size = CurrentFIFOSize.Value;
 	return Fifo_Size;
 }
 
-// ******** OS_MailBox_Init ************
-// Initialize communication channel
-// Inputs:  none
-// Outputs: none
-//static Sema4Type MailBoxFull;
-//static Sema4Type MailBoxEmpty;
-//static unsigned long MailBoxData;
+/// struct fields for Mailbox
 struct MailBox{
 	Sema4Type Full;
 	Sema4Type Empty;
@@ -615,6 +794,15 @@ struct MailBox{
 };
 typedef struct MailBox MailBoxType;
 MailBoxType mailbox;
+// ******** OS_MailBox_Init ************
+// Initialize communication channel
+// Inputs:  none
+// Outputs: none
+/** @brief  OS_MailBox_Init
+ *	Initialize communication channel
+ *  @param  none
+ *  @return none
+*/
 void OS_MailBox_Init(void){
 	OS_InitSemaphore(&mailbox.Full, 0);
 	OS_InitSemaphore(&mailbox.Empty, 1);
@@ -626,6 +814,13 @@ void OS_MailBox_Init(void){
 // Outputs: none
 // This function will be called from a foreground thread
 // It will spin/block if the MailBox contains data not yet received 
+/** @brief  OS_MailBox_Send
+ *	enter mail into the MailBox
+ *  This function will be called from a foreground thread
+ *  It will spin/block if the MailBox contains data not yet received 
+ *  @param  data to be sent
+ *  @return none
+*/
 void OS_MailBox_Send(unsigned long data){
 	OS_bWait(&mailbox.Empty);
 	mailbox.Data = data;
@@ -638,6 +833,13 @@ void OS_MailBox_Send(unsigned long data){
 // Outputs: data received
 // This function will be called from a foreground thread
 // It will spin/block if the MailBox is empty 
+/** @brief  OS_MailBox_Recv
+ *	remove mail from the MailBox
+ *  This function will be called from a foreground thread
+ *  It will spin/block if the MailBox is empty  
+ *  @param  none
+ *  @return data received
+*/
 unsigned long OS_MailBox_Recv(void){
 	unsigned long Mailbox_Data;
 	OS_bWait(&mailbox.Full);
@@ -653,8 +855,12 @@ unsigned long OS_MailBox_Recv(void){
 // The time resolution should be less than or equal to 1us, and the precision 32 bits
 // It is ok to change the resolution and precision of this function as long as 
 //   this function and OS_TimeDifference have the same resolution and precision 
+/** @brief  OS_Time
+ *  @param  none
+ *  @return time in 12.5ns units, 0 to 4294967295
+*/
 unsigned long OS_Time(void){
-	return SystemTime_Ms;
+	return TIMER0_TAR_R;
 }
 
 // ******** OS_TimeDifference ************
@@ -663,9 +869,17 @@ unsigned long OS_Time(void){
 // Outputs: time difference in 12.5ns units 
 // The time resolution should be less than or equal to 1us, and the precision at least 12 bits
 // It is ok to change the resolution and precision of this function as long as 
-//   this function and OS_Time have the same resolution and precision 
+// this function and OS_Time have the same resolution and precision 
+/** @brief  OS_TimeDifference
+ *  @param  two times measured with OS_Time
+ *  @return time difference in 12.5ns units 
+*/
 unsigned long OS_TimeDifference(unsigned long start, unsigned long stop){
-	return stop - start;
+	if(start > stop)
+		return (start - stop);
+	else{
+		return (SysTimeReload - stop + start);
+	}
 }
 
 // ******** OS_ClearMsTime ************
@@ -673,6 +887,11 @@ unsigned long OS_TimeDifference(unsigned long start, unsigned long stop){
 // Inputs:  none
 // Outputs: none
 // You are free to change how this works
+/** @brief  OS_ClearMsTime
+ *  sets the system time to zero
+ *  @param  none
+ *  @return none 
+*/
 void OS_ClearMsTime(void){
 	SystemTime_Ms  = 0;
 }
@@ -683,6 +902,35 @@ void OS_ClearMsTime(void){
 // Outputs: time in ms units
 // You are free to select the time resolution for this function
 // It is ok to make the resolution to match the first call to OS_AddPeriodicThread
+/** @brief  OS_MsTime
+ *  reads the current time in msec
+ *  @param  none
+ *  @return time in ms units 
+*/
 unsigned long OS_MsTime(void){
 	return SystemTime_Ms;
+}
+
+
+void Timer0A_Init(void){long sr;
+  sr = StartCritical(); 
+  SYSCTL_RCGCTIMER_R |= 0x01;   // 0) activate TIMER0
+  TIMER0_CTL_R = 0x00000000;    // 1) disable TIMER0A during setup
+  TIMER0_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
+  TIMER0_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
+  TIMER0_TAILR_R = SysTimeReload - 1;    // 4) reload value
+  TIMER0_TAPR_R = 0;            // 5) bus clock resolution
+  TIMER0_ICR_R = 0x00000001;    // 6) clear TIMER0A timeout flag
+  TIMER0_IMR_R = 0x00000001;    // 7) arm timeout interrupt
+  NVIC_PRI4_R = (NVIC_PRI4_R&0x00FFFFFF)|0x00000000; // 8) priority 1
+// interrupts enabled in the main program after all devices initialized
+// vector number 35, interrupt number 19
+  NVIC_EN0_R = 1<<19;           // 9) enable IRQ 19 in NVIC
+  TIMER0_CTL_R = 0x00000001;    // 10) enable TIMER0A
+  EndCritical(sr);
+}
+
+void Timer0A_Handler(void){
+  TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
+
 }

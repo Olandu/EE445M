@@ -343,7 +343,7 @@ void Interpreter(void){
 
 
 //*******************final user main DEMONTRATE THIS TO TA**********
-int  main(void){    // realmain
+int main(void){    // realmain
   OS_Init();           // initialize, disable interrupts
   PortE_Init();
   DataLost = 0;        // lost data between producer and consumer
@@ -561,6 +561,7 @@ static int i=0;
     i = 0;         //every 50 ms
     Count1++;
     OS_bSignal(&Readyd);
+		PE0 ^= 0x01;
   }
 }
 void Thread2d(void){
@@ -569,6 +570,7 @@ void Thread2d(void){
   Count2 = 0;          
   for(;;){
     OS_bWait(&Readyd);
+		PE0 ^= 0x01;
     Count2++;     
   }
 }
@@ -591,6 +593,8 @@ void BackgroundThread5d(void){   // called when Select button pushed
 int Testmain4(void){   // Testmain4
   Count4 = 0;          
   OS_Init();           // initialize, disable interrupts
+	PortE_Init();
+	GPIO_PortF_Init();
   NumCreated = 0 ;
   OS_AddPeriodicThread(&BackgroundThread1d,PERIOD,0); 
   OS_AddSW1Task(&BackgroundThread5d,2);
@@ -830,6 +834,7 @@ void Thread8(void){       // only thread running
 }
 int Testmain7(void){       // Testmain7
   PortE_Init();
+	GPIO_PortF_Init();
   OS_Init();           // initialize, disable interrupts
   NumCreated = 0 ;
   NumCreated += OS_AddThread(&Thread8,128,2); 
