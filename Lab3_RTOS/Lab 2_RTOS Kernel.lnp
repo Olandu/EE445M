@@ -1,0 +1,16 @@
+--cpu Cortex-M4
+".\startup_tm4c123.o"
+".\os.o"
+".\lab2.o"
+".\osasm.o"
+".\cr4_fft_64_stm32.o"
+".\pid_stm32.o"
+".\adc.o"
+".\interpreter.o"
+".\pll.o"
+".\st7735.o"
+".\uart.o"
+--strict --scatter ".\Lab 2_RTOS Kernel.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Lab 2_RTOS Kernel.map" -o ".\Lab 2_RTOS Kernel.axf"
