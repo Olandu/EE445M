@@ -1,0 +1,9 @@
+.\lab3.o: Lab3.c
+.\lab3.o: OS.h
+.\lab3.o: ..\inc/tm4c123gh6pm.h
+.\lab3.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\lab3.o: ST7735.h
+.\lab3.o: ADC.h
+.\lab3.o: UART.h
+.\lab3.o: Interpreter.h
+.\lab3.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h

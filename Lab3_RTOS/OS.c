@@ -183,14 +183,11 @@ void OS_Suspend(void){
 void SysTick_Handler(void){
 	//don't use RunPt here because we want to first save the current sp before switching
 	// this is done in PendSV_handler (OSasm.s)
-	PF1 ^= 0x02;
-	PF1 ^= 0x02;
 	NextRunPt = RunPt->next;
 	while(NextRunPt->sleep){
 		NextRunPt = NextRunPt->next;
 	}
 	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
-	PF1 ^= 0x02;
 }
 
 //******** OS_AddThread *************** 
@@ -260,9 +257,10 @@ void (*PeriodicThread1)(void);
  *  @param  priority of the background periodic task
  *  @return none
 */
-void PeriodicThread1_init(uint32_t period, uint32_t priority){long sr;
+void Timer4_Init(void(*task)(void), uint32_t period, uint32_t priority){long sr;
 	sr = StartCritical();
 	SYSCTL_RCGCTIMER_R |= 0x10;   // 0) activate TIMER4
+	PeriodicThread1 = task;          // user function
   TIMER4_CTL_R = 0x00000000;    // 1) disable TIMER4A during setup
   TIMER4_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
   TIMER4_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
@@ -280,6 +278,30 @@ void PeriodicThread1_init(uint32_t period, uint32_t priority){long sr;
 	EndCritical(sr);
 }
 
+void (*PeriodicThread2)(void);   // user function
+// ***************** TIMER1_Init ****************
+// Activate TIMER1 interrupts to run user task periodically
+// Inputs:  task is a pointer to a user function
+//          period in units (1/clockfreq)
+// Outputs: none
+void Timer1_Init(void(*task)(void), uint32_t period,uint32_t priority){long sr;
+	sr = StartCritical();
+  SYSCTL_RCGCTIMER_R |= 0x02;   // 0) activate TIMER1
+  PeriodicThread2 = task;          // user function
+  TIMER1_CTL_R = 0x00000000;    // 1) disable TIMER1A during setup
+  TIMER1_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
+  TIMER1_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
+  TIMER1_TAILR_R = period-1;    // 4) reload value
+  TIMER1_TAPR_R = 0;            // 5) bus clock resolution
+  TIMER1_ICR_R = 0x00000001;    // 6) clear TIMER1A timeout flag
+  TIMER1_IMR_R = 0x00000001;    // 7) arm timeout interrupt
+  NVIC_PRI5_R = (NVIC_PRI5_R&0xFFFF00FF)|0x00008000; // 8) priority 4
+// interrupts enabled in the main program after all devices initialized
+// vector number 37, interrupt number 21
+  NVIC_EN0_R = 1<<21;           // 9) enable IRQ 21 in NVIC
+  TIMER1_CTL_R = 0x00000001;    // 10) enable TIMER1A
+	EndCritical(sr);
+}
 /** @brief  Timer4A_Handler
  *	Executes periodic background task
  *  @param  none
@@ -290,6 +312,10 @@ void Timer4A_Handler(void){
   (*PeriodicThread1)();                // execute user task
 }
 
+void Timer1A_Handler(void){
+  TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
+  (*PeriodicThread2)();                // execute user task
+}
 //******** OS_AddPeriodicThread *************** 
 // add a background periodic task
 // typically this function receives the highest priority
@@ -320,10 +346,18 @@ void Timer4A_Handler(void){
  *  @param  priority 0 is the highest, 5 is the lowest
  *  @return 1 if successful, 0 if this thread can not be added
 */
-int OS_AddPeriodicThread(void(*task)(void), 
-   unsigned long period, unsigned long priority){ 
-		PeriodicThread1_init(period,priority);
-		PeriodicThread1 = task;
+unsigned long NumPeriodicTasks = 0;
+int OS_AddPeriodicThread(void(*task)(void),unsigned long period, unsigned long priority){ 
+		if(NumPeriodicTasks == 0){
+			Timer4_Init(task,period,priority);
+		}
+		else if(NumPeriodicTasks == 1){
+		 Timer1_Init(task,period,priority);
+		}
+		else{
+			return 0; // cannot add more than two threads
+		}
+		NumPeriodicTasks++;
 		return 1;
 }
 
@@ -396,7 +430,7 @@ void SW2_init (unsigned long priority){
  *  @return none
 */
 void SW1_Debounce(void){
-	OS_Sleep(20); // sleep for 20ms
+	OS_Sleep(10); // sleep for 20ms
 	GPIO_PORTF_ICR_R = 0x10;      // (e) clear flag4
   GPIO_PORTF_IM_R |= 0x10;      // (f) arm interrupt on PF4
 	OS_Kill();
@@ -427,7 +461,11 @@ void GPIOPortF_Handler(void){
 	if(GPIO_PORTF_RIS_R & 0x01){		// SW2 pressed
 		(*SW2_EventThread)();
 		GPIO_PORTF_IM_R &= ~0x01;     // disarm interrupt on PF0
-		OS_AddThread(&SW2_Debounce,128,SW2_Priority);
+		int status = OS_AddThread(&SW2_Debounce,128,SW2_Priority);
+		if(status == 0){ // thread cannot be created
+			GPIO_PORTF_ICR_R = 0x01;      // (e) clear flag4
+			GPIO_PORTF_IM_R |= 0x01;      // (f) arm interrupt on PF4
+		}
 	}
 }
 
@@ -456,6 +494,7 @@ void GPIOPortF_Handler(void){
  *  @param  priority 0 is the highest, 5 is the lowest
  *  @return 1 if successful, 0 if this thread can not be added
 */
+
 int OS_AddSW1Task(void(*task)(void), unsigned long priority){
 		SW1_EventThread = task;
 		SW1_init(priority); // initialize SW1
