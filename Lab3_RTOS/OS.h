@@ -20,8 +20,15 @@
 struct  Sema4{
   long Value;   // >0 means free, otherwise means busy        
 // add other components here, if necessary to implement blocking
+	struct Blocked *threads;
 };
 typedef struct Sema4 Sema4Type;
+
+struct Blocked{
+	struct tcb *current;
+	struct Blocked *next;
+};
+typedef struct Blocked BlockedType;
 
 // ******** OS_Init ************
 // initialize operating system, disable interrupts until OS_Launch

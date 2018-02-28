@@ -64,8 +64,8 @@ struct tcb{
 	int Id;
 	int sleep;
 	int status;
-	//unsigned long priority;
-	//struct Sema4 *blocked;
+	uint8_t priority;
+	Sema4Type *blocked;
 };
 typedef struct tcb tcbType;
 tcbType tcbs[NUMTHREADS];
