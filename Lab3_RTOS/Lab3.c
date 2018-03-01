@@ -31,8 +31,8 @@
 #include "UART.h"
 #include "Interpreter.h"
 #include <string.h> 
-#define Lab2 0
-#define Lab3 1
+#define Lab2 1
+#define Lab3 0
 //*********Prototype for FFT in cr4_fft_64_stm32.s, STMicroelectronics
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 //*********Prototype for PID in PID_stm32.s, STMicroelectronics
@@ -281,6 +281,8 @@ void SW1Push(void){
 // background threads execute once and return
 void BumperWork(void){
   PF1 ^= 0x02;
+	UART_OutString ("SW2");
+	
 	PF1 ^= 0x02;
 }
 //--------------end of Task 2-----------------------------
@@ -434,9 +436,9 @@ int main(void){    // realmain
 
 //*******attach background tasks***********
   OS_AddSW1Task(&SW1Push,2);
-#if Lab3
+//#if Lab3
   OS_AddSW2Task(&BumperWork,2);  // add this line in Lab 3
-#endif
+//#endif
   ADC_Init(4);  // sequencer 3, channel 4, PD3, sampling in DAS()
 #if Lab2
   OS_AddPeriodicThread(&DAS,PERIOD,1); // 2 kHz real time sampling of PD3
