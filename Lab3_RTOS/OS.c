@@ -43,6 +43,9 @@
 #define NUMTHREADS  10        // maximum number of threads
 #define STACKSIZE   128       // number of 32-bit words in stack
 
+#define lab2 0
+#define lab3 1
+
 // function definitions in osasm.s
 void OS_DisableInterrupts(void); // Disable interrupts
 void OS_EnableInterrupts(void);  // Enable interrupts
@@ -56,21 +59,25 @@ void Timer3_MS(unsigned long period);
 void Timer0A_Init(void);
 
 unsigned long SystemTime_Ms;
+unsigned long NumThreads = 0;
 
 
 struct tcb{
   int32_t *sp;                // pointer to stack (valid for threads not running
   struct tcb *next;           // linked-list pointer
+	struct tcb *prev;
 	int Id;
 	int sleep;
 	int status;
 	uint8_t priority;
 	Sema4Type *blocked;
+	struct tcb *nextBlocked;
 };
 typedef struct tcb tcbType;
 tcbType tcbs[NUMTHREADS];
 tcbType *RunPt;
 tcbType *NextRunPt;
+tcbType *LinkPt;
 int32_t Stacks[NUMTHREADS][STACKSIZE];
 
 
@@ -98,6 +105,58 @@ void OtherInits(void){
 	 UART_Init();	
 }
 
+void UnchainTCB(void){
+	RunPt->prev->next = RunPt->next;
+	RunPt->next->prev = RunPt->prev;
+	LinkPt = RunPt->next;
+	NumThreads--;
+}
+
+void ChainTCB(tcbType *newActiveThread){
+	tcbType *last = LinkPt->prev;
+	newActiveThread->next = LinkPt;
+	LinkPt->prev = newActiveThread;
+	newActiveThread->prev = last;
+	last->next = newActiveThread;
+	NumThreads++;
+}
+
+void AddBlockedTCB_Sema4(Sema4Type *semaPt){
+	//find the end of the blocked list
+	if(semaPt->blockedThreads == 0){//add head
+		semaPt->blockedThreads = RunPt;
+		semaPt->blockedThreads->nextBlocked = 0; //current thread is the end of the blocked list
+	}
+	else{//find the end of the list for the tcbs blocked on the sema4
+		tcbType *tail = semaPt->blockedThreads;
+		while(tail->nextBlocked != 0){
+			tail = tail->nextBlocked;
+		}
+		tail->nextBlocked = RunPt;
+		tail->nextBlocked->nextBlocked = 0;
+	}
+}
+
+tcbType* RemoveBlockedTCB_sema4(Sema4Type *semaPt){// assumes that at least one thread is blocked on this sema4
+	tcbType *head = semaPt->blockedThreads;
+	semaPt->blockedThreads = head->nextBlocked;
+	return head;
+}
+
+void Block(Sema4Type *semaPt){
+	RunPt->blocked = semaPt; //current thread point to the semap4 it is blocked on
+	UnchainTCB(); // remeove current tcb from active list (does not free tcb)
+	AddBlockedTCB_Sema4(semaPt); // add tcb to the linked list of blocked threads
+	OS_Suspend();
+}
+
+void UnBlock(Sema4Type *semaPt){
+		//remove the first tcb blocked on this sema4 from the blocked list
+		tcbType *blockedTCB = RemoveBlockedTCB_sema4(semaPt);
+		//add tcb to the active list
+		ChainTCB(blockedTCB); 
+		blockedTCB->blocked = 0; //wake up threads
+}
 
 // ******** OS_Init ************
 // initialize operating system, disable interrupts until OS_Launch
@@ -207,21 +266,20 @@ void SysTick_Handler(void){
  *  @param  priority, 0 is highest, 5 is the lowest
  *  @return 1 if successful, 0 if this thread can not be added
 */
-unsigned long NumThreads = 0;
 int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priority){int32_t status;
 	if(NumThreads >= NUMTHREADS){
 		return 0; // thread can not be added
 	}
 	status = StartCritical();
-	// find free tcb
 	int freetcb;
-	for( freetcb = 0; freetcb < NUMTHREADS; freetcb++){
+	for( freetcb = 0; freetcb < NUMTHREADS; freetcb++){// find free tcb
 		if(tcbs[freetcb].status == -1){
 			break;
 		}
 	}
 	if(NumThreads == 0){
 		tcbs[NumThreads].next = &tcbs[0];
+		tcbs[NumThreads].prev = &tcbs[0];
 		RunPt = &tcbs[0];
 	}
 	else{ //traverse linked list of tcb and find the last thread
@@ -229,20 +287,18 @@ int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priori
 			EndCritical(status);
 			return 0;
 		}
-		struct tcb *searchPt = RunPt;
-		while(searchPt->next != RunPt){
-			searchPt = searchPt->next;
-		}
-		searchPt->next = &tcbs[freetcb];
-		searchPt = searchPt->next;
-		searchPt->next = RunPt;
+		//doubly-linked list
+		tcbType *last = RunPt->prev; 
+		tcbs[freetcb].next = RunPt;		
+		RunPt->prev = &tcbs[freetcb];
+		tcbs[freetcb].prev = last;
+		last->next = &tcbs[freetcb];
+		
 	}
 	SetInitialStack(freetcb);
 	Stacks[freetcb][STACKSIZE-2] = (int32_t)(task); // PC
-	//set inittial state of tcb fields
 	tcbs[freetcb].sleep = 0;
 	tcbs[freetcb].status = 0; // tcb is in use (not free)
-	// set tcb_id???
 	tcbs[freetcb].Id = freetcb;
 	NumThreads++;
 	EndCritical(status);
@@ -532,6 +588,7 @@ unsigned long OS_Id(void){
 	return RunPt->Id;
 }
 
+
 // ******** OS_InitSemaphore ************
 // initialize semaphore 
 // input:  pointer to a semaphore
@@ -543,6 +600,7 @@ unsigned long OS_Id(void){
 */
 void OS_InitSemaphore(Sema4Type *semaPt, long value){	//Occurs once at the start
 	(*semaPt).Value = value;
+	
 }
 
 // ******** OS_Wait ************
@@ -559,6 +617,7 @@ void OS_InitSemaphore(Sema4Type *semaPt, long value){	//Occurs once at the start
  *  @return none
 */
 void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
+#if lab2
 	OS_DisableInterrupts();
 	while ((*semaPt).Value <= 0){ // Spin-lock...does nothing until the semaphore counter goes above 0
 		OS_EnableInterrupts();			// Allow interrupts to occur while the thread is spinning to not let the software hang
@@ -567,6 +626,14 @@ void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronizatio
 	}
 	(*semaPt).Value --;
 	OS_EnableInterrupts();
+#else
+	OS_DisableInterrupts();
+	semaPt->Value = semaPt->Value - 1;
+	if(semaPt->Value < 0){
+		Block(semaPt);
+	}
+	OS_EnableInterrupts();
+#endif
 }
 
 // ******** OS_Signal ************
@@ -583,9 +650,18 @@ void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronizatio
  *  @return none
 */
 void OS_Signal(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
+#if lab2
 	OS_DisableInterrupts();
  (*semaPt).Value++;
 	OS_EnableInterrupts();
+#else
+	OS_DisableInterrupts();
+	semaPt->Value = semaPt->Value + 1;
+	if(semaPt->Value <= 0){
+		UnBlock(semaPt);
+	}
+	OS_EnableInterrupts();
+#endif	
 }
 
 // ******** OS_bWait ************
@@ -601,6 +677,7 @@ void OS_Signal(Sema4Type *semaPt){ // Called at run time to provide synchronizat
  *  @return none
 */
 void OS_bWait(Sema4Type *semaPt){
+#if lab2
 	OS_DisableInterrupts();
 	while((*semaPt).Value == 0){
 		OS_EnableInterrupts();
@@ -609,6 +686,14 @@ void OS_bWait(Sema4Type *semaPt){
 	}
 	(*semaPt).Value = 0;
 	OS_EnableInterrupts();
+#else
+	OS_DisableInterrupts();
+	(*semaPt).Value -=1;
+	if(semaPt->Value < 0){
+		Block(semaPt);
+	}
+	OS_EnableInterrupts();
+#endif
 }
 
 // ******** OS_bSignal ************
@@ -624,9 +709,18 @@ void OS_bWait(Sema4Type *semaPt){
  *  @return none
 */
 void OS_bSignal(Sema4Type *semaPt){
+#if lab2
 	int32_t status = StartCritical();
 	(*semaPt).Value = 1;
 	EndCritical(status);
+#else
+	int32_t status = StartCritical();
+	semaPt->Value += 1;
+	if(semaPt->Value <= 0){
+		UnBlock(semaPt);
+	}
+	EndCritical(status);
+#endif
 }	
 
 /** @brief  Timer3_MS
@@ -709,13 +803,8 @@ void OS_Sleep(unsigned long sleepTime){
 */
 void OS_Kill(void){
 	OS_DisableInterrupts();
-	tcbType *prev = RunPt;
-	while(prev->next != RunPt){ //traverse linked-list to find previous pointer
-		prev = prev->next;
-	}
-	prev->next = RunPt->next;		//remove current running thread from the circular linked list
+	UnchainTCB();  //remove current running thread from the circular linked list
 	tcbs[RunPt->Id].status = -1; // remember which tcb is free
-	NumThreads--;
 	OS_Suspend(); //switch to the next task to run
 	OS_EnableInterrupts();
 	for(;;){}
@@ -944,7 +1033,7 @@ void OS_ClearMsTime(void){
 /** @brief  OS_MsTime
  *  reads the current time in msec
  *  @param  none
- *  @return time in ms units 
+ *  @return time in ms units  
 */
 unsigned long OS_MsTime(void){
 	return SystemTime_Ms;

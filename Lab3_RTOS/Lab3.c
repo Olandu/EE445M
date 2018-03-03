@@ -31,8 +31,8 @@
 #include "UART.h"
 #include "Interpreter.h"
 #include <string.h> 
-#define Lab2 1
-#define Lab3 0
+#define Lab2 0
+#define Lab3 1
 //*********Prototype for FFT in cr4_fft_64_stm32.s, STMicroelectronics
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 //*********Prototype for PID in PID_stm32.s, STMicroelectronics
@@ -418,7 +418,7 @@ void Interpreter(void){
 
 
 //*******************final user main DEMONTRATE THIS TO TA**********
-int main(void){    // realmain
+int realmain(void){    // realmain
   OS_Init();           // initialize, disable interrupts
   PortE_Init();
 	GPIO_PortF_Init();
@@ -674,7 +674,7 @@ void Thread4d(void){ int i;
 void BackgroundThread5d(void){   // called when Select button pushed
   NumCreated += OS_AddThread(&Thread4d,128,3); 
 }
-int Testmain4(void){   // Testmain4
+int main(void){   // Testmain4
   Count4 = 0;          
   OS_Init();           // initialize, disable interrupts
 	PortE_Init();

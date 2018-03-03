@@ -3,8 +3,8 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\tejas\Documents\GitHub\EE445M\Lab3_RTOS\Lab 2_RTOS Kernel.uvproj
-Project File Date:  02/28/2018
+C:\Users\oland\OneDrive - The University of Texas at Austin\Documents\UT\Spring2018\EE445M_Realtime_OS\EE445M\Lab3_RTOS\Lab 2_RTOS Kernel.uvproj
+Project File Date:  02/25/2018
 
 <h2>Output:</h2>
 Rebuild target 'Lab 2 RTOS Kernel'
@@ -20,13 +20,36 @@ compiling ST7735.c...
 compiling UART.c...
 compiling Lab3.c...
 linking...
-Program Size: Code=12620 RO-data=2052 RW-data=300 ZI-data=7532  
+Program Size: Code=6732 RO-data=2052 RW-data=308 ZI-data=6780  
 ".\Lab 2_RTOS Kernel.axf" - 0 Error(s), 0 Warning(s).
-</pre>
-</body>
-</html>
-cuments\\GitHub\\EE445M\\Lab3_RTOS\\Lab 2_RTOS Kernel.axf" 
+Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab3_RTOS\\Lab 2_RTOS Kernel.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
+Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab3_RTOS\\Lab 2_RTOS Kernel.axf" 
+Connecting: Mode=JTAG, Speed=1000000Hz
+Erase Done.
+Programming Done.
+Verify OK.
+r referenced
+  uint32_t Fifo[FSIZE];
+os.c(803): warning:  #177-D: variable "CurrentFIFOSize" was declared but never referenced
+  Sema4Type CurrentFIFOSize;// 0 means FIFO empty, FSIZE means full
+os.c(1048): error: At end of source:  #67: expected a "}"
+os.c: 6 warnings, 5 errors
+assembling OSasm.s...
+assembling cr4_fft_64_stm32.s...
+assembling PID_stm32.s...
+compiling ADC.c...
+compiling Interpreter.c...
+compiling PLL.c...
+compiling ST7735.c...
+compiling UART.c...
+compiling Lab3.c...
+".\Lab 2_RTOS Kernel.axf" - 5 Error(s), 6 Warning(s).
+Target not created
+Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab3_RTOS\\Lab 2_RTOS Kernel.axf" 
+_____^
+*** error 56: cannot open file
+Error: Flash Download failed  -  Could not load file 'C:\Users\oland\OneDrive - The University of Texas at Austin\Documents\UT\Spring2018\EE445M_Realtime_OS\EE445M\Lab3_RTOS\Lab 2_RTOS Kernel.axf'
