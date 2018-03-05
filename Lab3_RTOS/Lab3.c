@@ -504,9 +504,6 @@ void Thread2c(void){
   for(;;){
     OS_Wait(&Readyc);
     Count2++;   // Count2 + Count5 should equal Count1
-		int j = 0;
-		if(Count2 == 1825)
-			j  = 1;
   }
 }
 
@@ -530,7 +527,7 @@ void BackgroundThread5c(void){   // called when Select button pushed
   NumCreated += OS_AddThread(&Thread4c,128,3); 
 }
       
-int main(void){   // Testmain3
+int Testmain3(void){   // Testmain3
   Count4 = 0;          
   OS_Init();           // initialize, disable interrupts
 // Count2 + Count5 should equal Count1
@@ -793,7 +790,7 @@ static long result;
   result = m+n;
   return result;
 }
-int Testmain6(void){      // Testmain6  Lab 3
+int main(void){      // Testmain6  Lab 3
   volatile unsigned long delay;
   OS_Init();           // initialize, disable interrupts
   delay = add(3,4);

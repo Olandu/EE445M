@@ -43,7 +43,7 @@
 #define SysTimeReload   0xFFFFFFFF
 #define NUMTHREADS  10        // maximum number of threads
 #define STACKSIZE   128       // number of 32-bit words in stack
-#define PRILEVELS		6					// Maximum number of priority levels we can have is 6 (0 to 5) because 6 is Sys and 7 is PendSV
+#define PRILEVELS		8					// Maximum number of priority levels we can have is 7
 
 #define Lab2 0
 #define Lab3 1
@@ -767,9 +767,6 @@ void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronizatio
 	long status = StartCritical();
 	semaPt->Value = semaPt->Value - 1;
 	if(semaPt->Value < 0){
-		int stop = 0;
-		if(semaPt->Value < -2)
-			 stop = 1;
 		Block(semaPt);
 	}
 	EndCritical(status);
