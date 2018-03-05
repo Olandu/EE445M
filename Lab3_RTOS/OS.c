@@ -976,14 +976,17 @@ void OS_Kill(void){
 		}
 	} 
 	//RunPt->Pri_Next = 0;
+	tcbs[RunPt->Id].status = -1;
+	NumThreads--;
 	Pri_Total[RunPt->priority] = Pri_Total[RunPt->priority] - 1;
 	Pri_Available[RunPt->priority] = Pri_Available[RunPt->priority] - 1;
+	OS_Suspend(); //switch to the next task to run
 	OS_EnableInterrupts();
 	for(;;){}
 #endif
 }
 
-#define FSIZE 4    // can be any size
+#define FSIZE 32    // can be any size
 #define FIFOSUCCESS 1
 #define FIFOFAIL 0 
 uint32_t *PutPt;      // index of where to put next

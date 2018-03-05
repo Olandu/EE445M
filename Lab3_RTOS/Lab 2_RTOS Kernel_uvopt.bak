@@ -414,7 +414,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>272</TopLine>
+      <TopLine>273</TopLine>
       <CurrentLine>277</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\startup_TM4C123.s</PathWithFileName>
@@ -428,10 +428,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>23</ColumnNumber>
+      <ColumnNumber>24</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>38</TopLine>
-      <CurrentLine>638</CurrentLine>
+      <TopLine>681</TopLine>
+      <CurrentLine>690</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\os.c</PathWithFileName>
       <FilenameWithoutPath>os.c</FilenameWithoutPath>
@@ -446,7 +446,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>46</TopLine>
+      <TopLine>47</TopLine>
       <CurrentLine>51</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\OSasm.s</PathWithFileName>
@@ -604,10 +604,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>67</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>344</TopLine>
+      <CurrentLine>365</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Lab3.c</PathWithFileName>
       <FilenameWithoutPath>Lab3.c</FilenameWithoutPath>

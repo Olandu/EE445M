@@ -31,8 +31,8 @@
 #include "UART.h"
 #include "Interpreter.h"
 #include <string.h> 
-#define Lab2 1
-#define Lab3 0
+#define Lab2 0
+#define Lab3 1
 //*********Prototype for FFT in cr4_fft_64_stm32.s, STMicroelectronics
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 //*********Prototype for PID in PID_stm32.s, STMicroelectronics
@@ -129,7 +129,7 @@ long jitter;                    // time between measured and expected, in us
     thisTime = OS_Time();       // current time, 12.5 ns
     DASoutput = Filter(input);
     FilterWork++;        // calculation finished
-#if Lab2
+//#if Lab2
     if(FilterWork>1){    // ignore timing of first interrupt
       unsigned long diff = OS_TimeDifference(LastTime,thisTime);
       if(diff>PERIOD){
@@ -146,7 +146,7 @@ long jitter;                    // time between measured and expected, in us
       JitterHistogram[jitter]++; 
     }
     LastTime = thisTime;
-#endif
+//#endif
     PE0 ^= 0x01;
   }
 }
@@ -171,9 +171,9 @@ unsigned long myId = OS_Id();
   OS_Sleep(50);     // set this to sleep for 50msec
   ST7735_Message(1,1,"PIDWork     =",PIDWork);
   ST7735_Message(1,2,"DataLost    =",DataLost);
-	#if Lab2
+//	#if Lab2
   ST7735_Message(1,3,"Jitter 0.1us=",MaxJitter);
-	#endif
+//	#endif
   PE1 ^= 0x02;
   OS_Kill();  // done, OS does not return from a Kill
 }  
@@ -339,11 +339,11 @@ int main(void){    // realmain
   PortE_Init();
 	GPIO_PortF_Init();
 	
-#if Lab2
+//#if Lab2
   DataLost = 0;        // lost data between producer and consumer
   NumSamples = 0;
   MaxJitter = 0;       // in 1us units  
-#endif	
+//#endif	
 //********initialize communication channels
   OS_MailBox_Init();
   OS_Fifo_Init(128);    // ***note*** 4 is not big enough*****//128
@@ -355,9 +355,9 @@ int main(void){    // realmain
 #endif
   ADC_Init(4);  // sequencer 3, channel 4, PD3, sampling in DAS()
 
-#if Lab2
+//#if Lab2
   OS_AddPeriodicThread(&DAS,PERIOD,1); // 2 kHz real time sampling of PD3
-#endif
+//#endif
   NumCreated = 0 ;
 // create initial foreground threads
   NumCreated += OS_AddThread(&Interpreter,128,2); //2

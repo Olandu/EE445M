@@ -430,8 +430,8 @@
       <Focus>0</Focus>
       <ColumnNumber>24</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>681</TopLine>
-      <CurrentLine>690</CurrentLine>
+      <TopLine>633</TopLine>
+      <CurrentLine>638</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\os.c</PathWithFileName>
       <FilenameWithoutPath>os.c</FilenameWithoutPath>
@@ -604,10 +604,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>67</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>344</TopLine>
-      <CurrentLine>365</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Lab3.c</PathWithFileName>
       <FilenameWithoutPath>Lab3.c</FilenameWithoutPath>
