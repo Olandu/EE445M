@@ -416,11 +416,6 @@
               <FilePath>.\os.c</FilePath>
             </File>
             <File>
-              <FileName>Lab2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Lab2.c</FilePath>
-            </File>
-            <File>
               <FileName>OSasm.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\OSasm.s</FilePath>
@@ -469,6 +464,11 @@
               <FileName>FIFO.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\FIFO.h</FilePath>
+            </File>
+            <File>
+              <FileName>Lab3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Lab3.c</FilePath>
             </File>
           </Files>
         </Group>

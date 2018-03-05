@@ -31,8 +31,8 @@
 #include "UART.h"
 #include "Interpreter.h"
 #include <string.h> 
-#define Lab2 0
-#define Lab3 1
+#define Lab2 1
+#define Lab3 0
 //*********Prototype for FFT in cr4_fft_64_stm32.s, STMicroelectronics
 void cr4_fft_64_stm32(void *pssOUT, void *pssIN, unsigned short Nbin);
 //*********Prototype for PID in PID_stm32.s, STMicroelectronics
@@ -346,7 +346,7 @@ int main(void){    // realmain
 #endif	
 //********initialize communication channels
   OS_MailBox_Init();
-  OS_Fifo_Init(128);    // ***note*** 4 is not big enough*****
+  OS_Fifo_Init(128);    // ***note*** 4 is not big enough*****//128
 
 //*******attach background tasks***********
   OS_AddSW1Task(&SW1Push,2);
@@ -360,9 +360,9 @@ int main(void){    // realmain
 #endif
   NumCreated = 0 ;
 // create initial foreground threads
-  NumCreated += OS_AddThread(&Interpreter,128,2); 
-  NumCreated += OS_AddThread(&Consumer,128,1); 
-  NumCreated += OS_AddThread(&PID,128,3);  // Lab 3, make this lowest priority
+  NumCreated += OS_AddThread(&Interpreter,128,2); //2
+  NumCreated += OS_AddThread(&Consumer,128,1); //1
+  NumCreated += OS_AddThread(&PID,128,3);  // Lab 3, make this lowest priority ......3
  
   OS_Launch(TIME_2MS); // doesn't return, interrupts enabled in here
   return 0;            // this never executes

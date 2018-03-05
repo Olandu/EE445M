@@ -983,7 +983,7 @@ void OS_Kill(void){
 #endif
 }
 
-#define FSIZE 32    // can be any size
+#define FSIZE 4    // can be any size
 #define FIFOSUCCESS 1
 #define FIFOFAIL 0 
 uint32_t *PutPt;      // index of where to put next
