@@ -87,6 +87,8 @@
 // Z– (NC) analog input Z-axis from ADXL335 accelerometer
 // Backlight + - Light, backlight connected to +3.3 V
 
+#include <stdint.h>
+
 #ifndef _ST7735H_
 #define _ST7735H_
 

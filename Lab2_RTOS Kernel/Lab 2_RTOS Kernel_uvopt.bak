@@ -265,12 +265,12 @@
         <Ww>
           <count>21</count>
           <WinNumber>1</WinNumber>
-          <ItemText>PERIOD</ItemText>
+          <ItemText>PERIOD,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>22</count>
           <WinNumber>1</WinNumber>
-          <ItemText>diff</ItemText>
+          <ItemText>diff,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>23</count>
@@ -280,7 +280,7 @@
         <Ww>
           <count>24</count>
           <WinNumber>1</WinNumber>
-          <ItemText>MaxJitter</ItemText>
+          <ItemText>MaxJitter,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>25</count>
@@ -291,6 +291,21 @@
           <count>26</count>
           <WinNumber>1</WinNumber>
           <ItemText>LastTime,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>27</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>JitterHistogram</ItemText>
+        </Ww>
+        <Ww>
+          <count>28</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>time1</ItemText>
+        </Ww>
+        <Ww>
+          <count>29</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>time2,0x10</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -362,10 +377,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>23</ColumnNumber>
+      <ColumnNumber>44</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>886</TopLine>
-      <CurrentLine>904</CurrentLine>
+      <TopLine>861</TopLine>
+      <CurrentLine>875</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\os.c</PathWithFileName>
       <FilenameWithoutPath>os.c</FilenameWithoutPath>
@@ -378,10 +393,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>35</ColumnNumber>
+      <ColumnNumber>54</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>118</TopLine>
-      <CurrentLine>137</CurrentLine>
+      <TopLine>339</TopLine>
+      <CurrentLine>347</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Lab2.c</PathWithFileName>
       <FilenameWithoutPath>Lab2.c</FilenameWithoutPath>

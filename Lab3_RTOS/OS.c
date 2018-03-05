@@ -16,6 +16,7 @@
 #include "ST7735.h"
 #include "UART.h"
 
+
 // edit these depending on your clock        
 #define TIME_1MS    80000          
 #define TIME_2MS    (2*TIME_1MS)  
@@ -42,9 +43,20 @@
 #define SysTimeReload   0xFFFFFFFF
 #define NUMTHREADS  10        // maximum number of threads
 #define STACKSIZE   128       // number of 32-bit words in stack
+#define PRILEVELS		6					// Maximum number of priority levels we can have is 6 (0 to 5) because 6 is Sys and 7 is PendSV
 
-#define lab2 0
-#define lab3 1
+#define Lab2 0
+#define Lab3 1
+#define PriScheduler 1
+
+#if Lab3
+long MaxJitter1;             // largest time jitter between interrupts in usec
+long MaxJitter2;             // largest time jitter between interrupts in usec
+#define JITTER_SIZE 64
+unsigned long const Jitter_Size = JITTER_SIZE;
+unsigned long JitterHistogram1[JITTER_SIZE]={0,};
+unsigned long JitterHistogram2[JITTER_SIZE]={0,};
+#endif
 
 // function definitions in osasm.s
 void OS_DisableInterrupts(void); // Disable interrupts
@@ -54,9 +66,12 @@ void EndCritical(int32_t primask);
 void StartOS(void);
 
 
+
+
 //function prototypes in os.c
 void Timer3_MS(unsigned long period);
 void Timer0A_Init(void);
+
 
 unsigned long SystemTime_Ms;
 unsigned long NumThreads = 0;
@@ -69,16 +84,26 @@ struct tcb{
 	int Id;
 	int sleep;
 	int status;
-	uint8_t priority;
+	uint8_t priority;						// Range: 0 to 5 because 6 adn 7 being used for Systick and PendSV respectively
 	Sema4Type *blocked;
 	struct tcb *nextBlocked;
+	struct tcb *Pri_Next;
+	
 };
+
 typedef struct tcb tcbType;
 tcbType tcbs[NUMTHREADS];
 tcbType *RunPt;
 tcbType *NextRunPt;
 tcbType *LinkPt;
 int32_t Stacks[NUMTHREADS][STACKSIZE];
+
+// Priority Scheduling Data Structures
+tcbType *PriPt[PRILEVELS] = {0};						// Each correspongding slot will lead to the linked list associated with the priority (index)
+tcbType *PriLastPt[PRILEVELS] = {0};
+uint8_t Pri_Total[PRILEVELS] = {0};					// 0 if none else >0; Modify when any of the threads kill themselves
+uint8_t Pri_Available[PRILEVELS] = {0};			// Modified when any of the threads are sleeping or blocked...if 0, scheduler moves to the next priority level
+void AddPriThread (tcbType *thread);
 
 
 void SetInitialStack(int i){
@@ -108,14 +133,15 @@ void OtherInits(void){
 void UnchainTCB(void){
 	RunPt->prev->next = RunPt->next;
 	RunPt->next->prev = RunPt->prev;
-	LinkPt = RunPt->next;
+//	LinkPt = RunPt->next;
 	NumThreads--;
 }
 
 void ChainTCB(tcbType *newActiveThread){
-	tcbType *last = LinkPt->prev;
-	newActiveThread->next = LinkPt;
-	LinkPt->prev = newActiveThread;
+	tcbType *last = RunPt->prev;
+	Pri_Available[newActiveThread->priority] = Pri_Available[newActiveThread->priority] + 1;
+	newActiveThread->next = RunPt;
+	RunPt->prev = newActiveThread;
 	newActiveThread->prev = last;
 	last->next = newActiveThread;
 	NumThreads++;
@@ -145,6 +171,7 @@ tcbType* RemoveBlockedTCB_sema4(Sema4Type *semaPt){// assumes that at least one 
 
 void Block(Sema4Type *semaPt){
 	RunPt->blocked = semaPt; //current thread point to the semap4 it is blocked on
+	Pri_Available[RunPt->priority] = Pri_Available[RunPt->priority] - 1;
 	UnchainTCB(); // remeove current tcb from active list (does not free tcb)
 	AddBlockedTCB_Sema4(semaPt); // add tcb to the linked list of blocked threads
 	OS_Suspend();
@@ -176,6 +203,9 @@ void OS_Init(void){
 	SystemTime_Ms = 0;
 	for(int i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)
 		tcbs[i].status = -1;
+	}
+	for(int i = 0; i < PRILEVELS; i++){
+		PriPt[i] = 0;
 	}
 	Timer3_MS(TIME_1MS);
 	Timer0A_Init();
@@ -242,10 +272,30 @@ void OS_Suspend(void){
 void SysTick_Handler(void){
 	//don't use RunPt here because we want to first save the current sp before switching
 	// this is done in PendSV_handler (OSasm.s)
+	#if !PriScheduler 
 	NextRunPt = RunPt->next;
-	while(NextRunPt->sleep){
+	while(NextRunPt->sleep && NextRunPt->blocked){	// Accounts for both sleeping and blocked threads
 		NextRunPt = NextRunPt->next;
 	}
+	#else
+	int8_t priority = -1;
+	for (priority = 0; priority < PRILEVELS; priority++){
+		if (Pri_Available[priority] >= 1){break;}
+	}
+	if (priority == RunPt->priority){	
+		NextRunPt = RunPt->Pri_Next;
+		while(NextRunPt->sleep && NextRunPt->blocked){	// Accounts for both sleeping and blocked threads
+		NextRunPt = NextRunPt->Pri_Next;
+	}  
+	} else {
+		if (priority != PRILEVELS){
+		NextRunPt = PriPt[priority];
+		while(NextRunPt->sleep && NextRunPt->blocked){	// Accounts for both sleeping and blocked threads
+		NextRunPt = NextRunPt->Pri_Next;
+		}
+	}
+	}
+	#endif
 	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
 }
 
@@ -271,8 +321,9 @@ int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priori
 		return 0; // thread can not be added
 	}
 	status = StartCritical();
+	// find free tcb
 	int freetcb;
-	for( freetcb = 0; freetcb < NUMTHREADS; freetcb++){// find free tcb
+	for( freetcb = 0; freetcb < NUMTHREADS; freetcb++){
 		if(tcbs[freetcb].status == -1){
 			break;
 		}
@@ -281,6 +332,7 @@ int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priori
 		tcbs[NumThreads].next = &tcbs[0];
 		tcbs[NumThreads].prev = &tcbs[0];
 		RunPt = &tcbs[0];
+		tcbs[0].priority = priority;
 	}
 	else{ //traverse linked list of tcb and find the last thread
 		if(RunPt->status == -1){
@@ -297,12 +349,34 @@ int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priori
 	}
 	SetInitialStack(freetcb);
 	Stacks[freetcb][STACKSIZE-2] = (int32_t)(task); // PC
+	//set inittial state of tcb fields
 	tcbs[freetcb].sleep = 0;
 	tcbs[freetcb].status = 0; // tcb is in use (not free)
+	tcbs[freetcb].priority = priority;
 	tcbs[freetcb].Id = freetcb;
 	NumThreads++;
+	
+	#if PriScheduler
+	AddPriThread (&tcbs[freetcb]);
+	#endif
 	EndCritical(status);
 	return 1;     //successful
+}
+
+void AddPriThread (tcbType *thread){
+	uint8_t priority = thread->priority;
+	
+	if(Pri_Total[priority] == 0){
+		PriPt[priority] = thread; 
+		PriLastPt[priority] = thread;
+		thread->Pri_Next = thread;
+	} else {	// Add it to the beginning of the priority "linked list"
+		thread->Pri_Next = PriLastPt[priority]->Pri_Next;
+		PriLastPt[priority]->Pri_Next = thread;
+		PriPt[priority] = thread; 
+	}
+	
+	Pri_Total[priority]++; Pri_Available[priority]++;
 }
 
 //******** OS_PeriodicThreadInit *************** 
@@ -363,14 +437,73 @@ void Timer1_Init(void(*task)(void), uint32_t period,uint32_t priority){long sr;
  *  @param  none
  *  @return none
 */
+uint32_t PerTask1Counter = 0;
+uint32_t PerTask1Period;
 void Timer4A_Handler(void){
+	unsigned long thisTime = OS_Time();
+	unsigned static long LastTime;
+	long jitter;
+	
   TIMER4_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER4A timeout
   (*PeriodicThread1)();                // execute user task
+	
+#if Lab3	
+	if (PerTask1Counter){
+		unsigned long diff = OS_TimeDifference(LastTime,thisTime);
+      if(diff>PerTask1Period){
+        jitter = (diff-PerTask1Period+4)/8;  // in 0.1 usec
+      }else{
+        jitter = (PerTask1Period-diff+4)/8;  // in 0.1 usec
+      }
+      if(jitter > MaxJitter1){
+        MaxJitter1 = jitter; // in usec
+      }       // jitter should be 0
+      if(jitter >= Jitter_Size){
+        jitter = JITTER_SIZE-1;
+      }
+      JitterHistogram1[jitter]++; 
+	}
+	 LastTime = thisTime;
+	 PerTask1Counter++;
+#endif
 }
 
+uint32_t PerTask2Counter = 0;
+uint32_t PerTask2Period;
 void Timer1A_Handler(void){
+	unsigned long thisTime = OS_Time();
+	unsigned static long LastTime;
+	long jitter;
+	
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
   (*PeriodicThread2)();                // execute user task
+	
+#if Lab3
+	if (PerTask2Counter){
+		unsigned long diff = OS_TimeDifference(LastTime,thisTime);
+      if(diff>PerTask2Period){
+        jitter = (diff-PerTask2Period+4)/8;  // in 0.1 usec
+      }else{
+        jitter = (PerTask2Period-diff+4)/8;  // in 0.1 usec
+      }
+      if(jitter > MaxJitter2){
+        MaxJitter2 = jitter; // in usec
+      }       // jitter should be 0
+      if(jitter >= Jitter_Size){
+        jitter = JITTER_SIZE-1;
+      }
+      JitterHistogram2[jitter]++; 
+	}
+	 LastTime = thisTime;
+	 PerTask2Counter++;
+#endif
+}
+
+void Jitter (void) {
+	#if Lab3
+	ST7735_Message(0, 1, "Jitter 0.1us = ", MaxJitter1);	// Jitter for Periodic Task 1
+	ST7735_Message(0, 2, "Jitter 0.1us = ", MaxJitter2);	// Jitter for Periodic Task 2
+	#endif
 }
 //******** OS_AddPeriodicThread *************** 
 // add a background periodic task
@@ -405,9 +538,11 @@ void Timer1A_Handler(void){
 unsigned long NumPeriodicTasks = 0;
 int OS_AddPeriodicThread(void(*task)(void),unsigned long period, unsigned long priority){ 
 		if(NumPeriodicTasks == 0){
+			PerTask1Period = period;
 			Timer4_Init(task,period,priority);
 		}
 		else if(NumPeriodicTasks == 1){
+		 PerTask2Period = period;
 		 Timer1_Init(task,period,priority);
 		}
 		else{
@@ -442,13 +577,13 @@ void SW1_init (unsigned long priority){unsigned long volatile delay;
 
 	GPIO_PORTF_ICR_R = 0x10;      		// (e) clear flag4
   GPIO_PORTF_IM_R |= 0x10;      		// (f) arm interrupt on PF4
-	
+	SW1_Priority = priority;
 	priority = (priority & 0x07) << 21;	// NVIC priority bit (21-23)
   //NVIC_PRI7_R = (NVIC_PRI7_R&0xFF00FFFF)|0x00A00000; // (g) priority 5
 	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF); // clear priority
 	NVIC_PRI7_R = (NVIC_PRI7_R | priority); 
   NVIC_EN0_R = 0x40000000;      		// (h) enable interrupt 30 in NVIC 
-	SW1_Priority = priority;	
+		
 }
 
 
@@ -470,13 +605,13 @@ void SW2_init (unsigned long priority){
 
 	GPIO_PORTF_ICR_R = 0x01;      		// (e) clear flag0
   GPIO_PORTF_IM_R |= 0x01;      		// (f) arm interrupt on PF0
-	
+	SW2_Priority = priority;
 	priority = (priority & 0x07) << 21;	// NVIC priority bit (21-23)
   //NVIC_PRI7_R = (NVIC_PRI7_R&0xFF00FFFF)|0x00A00000; // (g) priority 5
 	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF); // clear priority
 	NVIC_PRI7_R = (NVIC_PRI7_R | priority); 
   NVIC_EN0_R = 0x40000000;      		// (h) enable interrupt 30 in NVIC 
-	SW2_Priority = priority;
+	
 }
 
 /** @brief  SW1_Debounce
@@ -588,7 +723,6 @@ unsigned long OS_Id(void){
 	return RunPt->Id;
 }
 
-
 // ******** OS_InitSemaphore ************
 // initialize semaphore 
 // input:  pointer to a semaphore
@@ -617,7 +751,7 @@ void OS_InitSemaphore(Sema4Type *semaPt, long value){	//Occurs once at the start
  *  @return none
 */
 void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
-#if lab2
+#if Lab2
 	OS_DisableInterrupts();
 	while ((*semaPt).Value <= 0){ // Spin-lock...does nothing until the semaphore counter goes above 0
 		OS_EnableInterrupts();			// Allow interrupts to occur while the thread is spinning to not let the software hang
@@ -650,7 +784,7 @@ void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronizatio
  *  @return none
 */
 void OS_Signal(Sema4Type *semaPt){ // Called at run time to provide synchronization between threads
-#if lab2
+#if Lab2
 	OS_DisableInterrupts();
  (*semaPt).Value++;
 	OS_EnableInterrupts();
@@ -677,7 +811,7 @@ void OS_Signal(Sema4Type *semaPt){ // Called at run time to provide synchronizat
  *  @return none
 */
 void OS_bWait(Sema4Type *semaPt){
-#if lab2
+#if Lab2
 	OS_DisableInterrupts();
 	while((*semaPt).Value == 0){
 		OS_EnableInterrupts();
@@ -709,7 +843,7 @@ void OS_bWait(Sema4Type *semaPt){
  *  @return none
 */
 void OS_bSignal(Sema4Type *semaPt){
-#if lab2
+#if Lab2
 	int32_t status = StartCritical();
 	(*semaPt).Value = 1;
 	EndCritical(status);
@@ -757,6 +891,11 @@ void WakeUpThreads(void){
 	for(int i=0;i<NUMTHREADS;i++){
 		if((tcbs[i].sleep)&&(tcbs[i].status != -1)){
 			tcbs[i].sleep--;
+			#if PriScheduler
+			if (tcbs[i].sleep == 0) {
+				Pri_Available[tcbs[i].priority] = Pri_Available[tcbs[i].priority] + 1;
+			}
+			#endif 
 		}
 	}
 }
@@ -787,6 +926,9 @@ void Timer3A_Handler(void){
 void OS_Sleep(unsigned long sleepTime){
 	OS_DisableInterrupts();
 	RunPt ->sleep = sleepTime;
+	#if PriScheduler
+	Pri_Available[RunPt->priority] = Pri_Available[RunPt->priority] - 1;
+	#endif
 	OS_Suspend();
 	OS_EnableInterrupts();
 }
@@ -802,12 +944,40 @@ void OS_Sleep(unsigned long sleepTime){
  *  @return none
 */
 void OS_Kill(void){
+#if Lab2
 	OS_DisableInterrupts();
 	UnchainTCB();  //remove current running thread from the circular linked list
 	tcbs[RunPt->Id].status = -1; // remember which tcb is free
 	OS_Suspend(); //switch to the next task to run
 	OS_EnableInterrupts();
 	for(;;){}
+#else
+	OS_DisableInterrupts();
+	tcbType *temp, *current;
+	if ((RunPt == PriPt[RunPt->priority]) && (RunPt == PriLastPt[RunPt->priority])){ // only one node in the list
+		PriPt[RunPt->priority] = 0;
+		PriLastPt[RunPt->priority] = 0;
+	} else if (RunPt == PriPt[RunPt->priority]){	// Delete the first node in the list
+			PriLastPt[RunPt->priority]->Pri_Next = RunPt->Pri_Next;
+			PriPt[RunPt->priority] = PriLastPt[RunPt->priority]->Pri_Next;
+	} else {	
+			temp = current = PriPt[RunPt->priority];
+			while (current != RunPt){
+				temp = current; current = current->Pri_Next;
+		}
+		if (RunPt == PriLastPt[RunPt->priority]){ // Delete the last node in the list
+			temp->Pri_Next = PriPt[RunPt->priority];
+			PriLastPt[RunPt->priority] = temp;
+		} else {	// Delete a specific node in the list
+			temp->Pri_Next = current->Pri_Next;
+		}
+	} 
+	//RunPt->Pri_Next = 0;
+	Pri_Total[RunPt->priority] = Pri_Total[RunPt->priority] - 1;
+	Pri_Available[RunPt->priority] = Pri_Available[RunPt->priority] - 1;
+	OS_EnableInterrupts();
+	for(;;){}
+#endif
 }
 
 #define FSIZE 32    // can be any size
@@ -1033,7 +1203,7 @@ void OS_ClearMsTime(void){
 /** @brief  OS_MsTime
  *  reads the current time in msec
  *  @param  none
- *  @return time in ms units  
+ *  @return time in ms units 
 */
 unsigned long OS_MsTime(void){
 	return SystemTime_Ms;
@@ -1060,5 +1230,6 @@ void Timer0A_Init(void){long sr;
 
 void Timer0A_Handler(void){
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
-
 }
+
+

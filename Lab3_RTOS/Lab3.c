@@ -51,21 +51,12 @@ long x[64],y[64];           // input and output arrays for FFT
 
 //---------------------User debugging-----------------------
 unsigned long DataLost;     // data sent by Producer, but not received by Consumer
-#if Lab2
+
 long MaxJitter;             // largest time jitter between interrupts in usec
 #define JITTERSIZE 64
 unsigned long const JitterSize=JITTERSIZE;
 unsigned long JitterHistogram[JITTERSIZE]={0,};
-#endif
 
-#if Lab3
-long MaxJitter1;             // largest time jitter between interrupts in usec
-long MaxJitter2;             // largest time jitter between interrupts in usec
-#define JITTERSIZE 64
-unsigned long const JitterSize = JITTERSIZE;
-unsigned long JitterHistogram1[JITTERSIZE]={0,};
-unsigned long JitterHistogram2[JITTERSIZE]={0,};
-#endif
 unsigned long TotalWithI1;
 unsigned short MaxWithI1;
 
@@ -125,7 +116,7 @@ static unsigned long n=3;   // 3, 4, or 5
 // inputs:  none
 // outputs: none
 unsigned long DASoutput;
-#if Lab2
+
 void DAS(void){ 
 unsigned long input;  
 unsigned static long LastTime;  // time at previous ADC sample
@@ -138,6 +129,7 @@ long jitter;                    // time between measured and expected, in us
     thisTime = OS_Time();       // current time, 12.5 ns
     DASoutput = Filter(input);
     FilterWork++;        // calculation finished
+#if Lab2
     if(FilterWork>1){    // ignore timing of first interrupt
       unsigned long diff = OS_TimeDifference(LastTime,thisTime);
       if(diff>PERIOD){
@@ -154,75 +146,12 @@ long jitter;                    // time between measured and expected, in us
       JitterHistogram[jitter]++; 
     }
     LastTime = thisTime;
-    PE0 ^= 0x01;
-  }
-}
 #endif
-#if Lab3
-void DAS1(void){ 
-unsigned long input;  
-unsigned static long LastTime;  // time at previous ADC sample
-unsigned long thisTime;         // time at current ADC sample
-long jitter;
-  if(NumSamples < RUNLENGTH){   // finite time run
     PE0 ^= 0x01;
-    input = ADC_In();           // channel set when calling ADC_Init
-    PE0 ^= 0x01;
-		thisTime = OS_Time();       // current time, 12.5 ns
-    DASoutput = Filter(input);
-    FilterWork++;        // calculation finished
-    PE0 ^= 0x01;
-		if(FilterWork>1){    // ignore timing of first interrupt
-      unsigned long diff = OS_TimeDifference(LastTime,thisTime);
-      if(diff>PERIOD){
-        jitter = (diff-PERIOD+4)/8;  // in 0.1 usec
-      }else{
-        jitter = (PERIOD-diff+4)/8;  // in 0.1 usec
-      }
-      if(jitter > MaxJitter1){
-        MaxJitter1 = jitter; // in usec
-      }       // jitter should be 0
-      if(jitter >= JitterSize){
-        jitter = JITTERSIZE-1;
-      }
-      JitterHistogram1[jitter]++; 
-    }
-    LastTime = thisTime;
   }
 }
 
-void DAS2(void){ 
-unsigned long input;  
-unsigned static long LastTime;  // time at previous ADC sample
-unsigned long thisTime;         // time at current ADC sample
-long jitter;
-  if(NumSamples < RUNLENGTH){   // finite time run
-    PE0 ^= 0x01;
-    input = ADC_In();           // channel set when calling ADC_Init
-    PE0 ^= 0x01;
-		thisTime = OS_Time();       // current time, 12.5 ns
-    DASoutput = Filter(input);
-    FilterWork++;        // calculation finished
-    PE0 ^= 0x01;
-		if(FilterWork>1){    // ignore timing of first interrupt
-      unsigned long diff = OS_TimeDifference(LastTime,thisTime);
-      if(diff>PERIOD){
-        jitter = (diff-PERIOD+4)/8;  // in 0.1 usec
-      }else{
-        jitter = (PERIOD-diff+4)/8;  // in 0.1 usec
-      }
-      if(jitter > MaxJitter2){
-        MaxJitter2 = jitter; // in usec
-      }       // jitter should be 0
-      if(jitter >= JitterSize){
-        jitter = JITTERSIZE-1;
-      }
-      JitterHistogram2[jitter]++; 
-    }
-    LastTime = thisTime;
-  }
-}
-#endif
+
 //--------------end of Task 1-----------------------------
 
 //------------------Task 2--------------------------------
@@ -233,7 +162,7 @@ long jitter;
 //#if Lab3
 //extern unsigned long MaxJitter;
 //#endif
-#if Lab2
+// #if Lab2
 void ButtonWork(void){
 unsigned long myId = OS_Id(); 
   PE1 ^= 0x02;
@@ -242,26 +171,14 @@ unsigned long myId = OS_Id();
   OS_Sleep(50);     // set this to sleep for 50msec
   ST7735_Message(1,1,"PIDWork     =",PIDWork);
   ST7735_Message(1,2,"DataLost    =",DataLost);
+	#if Lab2
   ST7735_Message(1,3,"Jitter 0.1us=",MaxJitter);
+	#endif
   PE1 ^= 0x02;
   OS_Kill();  // done, OS does not return from a Kill
-} 
-#else
-void ButtonWork(void){
-unsigned long myId = OS_Id(); 
-  PE1 ^= 0x02;
-  ST7735_Message(1,0,"NumCreated =",NumCreated); 
-  PE1 ^= 0x02;
-  OS_Sleep(50);     // set this to sleep for 50msec
-  ST7735_Message(1,1,"PIDWork     =",PIDWork);
-  ST7735_Message(1,2,"DataLost    =",DataLost);
-	ST7735_Message(1,3,"Jitter 0.1us=",MaxJitter1);
-  ST7735_Message(1,4,"Jitter 0.1us=",MaxJitter2);
-  PE1 ^= 0x02;
-  OS_Kill();  // done, OS does not return from a Kill
-} 
-#endif
-
+}  
+// #endif
+ 
 //************SW1Push*************
 // Called when SW1 Button pushed
 // Adds another foreground task
@@ -282,7 +199,6 @@ void SW1Push(void){
 void BumperWork(void){
   PF1 ^= 0x02;
 	UART_OutString ("SW2");
-	
 	PF1 ^= 0x02;
 }
 //--------------end of Task 2-----------------------------
@@ -422,29 +338,25 @@ int realmain(void){    // realmain
   OS_Init();           // initialize, disable interrupts
   PortE_Init();
 	GPIO_PortF_Init();
+	
+#if Lab2
   DataLost = 0;        // lost data between producer and consumer
   NumSamples = 0;
-#if Lab2
-  MaxJitter = 0;       // in 1us units
-#else
-	MaxJitter1 = 0;   
-	MaxJitter2 = 0;   
-#endif
+  MaxJitter = 0;       // in 1us units  
+#endif	
 //********initialize communication channels
   OS_MailBox_Init();
   OS_Fifo_Init(128);    // ***note*** 4 is not big enough*****
 
 //*******attach background tasks***********
   OS_AddSW1Task(&SW1Push,2);
-//#if Lab3
+#if Lab3
   OS_AddSW2Task(&BumperWork,2);  // add this line in Lab 3
-//#endif
+#endif
   ADC_Init(4);  // sequencer 3, channel 4, PD3, sampling in DAS()
+
 #if Lab2
   OS_AddPeriodicThread(&DAS,PERIOD,1); // 2 kHz real time sampling of PD3
-#else
-	OS_AddPeriodicThread(&DAS1,PERIOD,1); // 2 kHz real time sampling of PD3
-	OS_AddPeriodicThread(&DAS2,PERIOD,1); // 2 kHz real time sampling of PD3
 #endif
   NumCreated = 0 ;
 // create initial foreground threads
@@ -568,10 +480,12 @@ int Testmain2(void){  // Testmain2
 // tests the spinlock semaphores, tests Sleep and Kill
 Sema4Type Readyc;        // set in background
 int Lost;
+
 void BackgroundThread1c(void){   // called at 1000 Hz
   Count1++;
   OS_Signal(&Readyc);
 }
+
 void Thread5c(void){
   for(;;){
     OS_Wait(&Readyc);
@@ -579,6 +493,7 @@ void Thread5c(void){
     Lost = Count1-Count5-Count2;
   }
 }
+
 void Thread2c(void){
   OS_InitSemaphore(&Readyc,0);
   Count1 = 0;    // number of times signal is called      
@@ -603,6 +518,7 @@ void Thread4c(void){ int i;
 		Count4++;
 		OS_Sleep(10);
   }
+	
   OS_Kill();
   Count4 = 0;
 }
@@ -611,7 +527,7 @@ void BackgroundThread5c(void){   // called when Select button pushed
   NumCreated += OS_AddThread(&Thread4c,128,3); 
 }
       
-int Testmain3(void){   // Testmain3
+int main(void){   // Testmain3
   Count4 = 0;          
   OS_Init();           // initialize, disable interrupts
 // Count2 + Count5 should equal Count1
@@ -674,7 +590,7 @@ void Thread4d(void){ int i;
 void BackgroundThread5d(void){   // called when Select button pushed
   NumCreated += OS_AddThread(&Thread4d,128,3); 
 }
-int main(void){   // Testmain4
+int Testmain4(void){   // Testmain4
   Count4 = 0;          
   OS_Init();           // initialize, disable interrupts
 	PortE_Init();
@@ -767,7 +683,7 @@ extern void Jitter(void);   // prints jitter information (write this)
 void Thread7(void){  // foreground thread
   UART_OutString("\n\rEE345M/EE380L, Lab 3 Preparation 2\n\r");
   OS_Sleep(5000);   // 10 seconds        
-  //Jitter();         // print jitter information
+  Jitter();         // print jitter information
   UART_OutString("\n\r\n\r");
   OS_Kill();
 }
@@ -793,7 +709,7 @@ int Testmain5(void){       // Testmain5 Lab 3
   NumCreated = 0 ;
   NumCreated += OS_AddThread(&Thread6,128,2); 
   NumCreated += OS_AddThread(&Thread7,128,1); 
-  OS_AddPeriodicThread(&TaskA,TIME_1MS,0);           // 1 ms, higher priority
+  OS_AddPeriodicThread(&TaskA,TIME_1MS,0);           // 1 ms, higher priority, 239997...0.0029999625
   OS_AddPeriodicThread(&TaskB,2*TIME_1MS,1);         // 2 ms, lower priority
  
   OS_Launch(TIME_2MS); // 2ms, doesn't return, interrupts enabled in here
