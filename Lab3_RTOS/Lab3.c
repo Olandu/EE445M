@@ -334,7 +334,7 @@ void Interpreter(void){
 
 
 //*******************final user main DEMONTRATE THIS TO TA**********
-int realmain(void){    // realmain
+int main(void){    // realmain
   OS_Init();           // initialize, disable interrupts
   PortE_Init();
 	GPIO_PortF_Init();
@@ -790,7 +790,7 @@ static long result;
   result = m+n;
   return result;
 }
-int main(void){      // Testmain6  Lab 3
+int Testmain6(void){      // Testmain6  Lab 3
   volatile unsigned long delay;
   OS_Init();           // initialize, disable interrupts
   delay = add(3,4);
