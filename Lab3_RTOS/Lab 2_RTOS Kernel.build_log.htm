@@ -10,6 +10,9 @@ Project File Date:  03/04/2018
 Rebuild target 'Lab 2 RTOS Kernel'
 assembling startup_TM4C123.s...
 compiling os.c...
+os.c(770): warning:  #550-D: variable "stop" was set but never used
+                int stop = 0;
+os.c: 1 warning, 0 errors
 assembling OSasm.s...
 assembling cr4_fft_64_stm32.s...
 assembling PID_stm32.s...
@@ -25,10 +28,12 @@ Lab3.c(123): warning:  #550-D: variable "thisTime" was set but never used
   unsigned long thisTime;         // time at current ADC sample
 Lab3.c(124): warning:  #177-D: variable "jitter" was declared but never referenced
   long jitter;                    // time between measured and expected, in us
-Lab3.c: 3 warnings, 0 errors
+Lab3.c(507): warning:  #550-D: variable "j" was set but never used
+                int j = 0;
+Lab3.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=7412 RO-data=2052 RW-data=344 ZI-data=7384  
-".\Lab 2_RTOS Kernel.axf" - 0 Error(s), 3 Warning(s).
+Program Size: Code=7512 RO-data=2052 RW-data=332 ZI-data=7428  
+".\Lab 2_RTOS Kernel.axf" - 0 Error(s), 5 Warning(s).
 Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab3_RTOS\\Lab 2_RTOS Kernel.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
@@ -36,6 +41,5 @@ Programming Done.
 Verify OK.
 Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab3_RTOS\\Lab 2_RTOS Kernel.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
+Connection failed!, error code=&d
+Error: Flash Download failed  -  Target DLL has been cancelled

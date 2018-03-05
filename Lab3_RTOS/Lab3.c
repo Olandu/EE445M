@@ -504,6 +504,9 @@ void Thread2c(void){
   for(;;){
     OS_Wait(&Readyc);
     Count2++;   // Count2 + Count5 should equal Count1
+		int j = 0;
+		if(Count2 == 1825)
+			j  = 1;
   }
 }
 

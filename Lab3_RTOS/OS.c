@@ -101,8 +101,8 @@ int32_t Stacks[NUMTHREADS][STACKSIZE];
 // Priority Scheduling Data Structures
 tcbType *PriPt[PRILEVELS] = {0};						// Each correspongding slot will lead to the linked list associated with the priority (index)
 tcbType *PriLastPt[PRILEVELS] = {0};
-uint8_t Pri_Total[PRILEVELS] = {0};					// 0 if none else >0; Modify when any of the threads kill themselves
-uint8_t Pri_Available[PRILEVELS] = {0};			// Modified when any of the threads are sleeping or blocked...if 0, scheduler moves to the next priority level
+int32_t Pri_Total[PRILEVELS] = {0};					// 0 if none else >0; Modify when any of the threads kill themselves
+int32_t Pri_Available[PRILEVELS] = {0};			// Modified when any of the threads are sleeping or blocked...if 0, scheduler moves to the next priority level
 void AddPriThread (tcbType *thread);
 
 
@@ -274,7 +274,7 @@ void SysTick_Handler(void){
 	// this is done in PendSV_handler (OSasm.s)
 	#if !PriScheduler 
 	NextRunPt = RunPt->next;
-	while(NextRunPt->sleep && NextRunPt->blocked){	// Accounts for both sleeping and blocked threads
+	while(NextRunPt->sleep || NextRunPt->blocked){	// Accounts for both sleeping and blocked threads
 		NextRunPt = NextRunPt->next;
 	}
 	#else
@@ -284,16 +284,16 @@ void SysTick_Handler(void){
 	}
 	if (priority == RunPt->priority){	
 		NextRunPt = RunPt->Pri_Next;
-		while(NextRunPt->sleep && NextRunPt->blocked){	// Accounts for both sleeping and blocked threads
-		NextRunPt = NextRunPt->Pri_Next;
-	}  
+		while(NextRunPt->sleep || NextRunPt->blocked){	// Accounts for both sleeping and blocked threads
+			NextRunPt = NextRunPt->Pri_Next;
+		}  
 	} else {
 		if (priority != PRILEVELS){
-		NextRunPt = PriPt[priority];
-		while(NextRunPt->sleep && NextRunPt->blocked){	// Accounts for both sleeping and blocked threads
-		NextRunPt = NextRunPt->Pri_Next;
+			NextRunPt = PriPt[priority];
+			while(NextRunPt->sleep || NextRunPt->blocked){	// Accounts for both sleeping and blocked threads
+				NextRunPt = NextRunPt->Pri_Next;
+			}
 		}
-	}
 	}
 	#endif
 	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
@@ -733,7 +733,10 @@ unsigned long OS_Id(void){
  *  @return none
 */
 void OS_InitSemaphore(Sema4Type *semaPt, long value){	//Occurs once at the start
+	long status = StartCritical();
 	(*semaPt).Value = value;
+	semaPt->blockedThreads = 0;
+	EndCritical(status);
 	
 }
 
@@ -761,12 +764,15 @@ void OS_Wait(Sema4Type *semaPt){ // Called at run time to provide synchronizatio
 	(*semaPt).Value --;
 	OS_EnableInterrupts();
 #else
-	OS_DisableInterrupts();
+	long status = StartCritical();
 	semaPt->Value = semaPt->Value - 1;
 	if(semaPt->Value < 0){
+		int stop = 0;
+		if(semaPt->Value < -2)
+			 stop = 1;
 		Block(semaPt);
 	}
-	OS_EnableInterrupts();
+	EndCritical(status);
 #endif
 }
 
@@ -789,12 +795,12 @@ void OS_Signal(Sema4Type *semaPt){ // Called at run time to provide synchronizat
  (*semaPt).Value++;
 	OS_EnableInterrupts();
 #else
-	OS_DisableInterrupts();
+	long status = StartCritical();
 	semaPt->Value = semaPt->Value + 1;
 	if(semaPt->Value <= 0){
 		UnBlock(semaPt);
 	}
-	OS_EnableInterrupts();
+	EndCritical(status);
 #endif	
 }
 
