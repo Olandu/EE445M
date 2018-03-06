@@ -556,6 +556,7 @@ int OS_AddPeriodicThread(void(*task)(void),unsigned long period, unsigned long p
 //******** OS_EventThreadInit *************** 
 void (*SW1_EventThread) (void);
 unsigned long SW1_Priority;
+unsigned long LastPF4;
 /** @brief  SW1_init
  *	Initializes the TM4C123 built-in SW1
  *  @param  priority of the background periodic task
@@ -583,11 +584,12 @@ void SW1_init (unsigned long priority){unsigned long volatile delay;
 	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF); // clear priority
 	NVIC_PRI7_R = (NVIC_PRI7_R | priority); 
   NVIC_EN0_R = 0x40000000;      		// (h) enable interrupt 30 in NVIC 
-		
+	LastPF4 = PF4;
 }
 
 
 void (*SW2_EventThread) (void);
+unsigned long LastPF0;
 unsigned long SW2_Priority;
 void SW2_init (unsigned long priority){
 	SYSCTL_RCGCGPIO_R |= 0x00000020; 	// (a) activate clock for port F
@@ -611,7 +613,7 @@ void SW2_init (unsigned long priority){
 	NVIC_PRI7_R = (NVIC_PRI7_R & 0xFF00FFFF); // clear priority
 	NVIC_PRI7_R = (NVIC_PRI7_R | priority); 
   NVIC_EN0_R = 0x40000000;      		// (h) enable interrupt 30 in NVIC 
-	
+	LastPF0 = PF0;
 }
 
 /** @brief  SW1_Debounce
@@ -621,7 +623,8 @@ void SW2_init (unsigned long priority){
  *  @return none
 */
 void SW1_Debounce(void){
-	OS_Sleep(10); // sleep for 20ms
+	OS_Sleep(10); // sleep for 10ms
+	LastPF4 = PF4;
 	GPIO_PORTF_ICR_R = 0x10;      // (e) clear flag4
   GPIO_PORTF_IM_R |= 0x10;      // (f) arm interrupt on PF4
 	OS_Kill();
@@ -629,6 +632,7 @@ void SW1_Debounce(void){
 
 void SW2_Debounce(void){
 	OS_Sleep(10); // sleep for 10ms
+	LastPF0 = PF0;
 	GPIO_PORTF_ICR_R = 0x01;      // (e) clear flag0
   GPIO_PORTF_IM_R |= 0x01;      // (f) arm interrupt on PF0
 	OS_Kill();
@@ -641,7 +645,9 @@ void SW2_Debounce(void){
 */
 void GPIOPortF_Handler(void){
 	if(GPIO_PORTF_RIS_R & 0x10){    // SW1 pressed
-		(*SW1_EventThread)();
+		if(LastPF4 == PF4){
+			(*SW1_EventThread)();
+		}
 		GPIO_PORTF_IM_R &= ~0x10;     // disarm interrupt on PF4 
 		int status = OS_AddThread(&SW1_Debounce,128,SW1_Priority);
 		if(status == 0){ // thread cannot be created
@@ -650,7 +656,9 @@ void GPIOPortF_Handler(void){
 		}
 	}
 	if(GPIO_PORTF_RIS_R & 0x01){		// SW2 pressed
-		(*SW2_EventThread)();
+		if(LastPF0 == PF0){
+			(*SW2_EventThread)();
+		}
 		GPIO_PORTF_IM_R &= ~0x01;     // disarm interrupt on PF0
 		int status = OS_AddThread(&SW2_Debounce,128,SW2_Priority);
 		if(status == 0){ // thread cannot be created

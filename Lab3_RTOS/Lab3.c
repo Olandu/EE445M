@@ -185,21 +185,25 @@ unsigned long myId = OS_Id();
 // background threads execute once and return
 void SW1Push(void){
 	unsigned long Time = OS_MsTime();
-  //if(OS_MsTime() > 20){ // debounce
+//  if(OS_MsTime() > 20){ // debounce
     if(OS_AddThread(&ButtonWork,100,2)){
       NumCreated++; 
     }
- //   OS_ClearMsTime();  // at least 20ms between touches
+//    OS_ClearMsTime();  // at least 20ms between touches
  // }
 }
 //************SW2Push*************
 // Called when SW2 Button pushed, Lab 3 only
 // Adds another foreground task
 // background threads execute once and return
-void BumperWork(void){
-  PF1 ^= 0x02;
-	UART_OutString ("SW2");
-	PF1 ^= 0x02;
+void SW2Push(void){
+  unsigned long Time = OS_MsTime();
+//  if(OS_MsTime() > 20){ // debounce
+    if(OS_AddThread(&ButtonWork,100,2)){
+      NumCreated++; 
+    }
+//    OS_ClearMsTime();  // at least 20ms between touches
+ // }
 }
 //--------------end of Task 2-----------------------------
 
@@ -351,7 +355,7 @@ int main(void){    // realmain
 //*******attach background tasks***********
   OS_AddSW1Task(&SW1Push,2);
 #if Lab3
-  OS_AddSW2Task(&BumperWork,2);  // add this line in Lab 3
+  OS_AddSW2Task(&SW2Push,2);  // add this line in Lab 3
 #endif
   ADC_Init(4);  // sequencer 3, channel 4, PD3, sampling in DAS()
 
@@ -362,7 +366,7 @@ int main(void){    // realmain
 // create initial foreground threads
   NumCreated += OS_AddThread(&Interpreter,128,2); //2
   NumCreated += OS_AddThread(&Consumer,128,1); //1
-  NumCreated += OS_AddThread(&PID,128,3);  // Lab 3, make this lowest priority ......3
+  NumCreated += OS_AddThread(&PID,128,2);  // Lab 3, make this lowest priority ......3
  
   OS_Launch(TIME_2MS); // doesn't return, interrupts enabled in here
   return 0;            // this never executes
