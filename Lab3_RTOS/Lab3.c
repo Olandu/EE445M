@@ -165,16 +165,16 @@ long jitter;                    // time between measured and expected, in us
 // #if Lab2
 void ButtonWork(void){
 unsigned long myId = OS_Id(); 
-  PE1 ^= 0x02;
+  PF1 ^= 0x02;
   ST7735_Message(1,0,"NumCreated =",NumCreated); 
-  PE1 ^= 0x02;
+  PF1 ^= 0x02;
   OS_Sleep(50);     // set this to sleep for 50msec
   ST7735_Message(1,1,"PIDWork     =",PIDWork);
   ST7735_Message(1,2,"DataLost    =",DataLost);
 //	#if Lab2
   ST7735_Message(1,3,"Jitter 0.1us=",MaxJitter);
 //	#endif
-  PE1 ^= 0x02;
+  PF1 ^= 0x02;
   OS_Kill();  // done, OS does not return from a Kill
 }  
 // #endif
@@ -299,12 +299,15 @@ unsigned long myId = OS_Id();
   Coeff[0] = 384;   // 1.5 = 384/256 proportional coefficient
   Coeff[1] = 128;   // 0.5 = 128/256 integral coefficient
   Coeff[2] = 64;    // 0.25 = 64/256 derivative coefficient*
+	PF2 ^= 0x04;
+	PF2 ^= 0x04;
   while(NumSamples < RUNLENGTH) { 
     for(err = -1000; err <= 1000; err++){    // made-up data
       Actuator = PID_stm32(err,Coeff)/256;
     }
     PIDWork++;        // calculation finished
   }
+	PF2 ^= 0x04;
   for(;;){ }          // done
 }
 //--------------end of Task 4-----------------------------
@@ -343,11 +346,10 @@ int main(void){    // realmain
   PortE_Init();
 	GPIO_PortF_Init();
 	
-//#if Lab2
   DataLost = 0;        // lost data between producer and consumer
   NumSamples = 0;
   MaxJitter = 0;       // in 1us units  
-//#endif	
+	
 //********initialize communication channels
   OS_MailBox_Init();
   OS_Fifo_Init(128);    // ***note*** 4 is not big enough*****//128
@@ -359,9 +361,8 @@ int main(void){    // realmain
 #endif
   ADC_Init(4);  // sequencer 3, channel 4, PD3, sampling in DAS()
 
-//#if Lab2
   OS_AddPeriodicThread(&DAS,PERIOD,1); // 2 kHz real time sampling of PD3
-//#endif
+
   NumCreated = 0 ;
 // create initial foreground threads
   NumCreated += OS_AddThread(&Interpreter,128,2); //2

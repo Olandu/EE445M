@@ -133,15 +133,18 @@ void OtherInits(void){
 void UnchainTCB(void){
 	RunPt->prev->next = RunPt->next;
 	RunPt->next->prev = RunPt->prev;
-//	LinkPt = RunPt->next;
+	LinkPt = RunPt->next;
 	NumThreads--;
 }
 
 void ChainTCB(tcbType *newActiveThread){
-	tcbType *last = RunPt->prev;
+//	tcbType *last = RunPt->prev;
+	tcbType *last = LinkPt->prev;
 	Pri_Available[newActiveThread->priority] = Pri_Available[newActiveThread->priority] + 1;
-	newActiveThread->next = RunPt;
-	RunPt->prev = newActiveThread;
+//	newActiveThread->next = RunPt;
+	newActiveThread->next = LinkPt;
+//	RunPt->prev = newActiveThread;
+	LinkPt->prev = newActiveThread;
 	newActiveThread->prev = last;
 	last->next = newActiveThread;
 	NumThreads++;
@@ -278,6 +281,8 @@ void SysTick_Handler(void){
 		NextRunPt = NextRunPt->next;
 	}
 	#else
+	PE1 ^= 0x02;
+	PE1 ^= 0x02;
 	int8_t priority = -1;
 	for (priority = 0; priority < PRILEVELS; priority++){
 		if (Pri_Available[priority] >= 1){break;}
@@ -297,6 +302,7 @@ void SysTick_Handler(void){
 	}
 	#endif
 	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
+	PE1 ^= 0x02;
 }
 
 //******** OS_AddThread *************** 
@@ -955,7 +961,7 @@ void OS_Sleep(unsigned long sleepTime){
  *  @return none
 */
 void OS_Kill(void){
-#if Lab2
+#if !PriScheduler
 	OS_DisableInterrupts();
 	UnchainTCB();  //remove current running thread from the circular linked list
 	tcbs[RunPt->Id].status = -1; // remember which tcb is free
