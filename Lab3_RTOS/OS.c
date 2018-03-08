@@ -47,7 +47,7 @@
 
 #define Lab2 0
 #define Lab3 1
-#define PriScheduler 1
+#define PriScheduler 0
 
 #if Lab3
 long MaxJitter1;             // largest time jitter between interrupts in usec
@@ -133,18 +133,18 @@ void OtherInits(void){
 void UnchainTCB(void){
 	RunPt->prev->next = RunPt->next;
 	RunPt->next->prev = RunPt->prev;
-	LinkPt = RunPt->next;
+//	LinkPt = RunPt->next;
 	NumThreads--;
 }
 
 void ChainTCB(tcbType *newActiveThread){
-//	tcbType *last = RunPt->prev;
-	tcbType *last = LinkPt->prev;
+	tcbType *last = RunPt->prev;
+//	tcbType *last = LinkPt->prev;
 	Pri_Available[newActiveThread->priority] = Pri_Available[newActiveThread->priority] + 1;
-//	newActiveThread->next = RunPt;
-	newActiveThread->next = LinkPt;
-//	RunPt->prev = newActiveThread;
-	LinkPt->prev = newActiveThread;
+	newActiveThread->next = RunPt;
+//	newActiveThread->next = LinkPt;
+	RunPt->prev = newActiveThread;
+//	LinkPt->prev = newActiveThread;
 	newActiveThread->prev = last;
 	last->next = newActiveThread;
 	NumThreads++;
