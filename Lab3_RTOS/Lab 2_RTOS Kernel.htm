@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Lab 2_RTOS Kernel.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Lab 2_RTOS Kernel.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Wed Mar 07 18:46:14 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Thu Mar 08 18:41:51 2018
 <BR><P>
 <H3>Maximum Stack Usage =        208 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1020,7 +1020,7 @@ Global Symbols
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ButtonWork
 </UL>
 
-<P><STRONG><a name="[c5]"></a>OS_Init</STRONG> (Thumb, 124 bytes, Stack size 8 bytes, os.o(i.OS_Init))
+<P><STRONG><a name="[c5]"></a>OS_Init</STRONG> (Thumb, 160 bytes, Stack size 8 bytes, os.o(i.OS_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 184 + Unknown Stack Size
 <LI>Call Chain = OS_Init &rArr; OtherInits &rArr; LCD_Init &rArr; ST7735_OutString &rArr; ST7735_OutChar &rArr; ST7735_DrawString &rArr; ST7735_DrawCharS &rArr; ST7735_FillRect &rArr; setAddrWindow
 </UL>
@@ -1134,6 +1134,7 @@ Global Symbols
 <P><STRONG><a name="[ab]"></a>OS_Time</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, os.o(i.OS_Time))
 <BR><BR>[Called By]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer4A_Handler
 <LI><a href="#[22]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer1A_Handler
+<LI><a href="#[c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAS
 </UL>
 
@@ -1420,7 +1421,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_AddThread
 </UL>
 
-<P><STRONG><a name="[c]"></a>SysTick_Handler</STRONG> (Thumb, 64 bytes, Stack size 0 bytes, os.o(i.SysTick_Handler))
+<P><STRONG><a name="[c]"></a>SysTick_Handler</STRONG> (Thumb, 118 bytes, Stack size 4 bytes, os.o(i.SysTick_Handler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = SysTick_Handler
+</UL>
+<BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Time
+</UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_tm4c123.o(RESET)
 </UL>
 <P><STRONG><a name="[20]"></a>Timer0A_Handler</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, os.o(i.Timer0A_Handler))
@@ -1436,7 +1441,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Init
 </UL>
 
-<P><STRONG><a name="[22]"></a>Timer1A_Handler</STRONG> (Thumb, 118 bytes, Stack size 16 bytes, os.o(i.Timer1A_Handler))
+<P><STRONG><a name="[22]"></a>Timer1A_Handler</STRONG> (Thumb, 214 bytes, Stack size 16 bytes, os.o(i.Timer1A_Handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = Timer1A_Handler
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_TimeDifference
@@ -1471,7 +1476,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Init
 </UL>
 
-<P><STRONG><a name="[4f]"></a>Timer4A_Handler</STRONG> (Thumb, 118 bytes, Stack size 16 bytes, os.o(i.Timer4A_Handler))
+<P><STRONG><a name="[4f]"></a>Timer4A_Handler</STRONG> (Thumb, 214 bytes, Stack size 16 bytes, os.o(i.Timer4A_Handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = Timer4A_Handler
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_TimeDifference

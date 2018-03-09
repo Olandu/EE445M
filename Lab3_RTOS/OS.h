@@ -16,6 +16,14 @@
 #define TIME_500US  (TIME_1MS/2)  
 #define TIME_250US  (TIME_1MS/5)  
 
+struct Dump { // Lab 3 Procedure 7 profile recorder
+	short event_thread; // 
+	short event_periodic; // 1 or 2
+	unsigned long timestamp;
+}; 
+
+typedef struct Dump DataDump;
+
 // feel free to change the type of semaphore, there are lots of good solutions
 struct  Sema4{
   long Value;   // >0 means free, otherwise means busy        

@@ -49,6 +49,11 @@
 #define Lab3 1
 #define PriScheduler 0
 
+// Lab 3 Profile Thread
+#define DumpSize 100
+uint8_t DumpIndex = 0;
+DataDump Dump[DumpSize];
+
 #if Lab3
 long MaxJitter1;             // largest time jitter between interrupts in usec
 long MaxJitter2;             // largest time jitter between interrupts in usec
@@ -65,13 +70,9 @@ int32_t StartCritical(void);
 void EndCritical(int32_t primask);
 void StartOS(void);
 
-
-
-
-//function prototypes in os.c
+// function prototypes in os.c
 void Timer3_MS(unsigned long period);
 void Timer0A_Init(void);
-
 
 unsigned long SystemTime_Ms;
 unsigned long NumThreads = 0;
@@ -210,6 +211,11 @@ void OS_Init(void){
 	for(int i = 0; i < PRILEVELS; i++){
 		PriPt[i] = 0;
 	}
+	for(int i = 0; i < 100; i++){
+		Dump[i].event_periodic = -1;
+		Dump[i].event_thread = -1;
+		Dump[i].timestamp = 0;
+	}
 	Timer3_MS(TIME_1MS);
 	Timer0A_Init();
   NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
@@ -301,6 +307,11 @@ void SysTick_Handler(void){
 		}
 	}
 	#endif
+	if (DumpIndex < DumpSize){
+		Dump[DumpIndex].event_thread = NextRunPt->Id;
+		Dump[DumpIndex].timestamp = OS_Time();
+		DumpIndex++;
+	}
 	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
 	PE1 ^= 0x02;
 }
@@ -450,8 +461,19 @@ void Timer4A_Handler(void){
 	unsigned static long LastTime;
 	long jitter;
 	
-  TIMER4_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER4A timeout
+  TIMER4_ICR_R = TIMER_ICR_TATOCINT;	 // acknowledge TIMER4A timeout
+	if (DumpIndex < DumpSize){
+		Dump[DumpIndex].event_periodic = 1; // periodic 1
+		Dump[DumpIndex].timestamp = OS_Time();
+		DumpIndex++;
+	}
   (*PeriodicThread1)();                // execute user task
+	
+if (DumpIndex < DumpSize){
+		Dump[DumpIndex].event_periodic = 1; // periodic 1
+		Dump[DumpIndex].timestamp = OS_Time();
+		DumpIndex++;
+	}
 	
 #if Lab3	
 	if (PerTask1Counter){
@@ -476,34 +498,44 @@ void Timer4A_Handler(void){
 
 uint32_t PerTask2Counter = 0;
 uint32_t PerTask2Period;
-void Timer1A_Handler(void){
-	unsigned long thisTime = OS_Time();
-	unsigned static long LastTime;
-	long jitter;
-	
-  TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
-  (*PeriodicThread2)();                // execute user task
-	
-#if Lab3
-	if (PerTask2Counter){
-		unsigned long diff = OS_TimeDifference(LastTime,thisTime);
-      if(diff>PerTask2Period){
-        jitter = (diff-PerTask2Period+4)/8;  // in 0.1 usec
-      }else{
-        jitter = (PerTask2Period-diff+4)/8;  // in 0.1 usec
-      }
-      if(jitter > MaxJitter2){
-        MaxJitter2 = jitter; // in usec
-      }       // jitter should be 0
-      if(jitter >= Jitter_Size){
-        jitter = JITTER_SIZE-1;
-      }
-      JitterHistogram2[jitter]++; 
+	void Timer1A_Handler(void){
+		unsigned long thisTime = OS_Time();
+		unsigned static long LastTime;
+		long jitter;
+		
+		TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
+		if (DumpIndex < DumpSize){
+			Dump[DumpIndex].event_periodic = 2; // periodic 1
+			Dump[DumpIndex].timestamp = OS_Time();
+			DumpIndex++;
+		}
+		(*PeriodicThread2)();                // execute user task
+	if (DumpIndex < DumpSize){
+			Dump[DumpIndex].event_periodic = 2; // periodic 1
+			Dump[DumpIndex].timestamp = OS_Time();
+			DumpIndex++;
+		}
+		
+	#if Lab3
+		if (PerTask2Counter){
+			unsigned long diff = OS_TimeDifference(LastTime,thisTime);
+				if(diff>PerTask2Period){
+					jitter = (diff-PerTask2Period+4)/8;  // in 0.1 usec
+				}else{
+					jitter = (PerTask2Period-diff+4)/8;  // in 0.1 usec
+				}
+				if(jitter > MaxJitter2){
+					MaxJitter2 = jitter; // in usec
+				}       // jitter should be 0
+				if(jitter >= Jitter_Size){
+					jitter = JITTER_SIZE-1;
+				}
+				JitterHistogram2[jitter]++; 
+		}
+		 LastTime = thisTime;
+		 PerTask2Counter++;
+	#endif
 	}
-	 LastTime = thisTime;
-	 PerTask2Counter++;
-#endif
-}
 
 void Jitter (void) {
 	#if Lab3
