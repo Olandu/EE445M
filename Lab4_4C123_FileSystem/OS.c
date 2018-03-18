@@ -126,10 +126,6 @@ void SetInitialStack(int i){
   Stacks[i][STACKSIZE-16] = 0x04040404;  // R4
 }
 
-void OtherInits(void){
-	 LCD_Init();
-	 UART_Init();	
-}
 
 void UnchainTCB(void){
 	RunPt->prev->next = RunPt->next;
@@ -203,8 +199,10 @@ void UnBlock(Sema4Type *semaPt){
 void OS_Init(void){
 	int i;
 	OS_DisableInterrupts();
-  PLL_Init();         // set processor clock to 50 MHz
-	OtherInits();
+  PLL_Init(Bus80MHz);         // set processor clock to 80 MHz
+	ST7735_InitR(INITR_REDTAB);						// LCD initialization
+	ST7735_FillScreen(0);  
+	UART_Init();	
 	SystemTime_Ms = 0;
 	for(i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)
 		tcbs[i].status = -1;
@@ -221,8 +219,8 @@ void OS_Init(void){
 	Timer0A_Init();
   NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
   NVIC_ST_CURRENT_R = 0;      // any write to current clears it
-  NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0x00FFFFFF)|0xD0000000; // priority 6
-	NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0xFF00FFFF)|0x00E00000; // priority 7
+  NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0x00FFFFFF)|0xD0000000; // priority 6 SysTick
+	NVIC_SYS_PRI3_R =(NVIC_SYS_PRI3_R&0xFF00FFFF)|0x00E00000; // priority 7 PendSV
 	RunPt = &tcbs[0]; 
 }
 
@@ -288,8 +286,8 @@ void SysTick_Handler(void){
 		NextRunPt = NextRunPt->next;
 	}
 	#else
-	PE1 ^= 0x02;
-	PE1 ^= 0x02;
+//	PE1 ^= 0x02;
+//	PE1 ^= 0x02;
 	int8_t priority = -1;
 	for (priority = 0; priority < PRILEVELS; priority++){
 		if (Pri_Available[priority] >= 1){break;}
@@ -314,7 +312,7 @@ void SysTick_Handler(void){
 		DumpIndex++;
 	}
 	NVIC_INT_CTRL_R = 0x10000000;    // trigger PendSV
-	PE1 ^= 0x02;
+//	PE1 ^= 0x02;
 }
 
 //******** OS_AddThread *************** 

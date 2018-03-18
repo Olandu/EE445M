@@ -29,28 +29,28 @@
 
 // U0Rx (VCP receive) connected to PA0
 // U0Tx (VCP transmit) connected to PA1
-//#include "inc/tm4c123gh6pm.h"
+#include "inc/tm4c123gh6pm.h"
 #include "UART2.h"
 #include <string.h> 
 #include "OS.h"
 
 #define NVIC_EN0_INT5           0x00000020  // Interrupt 5 enable
-#define NVIC_EN0_R              (*((volatile unsigned long *)0xE000E100))  // IRQ 0 to 31 Set Enable Register
-#define NVIC_PRI1_R             (*((volatile unsigned long *)0xE000E404))  // IRQ 4 to 7 Priority Register
-#define GPIO_PORTA_AFSEL_R      (*((volatile unsigned long *)0x40004420))
-#define GPIO_PORTA_DEN_R        (*((volatile unsigned long *)0x4000451C))
-#define GPIO_PORTA_AMSEL_R      (*((volatile unsigned long *)0x40004528))
-#define GPIO_PORTA_PCTL_R       (*((volatile unsigned long *)0x4000452C))
-#define UART0_DR_R              (*((volatile unsigned long *)0x4000C000))
-#define UART0_FR_R              (*((volatile unsigned long *)0x4000C018))
-#define UART0_IBRD_R            (*((volatile unsigned long *)0x4000C024))
-#define UART0_FBRD_R            (*((volatile unsigned long *)0x4000C028))
-#define UART0_LCRH_R            (*((volatile unsigned long *)0x4000C02C))
-#define UART0_CTL_R             (*((volatile unsigned long *)0x4000C030))
-#define UART0_IFLS_R            (*((volatile unsigned long *)0x4000C034))
-#define UART0_IM_R              (*((volatile unsigned long *)0x4000C038))
-#define UART0_RIS_R             (*((volatile unsigned long *)0x4000C03C))
-#define UART0_ICR_R             (*((volatile unsigned long *)0x4000C044))
+//#define NVIC_EN0_R              (*((volatile unsigned long *)0xE000E100))  // IRQ 0 to 31 Set Enable Register
+//#define NVIC_PRI1_R             (*((volatile unsigned long *)0xE000E404))  // IRQ 4 to 7 Priority Register
+//#define GPIO_PORTA_AFSEL_R      (*((volatile unsigned long *)0x40004420))
+//#define GPIO_PORTA_DEN_R        (*((volatile unsigned long *)0x4000451C))
+//#define GPIO_PORTA_AMSEL_R      (*((volatile unsigned long *)0x40004528))
+//#define GPIO_PORTA_PCTL_R       (*((volatile unsigned long *)0x4000452C))
+//#define UART0_DR_R              (*((volatile unsigned long *)0x4000C000))
+//#define UART0_FR_R              (*((volatile unsigned long *)0x4000C018))
+//#define UART0_IBRD_R            (*((volatile unsigned long *)0x4000C024))
+//#define UART0_FBRD_R            (*((volatile unsigned long *)0x4000C028))
+//#define UART0_LCRH_R            (*((volatile unsigned long *)0x4000C02C))
+//#define UART0_CTL_R             (*((volatile unsigned long *)0x4000C030))
+//#define UART0_IFLS_R            (*((volatile unsigned long *)0x4000C034))
+//#define UART0_IM_R              (*((volatile unsigned long *)0x4000C038))
+//#define UART0_RIS_R             (*((volatile unsigned long *)0x4000C03C))
+//#define UART0_ICR_R             (*((volatile unsigned long *)0x4000C044))
 #define UART_FR_RXFF            0x00000040  // UART Receive FIFO Full
 #define UART_FR_TXFF            0x00000020  // UART Transmit FIFO Full
 #define UART_FR_RXFE            0x00000010  // UART Receive FIFO Empty
@@ -72,8 +72,8 @@
 #define UART_ICR_RTIC           0x00000040  // Receive Time-Out Interrupt Clear
 #define UART_ICR_TXIC           0x00000020  // Transmit Interrupt Clear
 #define UART_ICR_RXIC           0x00000010  // Receive Interrupt Clear
-#define SYSCTL_RCGC1_R          (*((volatile unsigned long *)0x400FE104))
-#define SYSCTL_RCGC2_R          (*((volatile unsigned long *)0x400FE108))
+//#define SYSCTL_RCGC1_R          (*((volatile unsigned long *)0x400FE104))
+//#define SYSCTL_RCGC2_R          (*((volatile unsigned long *)0x400FE108))
 #define SYSCTL_RCGC1_UART0      0x00000001  // UART0 Clock Gating Control
 #define SYSCTL_RCGC2_GPIOA      0x00000001  // port A Clock Gating Control
 
@@ -173,10 +173,8 @@ unsigned int RxFifo_Size(void){
 // Initialize UART0
 // Baud rate is 115200 bits/sec
 void UART_Init(void){
-//  SYSCTL_RCGCUART_R |= 0x01; // activate UART0
-//  SYSCTL_RCGCGPIO_R |= 0x01; // activate port A
-	SYSCTL_RCGC1_R |= SYSCTL_RCGC1_UART0; // activate UART0
-  SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOA; // activate port A
+  SYSCTL_RCGCUART_R |= 0x01; // activate UART0
+  SYSCTL_RCGCGPIO_R |= 0x01; // activate port A
   RxFifo_Init();                        // initialize empty FIFOs
   TxFifo_Init();
   UART0_CTL_R &= ~UART_CTL_UARTEN;      // disable UART
@@ -199,7 +197,7 @@ void UART_Init(void){
                                         // UART0=priority 2
   NVIC_PRI1_R = (NVIC_PRI1_R&0xFFFF00FF)|0x00004000; // bits 13-15
   NVIC_EN0_R = NVIC_EN0_INT5;           // enable interrupt 5 in NVIC
-  EnableInterrupts();
+//  EnableInterrupts();
 }
 // copy from hardware RX FIFO to software RX FIFO
 // stop when hardware RX FIFO is empty or software RX FIFO is full

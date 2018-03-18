@@ -272,7 +272,7 @@ extern void Interpreter(void);
 // execute   eFile_Init();  after periodic interrupts have started
 
 //*******************lab 4 main **********
-int main(void){        // lab 4 real main
+int realmain(void){        // lab 4 real main
   OS_Init();           // initialize, disable interrupts
   Running = 0;         // robot not running
   DataLost = 0;        // lost data between producer and consumer
@@ -360,7 +360,7 @@ void diskError(char* errtype, unsigned long n){
 }
 void TestDisk(void){  DSTATUS result;  unsigned short block;  int i; unsigned long n;
   // simple test of eDisk
-  ST7735_OutString2(0, 1, "eDisk test      ", ST7735_WHITE);
+  ST7735_OutString(0, 1, "eDisk test      ", ST7735_WHITE);
   printf("\n\rEE445M/EE380L, Lab 4 eDisk test\n\r");
   result = eDisk_Init(0);  // initialize disk
   if(result) diskError("eDisk_Init",result);
@@ -390,7 +390,7 @@ void TestDisk(void){  DSTATUS result;  unsigned short block;  int i; unsigned lo
     }
   }  
   printf("Successful test of %u blocks\n\r",MAXBLOCKS);
-  ST7735_OutString2(0, 1, "eDisk successful", ST7735_YELLOW);
+  ST7735_OutString(0, 1, "eDisk successful", ST7735_YELLOW);
   Running=0; // launch again
   OS_Kill();
 }
@@ -409,7 +409,7 @@ void SW1Push1(void){
 //******************* test main1 **********
 // SYSTICK interrupts, period established by OS_Launch
 // Timer interrupts, period established by first call to OS_AddPeriodicThread
-int testmain1(void){   // testmain1
+int main(void){   // testmain1
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
 //*******attach background tasks***********
@@ -431,7 +431,7 @@ int testmain1(void){   // testmain1
 
 void TestFile(void){   int i; char data; 
   printf("\n\rEE445M/EE380L, Lab 4 eFile test\n\r");
-  ST7735_OutString2(0, 1, "eFile test      ", ST7735_WHITE);
+  ST7735_OutString(0, 1, "eFile test      ", ST7735_WHITE);
   // simple test of eFile
   if(eFile_Init())              diskError("eFile_Init",0); 
   if(eFile_Format())            diskError("eFile_Format",0); 
@@ -456,7 +456,7 @@ void TestFile(void){   int i; char data;
   eFile_Directory(&UART_OutChar);
   if(eFile_Close())             diskError("eFile_Close",0);
   printf("Successful test of creating a file\n\r");
-  ST7735_OutString2(0, 1, "eFile successful", ST7735_YELLOW);
+  ST7735_OutString(0, 1, "eFile successful", ST7735_YELLOW);
   Running=0; // launch again
   OS_Kill();
 }
