@@ -1,48 +1,43 @@
-/**
- * @file      OS.h
- * @brief     Real Time Operating System for Labs 2, 3 and 4
- * @details   EE445M/EE380L.6
- * @version   V1.0
- * @author    Valvano
- * @copyright Copyright 2017 by Jonathan W. Valvano, valvano@mail.utexas.edu,
- * @warning   AS-IS
- * @note      For more information see  http://users.ece.utexas.edu/~valvano/
- * @date      March 9, 2017
-
- ******************************************************************************/
-
-
-#include <stdint.h>
+// filename **********OS.H***********
+// Real Time Operating System for Labs 2 and 3 
+// Jonathan W. Valvano 2/20/17, valvano@mail.utexas.edu
+// EE445M/EE380L.12
+// You may use, edit, run or distribute this file 
+// You are free to change the syntax/organization of this file
+// You are required to implement the spirit of this OS
 
  
 #ifndef __OS_H
 #define __OS_H  1
 
-/**
- * \brief Times assuming a 80 MHz
- */      
+// edit these depending on your clock        
 #define TIME_1MS    80000          
 #define TIME_2MS    (2*TIME_1MS)  
 #define TIME_500US  (TIME_1MS/2)  
 #define TIME_250US  (TIME_1MS/5)  
 
-/**
- * \brief Semaphore structure. Feel free to change the type of semaphore, there are lots of good solutions
- */  
+struct Dump { // Lab 3 Procedure 7 profile recorder
+	short event_thread; // 
+	short event_periodic; // 1 or 2
+	unsigned long timestamp;
+}; 
+
+typedef struct Dump DataDump;
+
+// feel free to change the type of semaphore, there are lots of good solutions
 struct  Sema4{
   long Value;   // >0 means free, otherwise means busy        
 // add other components here, if necessary to implement blocking
+	struct tcb *blockedThreads;
 };
 typedef struct Sema4 Sema4Type;
 
-/**
- * @details  Initialize operating system, disable interrupts until OS_Launch.
- * Initialize OS controlled I/O: serial, ADC, systick, LaunchPad I/O and timers.
- * Interrupts not yet enabled.
- * @param  none
- * @return none
- * @brief  Initialize OS
- */
+
+// ******** OS_Init ************
+// initialize operating system, disable interrupts until OS_Launch
+// initialize OS controlled I/O: serial, ADC, systick, LaunchPad I/O and timers 
+// input:  none
+// output: none
 void OS_Init(void); 
 
 // ******** OS_InitSemaphore ************

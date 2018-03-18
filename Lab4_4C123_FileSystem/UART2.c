@@ -29,7 +29,7 @@
 
 // U0Rx (VCP receive) connected to PA0
 // U0Tx (VCP transmit) connected to PA1
-#include "inc/tm4c123gh6pm.h"
+//#include "inc/tm4c123gh6pm.h"
 #include "UART2.h"
 #include <string.h> 
 #include "OS.h"
@@ -173,8 +173,10 @@ unsigned int RxFifo_Size(void){
 // Initialize UART0
 // Baud rate is 115200 bits/sec
 void UART_Init(void){
-  SYSCTL_RCGCUART_R |= 0x01; // activate UART0
-  SYSCTL_RCGCGPIO_R |= 0x01; // activate port A
+//  SYSCTL_RCGCUART_R |= 0x01; // activate UART0
+//  SYSCTL_RCGCGPIO_R |= 0x01; // activate port A
+	SYSCTL_RCGC1_R |= SYSCTL_RCGC1_UART0; // activate UART0
+  SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOA; // activate port A
   RxFifo_Init();                        // initialize empty FIFOs
   TxFifo_Init();
   UART0_CTL_R &= ~UART_CTL_UARTEN;      // disable UART
@@ -581,3 +583,11 @@ void UART_Fix2(long number){
   UART_OutString(message);
 }
 
+//---------------------OutCRLF---------------------
+// Output a CR,LF to UART to go to a new line
+// Input: none
+// Output: none
+void OutCRLF(void){
+  UART_OutChar(CR);
+  UART_OutChar(LF);
+}

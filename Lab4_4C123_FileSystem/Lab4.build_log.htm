@@ -3,50 +3,105 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\tejas\Documents\GitHub\EE445M\Lab4_4C123_FileSystem\Lab4.uvproj
-Project File Date:  03/17/2018
+C:\Users\oland\OneDrive - The University of Texas at Austin\Documents\UT\Spring2018\EE445M_Realtime_OS\EE445M\Lab4_4C123_FileSystem\Lab4.uvproj
+Project File Date:  03/18/2018
 
 <h2>Output:</h2>
 Rebuild target 'Lab4'
 assembling startup.s...
 compiling PLL.c...
-PLL.c(35): warning:  #47-D: incompatible redefinition of macro "SYSCTL_RIS_R" (declared at line 2049 of "..\inc/tm4c123gh6pm.h")
-  #define SYSCTL_RIS_R            (*((volatile unsigned long *)0x400FE050))
-PLL.c(37): warning:  #47-D: incompatible redefinition of macro "SYSCTL_RCC_R" (declared at line 2053 of "..\inc/tm4c123gh6pm.h")
-  #define SYSCTL_RCC_R            (*((volatile unsigned long *)0x400FE060))
-PLL.c(42): warning:  #47-D: incompatible redefinition of macro "SYSCTL_RCC2_R" (declared at line 2055 of "..\inc/tm4c123gh6pm.h")
-  #define SYSCTL_RCC2_R           (*((volatile unsigned long *)0x400FE070))
-PLL.c: 3 warnings, 0 errors
 compiling ST7735.c...
-ST7735.c(114): warning:  #47-D: incompatible redefinition of macro "SYSCTL_RCGC1_R" (declared at line 2058 of "..\inc/tm4c123gh6pm.h")
-  #define SYSCTL_RCGC1_R          (*((volatile unsigned long *)0x400FE104))
-ST7735.c(115): warning:  #47-D: incompatible redefinition of macro "SYSCTL_RCGC2_R" (declared at line 2059 of "..\inc/tm4c123gh6pm.h")
-  #define SYSCTL_RCGC2_R          (*((volatile unsigned long *)0x400FE108))
-ST7735.c: 2 warnings, 0 errors
 compiling UART2.c...
-UART2.c(38): warning:  #47-D: incompatible redefinition of macro "NVIC_EN0_R" (declared at line 2221 of "..\inc/tm4c123gh6pm.h")
-  #define NVIC_EN0_R              (*((volatile unsigned long *)0xE000E100))  // IRQ 0 to 31 Set Enable Register
-UART2.c(39): warning:  #47-D: incompatible redefinition of macro "NVIC_PRI1_R" (declared at line 2247 of "..\inc/tm4c123gh6pm.h")
-  #define NVIC_PRI1_R             (*((volatile unsigned long *)0xE000E404))  // IRQ 4 to 7 Priority Register
-UART2.c(40): warning:  #47-D: incompatible redefinition of macro "GPIO_PORTA_AFSEL_R" (declared at line 171 of "..\inc/tm4c123gh6pm.h")
-  #define GPIO_PORTA_AFSEL_R      (*((volatile unsigned long *)0x40004420))
-UART2.c(41): warning:  #47-D: incompatible redefinition of macro "GPIO_PORTA_DEN_R" (declared at line 179 of "..\inc/tm4c123gh6pm.h")
-  #define GPIO_PORTA_DEN_R        (*((volatile unsigned long *)0x4000451C))
-UART2.c(42): warning:  #47-D: incompatible redefinition of macro "GPIO_PORTA_AMSEL_R" (declared at line 182 of "..\inc/tm4c123gh6pm.h")
-  #define GPIO_PORTA_AMSEL_R      (*((volatile unsigned long *)0x40004528))
-UART2.c(43): warning:  #47-D: incompatible redefinition of macro "GPIO_PORTA_PCTL_R" (declared at line 183 of "..\inc/tm4c123gh6pm.h")
-  #define GPIO_PORTA_PCTL_R       (*((volatile unsigned long *)0x4000452C))
-UART2.c(44): warning:  #47-D: incompatible redefinition of macro "UART0_DR_R" (declared at line 353 of "..\inc/tm4c123gh6pm.h")
-  #define UART0_DR_R              (*((volatile unsigned long *)0x4000C000))
-UART2.c(45): warning:  #47-D: incompatible redefinition of macro "UART0_FR_R" (declared at line 356 of "..\inc/tm4c123gh6pm.h")
-  #define UART0_FR_R              (*((volatile unsigned long *)0x4000C018))
-UART2.c(46): warning:  #47-D: incompatible redefinition of macro "UART0_IBRD_R" (declared at line 358 of "..\inc/tm4c123gh6pm.h")
-  #define UART0_IBRD_R            (*((volatile unsigned long *)0x4000C024))
-UART2.c(47): warning:  #47-D: incompatible redefinition of macro "UART0_FBRD_R" (declared at line 359 of "..\inc/tm4c123gh6pm.h")
-  #define UART0_FBRD_R            (*((volatile unsigned long *)0x4000C028))
-UART2.c(48): warning:  #47-D: incompatible redefinition of macro "UART0_LCRH_R" (declared at line 360 of "..\inc/tm4c123gh6pm.h")
-  #define UART0_LCRH_R            (*((volatile unsigned long *)0x4000C02C))
-UART2.c(49): warning:  #47-D: incompatible redefinition of macro "UART0_CTL_R" (declared at line 361 of "..\inc/tm4c123gh6pm.h")
+compiling OS.c...
+assembling osasm.s...
+compiling ADC.c...
+assembling cr4_fft_64_stm32.s...
+compiling Interpreter.c...
+compiling eDisk.c...
+compiling efile.c...
+compiling Lab4.c...
+linking...
+Program Size: Code=13044 RO-data=2052 RW-data=304 ZI-data=9216  
+".\Lab4.axf" - 0 Error(s), 0 Warning(s).
+Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab4_4C123_FileSystem\\Lab4.axf" 
+Connecting: Mode=JTAG, Speed=1000000Hz
+Erase Done.
+Programming Done.
+Verify OK.
+;i<NUMTHREADS;i++){
+OS.c: 0 warnings, 5 errors
+".\Lab4.axf" - 5 Error(s), 0 Warning(s).
+Target not created
+;i<NUMTHREADS;i++){
+OS.c: 0 warnings, 6 errors
+".\Lab4.axf" - 6 Error(s), 0 Warning(s).
+Target not created
+c: 0 warnings, 7 errors
+".\Lab4.axf" - 7 Error(s), 0 Warning(s).
+Target not created
+
+OS.c(941): error:  #20: identifier "i" is undefined
+        for(int i=0;i<NUMTHREADS;i++){
+OS.c: 0 warnings, 8 errors
+assembling osasm.s...
+compiling ADC.c...
+assembling cr4_fft_64_stm32.s...
+compiling Interpreter.c...
+compiling eDisk.c...
+compiling efile.c...
+compiling Lab4.c...
+".\Lab4.axf" - 8 Error(s), 0 Warning(s).
+Target not created
+compiling efile.c...
+compiling Lab4.c...
+".\Lab4.axf" - 9 Error(s), 0 Warning(s).
+Target not created
+ed
+iling ADC.c...
+assembling cr4_fft_64_stm32.s...
+compiling Interpreter.c...
+compiling eDisk.c...
+compiling efile.c...
+compiling Lab4.c...
+".\Lab4.axf" - 10 Error(s), 0 Warning(s).
+Target not created
+warnings, 12 errors
+assembling osasm.s...
+compiling ADC.c...
+assembling cr4_fft_64_stm32.s...
+compiling Interpreter.c...
+compiling eDisk.c...
+compiling efile.c...
+compiling Lab4.c...
+".\Lab4.axf" - 12 Error(s), 0 Warning(s).
+Target not created
+
+Target not created
+g Lab4.c...
+".\Lab4.axf" - 12 Error(s), 1 Warning(s).
+Target not created
+ is undefined
+        for(int i=0;i<NUMTHREADS;i++){
+OS.c: 1 warning, 10 errors
+assembling osasm.s...
+compiling ADC.c...
+assembling cr4_fft_64_stm32.s...
+compiling Interpreter.c...
+UART2.h(192): warning:  #1-D: last line of file ends without a newline
+  void OutCRLF(void);
+Interpreter.c: 1 warning, 0 errors
+compiling eDisk.c...
+compiling efile.c...
+UART2.h(192): warning:  #1-D: last line of file ends without a newline
+  void OutCRLF(void);
+efile.c: 1 warning, 0 errors
+compiling Lab4.c...
+UART2.h(192): warning:  #1-D: last line of file ends without a newline
+  void OutCRLF(void);
+Lab4.c: 1 warning, 0 errors
+".\Lab4.axf" - 12 Error(s), 7 Warning(s).
+Target not created
+L_R" (declared at line 361 of "..\inc/tm4c123gh6pm.h")
   #define UART0_CTL_R             (*((volatile unsigned long *)0x4000C030))
 UART2.c(50): warning:  #47-D: incompatible redefinition of macro "UART0_IFLS_R" (declared at line 362 of "..\inc/tm4c123gh6pm.h")
   #define UART0_IFLS_R            (*((volatile unsigned long *)0x4000C034))
@@ -62,6 +117,27 @@ UART2.c(76): warning:  #47-D: incompatible redefinition of macro "SYSCTL_RCGC2_R
   #define SYSCTL_RCGC2_R          (*((volatile unsigned long *)0x400FE108))
 UART2.c: 18 warnings, 0 errors
 compiling OS.c...
+OS.c(205): error:  #29: expected an expression
+        for(int i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)
+OS.c(205): error:  #20: identifier "i" is undefined
+        for(int i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)
+OS.c(208): error:  #29: expected an expression
+        for(int i = 0; i < PRILEVELS; i++){
+OS.c(211): error:  #29: expected an expression
+        for(int i = 0; i < 100; i++){
+OS.c(339): error:  #268: declaration may not appear after executable statement in block
+        int freetcb;
+OS.c(357): error:  #268: declaration may not appear after executable statement in block
+                tcbType *last = RunPt->prev; 
+OS.c(687): error:  #268: declaration may not appear after executable statement in block
+                int status = OS_AddThread(&SW1_Debounce,128,SW1_Priority);
+OS.c(698): error:  #268: declaration may not appear after executable statement in block
+                int status = OS_AddThread(&SW2_Debounce,128,SW2_Priority);
+OS.c(937): error:  #29: expected an expression
+        for(int i=0;i<NUMTHREADS;i++){
+OS.c(937): error:  #20: identifier "i" is undefined
+        for(int i=0;i<NUMTHREADS;i++){
+OS.c: 0 warnings, 10 errors
 assembling osasm.s...
 compiling ADC.c...
 assembling cr4_fft_64_stm32.s...
@@ -69,28 +145,5 @@ compiling Interpreter.c...
 compiling eDisk.c...
 compiling efile.c...
 compiling Lab4.c...
-linking...
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_InitSemaphore (referred from st7735.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_bSignal (referred from st7735.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_bWait (referred from st7735.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_Signal (referred from uart2.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_Wait (referred from uart2.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_AddPeriodicThread (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_AddSW1Task (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_AddSW2Task (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_AddThread (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_ClearMsTime (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_Fifo_Get (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_Fifo_Init (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_Fifo_Put (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_Init (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_Kill (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_Launch (referred from lab4.o).
-.\Lab4.axf: Error: L6218E: Undefined symbol OS_MsTime (referred from lab4.o).
-Not enough information to list image symbols.
-Finished: 1 information, 0 warning and 17 error messages.
-".\Lab4.axf" - 17 Error(s), 23 Warning(s).
+".\Lab4.axf" - 10 Error(s), 19 Warning(s).
 Target not created
-</pre>
-</body>
-</html>

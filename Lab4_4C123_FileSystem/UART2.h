@@ -185,3 +185,8 @@ void UART_InString(char *bufPt, unsigned short max);
  */
 void UART_Fix2(long number);
 
+//---------------------OutCRLF---------------------
+// Output a CR,LF to UART to go to a new line
+// Input: none
+// Output: none
+void OutCRLF(void);
