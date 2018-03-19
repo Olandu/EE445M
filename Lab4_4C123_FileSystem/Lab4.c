@@ -358,6 +358,44 @@ void diskError(char* errtype, unsigned long n){
   printf(" disk error %u",n);
   OS_Kill();
 }
+
+void TestWrite (void){DSTATUS result;  unsigned short block;  int i; unsigned long n;
+  result = eDisk_Init(0);  // initialize disk
+  if(result) diskError("eDisk_Init",result);
+  printf("Writing blocks\n\r");
+  n = 1;    // seed
+  for(block = 0; block < MAXBLOCKS; block++){
+    for(i=0;i<512;i++){
+      n = (16807*n)%2147483647; // pseudo random sequence
+      buffer[i] = 0xFF&n;        
+    }
+    PD3 = 0x08;     // PD3 high for 100 block writes
+    if(eDisk_WriteBlock(buffer,block))diskError("eDisk_WriteBlock",block); // save to disk
+    PD3 = 0x00;     
+  }  
+	printf("Successful Write of %u blocks\n\r",MAXBLOCKS);
+  OS_Kill();
+}
+
+void TestRead(void){
+	unsigned short block; unsigned long n; int i;
+  n = 1;  // reseed, start over to get the same sequence
+  for(block = 0; block < MAXBLOCKS; block++){
+    PD2 = 0x04;     // PF2 high for one block read
+    if(eDisk_ReadBlock(buffer,block))diskError("eDisk_ReadBlock",block); // read from disk
+    PD2 = 0x00;
+    for(i=0;i<512;i++){
+      n = (16807*n)%2147483647; // pseudo random sequence
+      if(buffer[i] != (0xFF&n)){
+        printf("Read data not correct, block=%u, i=%u, expected %u, read %u\n\r",block,i,(0xFF&n),buffer[i]);
+        OS_Kill();
+      }      
+    }
+  }  
+  printf("Successful Read of %u blocks\n\r",MAXBLOCKS);
+  OS_Kill();
+}
+
 void TestDisk(void){  DSTATUS result;  unsigned short block;  int i; unsigned long n;
   // simple test of eDisk
   ST7735_OutString(0, 1, "eDisk test      ", ST7735_WHITE);
@@ -419,7 +457,10 @@ int main(void){   // testmain1
   NumCreated = 0 ;
   Running = 1; 
 // create initial foreground threads
-  NumCreated += OS_AddThread(&TestDisk,128,1);  
+  NumCreated += OS_AddThread(&TestDisk,128,1); 
+	//Note: eDisk_Init is initialized	in TestDisk and TestWrite
+//	NumCreated += OS_AddThread(&TestWrite,128,1);
+//	NumCreated += OS_AddThread(&TestRead,128,1);
   NumCreated += OS_AddThread(&IdleTask,128,3); 
   OS_AddSW1Task(&SW1Push1,2);    // PF4, SW1
  

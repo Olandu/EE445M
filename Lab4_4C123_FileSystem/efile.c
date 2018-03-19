@@ -6,18 +6,51 @@
 #include "edisk.h"
 #include "UART2.h"
 #include <stdio.h>
+#include <stdint.h>
 
 #define SUCCESS 0
 #define FAIL 1
-                             
 
+#define NUM_SECTOR 256
+#define BLOCK_SIZE 512
+
+uint8_t Buff[2*BLOCK_SIZE];
+uint8_t Directory[BLOCK_SIZE], FAT[BLOCK_SIZE];
+int32_t bDirectoryLoaded =0; // 0 means disk on ROM is complete, 1 means RAM version active
+
+
+struct FATdirectory{
+	BYTE name;
+	UINT startSector;
+};
+typedef struct FATdirectory dType;
+//---------- MountDirectory-----------------
+// if directory and FAT not loaded,
+// bring it into RAM from disk
+int MountDirectory(void){ 
+// if bDirectoryLoaded is 0, 
+//    read disk sector 255 and populate Directory and FAT
+//    set bDirectoryLoaded=1
+// if bDirectoryLoaded is 1, simply return
+	if(bDirectoryLoaded == 0){
+		if(eDisk_Read(0,Buff,0, 2))
+			return FAIL;
+		for(int i =0; i< BLOCK_SIZE; i++){
+			Directory[i] = Buff[i];
+			FAT[i] = Buff[i+BLOCK_SIZE];
+		}
+		bDirectoryLoaded = 1;
+	} 
+	return SUCCESS;
+}
 
 //---------- eFile_Init-----------------
 // Activate the file system, without formating
 // Input: none
 // Output: 0 if successful and 1 on failure (already initialized)
 int eFile_Init(void){ // initialize file system
-
+	if(eDisk_Init(0)) 
+		return FAIL;
   return SUCCESS;
 }
 
@@ -26,7 +59,7 @@ int eFile_Init(void){ // initialize file system
 // Input: none
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Format(void){ // erase disk, add format
-
+	
   return SUCCESS;   // OK
 }
 
