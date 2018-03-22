@@ -13,37 +13,20 @@
 
 #define NUM_SECTOR 256
 #define BLOCK_SIZE 512
+#define NAME 6
+#define NUM_FILES 64 // 512 bytes / 8 bytes (struct)
+#define FREE_SPACE 255
 
-uint8_t Buff[2*BLOCK_SIZE];
-uint8_t Directory[BLOCK_SIZE], FAT[BLOCK_SIZE];
-int32_t bDirectoryLoaded =0; // 0 means disk on ROM is complete, 1 means RAM version active
+uint8_t dataBuff[BLOCK_SIZE], FAT[BLOCK_SIZE];
 
 
 struct FATdirectory{
-	BYTE name;
-	UINT startSector;
+	BYTE name[NAME];
+	BYTE startSector;
+	BYTE size;
 };
 typedef struct FATdirectory dType;
-//---------- MountDirectory-----------------
-// if directory and FAT not loaded,
-// bring it into RAM from disk
-int MountDirectory(void){ 
-// if bDirectoryLoaded is 0, 
-//    read disk sector 255 and populate Directory and FAT
-//    set bDirectoryLoaded=1
-// if bDirectoryLoaded is 1, simply return
-	if(bDirectoryLoaded == 0){
-		if(eDisk_Read(0,Buff,0, 2))
-			return FAIL;
-		for(int i =0; i< BLOCK_SIZE; i++){
-			Directory[i] = Buff[i];
-			FAT[i] = Buff[i+BLOCK_SIZE];
-		}
-		bDirectoryLoaded = 1;
-	} 
-	return SUCCESS;
-}
-
+dType directory[NUM_FILES];
 //---------- eFile_Init-----------------
 // Activate the file system, without formating
 // Input: none
@@ -59,6 +42,34 @@ int eFile_Init(void){ // initialize file system
 // Input: none
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Format(void){ // erase disk, add format
+	int i =0;
+	// Initialize Free_space field in the directory (first entry)
+		directory[0].name[0] = '*';
+		directory[0].size = FREE_SPACE - 3;	
+		directory[0].startSector = 2;
+	
+	for(i = 1; i < NUM_FILES; i++){
+		directory[i].name[0] = '*';
+		directory[i].size = FREE_SPACE - 2;	
+		directory[i].startSector = 2;
+	}		
+	
+	// FAT
+	for (i = 2; i < FREE_SPACE; i++) {
+		FAT[i] = i + 1;
+	}
+	FAT[FREE_SPACE] = 0; // null pointer
+	
+	// Writing the directory to the disk;
+	for (i = 0; i < BLOCK_SIZE; i++){
+		dataBuff[i] = directory[i].name[0];
+		dataBuff[i+6] = directory[i+6].size;
+		dataBuff[i+7] = directory[i+7].startSector;
+	}
+	if (eDisk_WriteBlock(dataBuff, 0)) return FAIL; // sector 0 contains directory
+	
+	// Writing the FAT to the disk
+	if (eDisk_WriteBlock(FAT, 1)) return FAIL; 	//sector 1 contains the FAT
 	
   return SUCCESS;   // OK
 }
@@ -70,7 +81,55 @@ int eFile_Format(void){ // erase disk, add format
 // Input: file name is an ASCII string up to seven characters 
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Create( char name[]){  // create new file, make it empty 
-
+	int i, j, freeFile_idx , freeStartSector_idx, newfreeSector_idx;
+	
+	if (eDisk_ReadBlock(dataBuff, 0)) 
+		return FAIL;
+	
+	// Read directory 
+	for (i = 0; i < NUM_FILES; i++){
+		for (j = 0; j < NAME; j++){
+			directory[i].name[j] = dataBuff[i+j];
+		}
+		directory[i].startSector = dataBuff[i+6];
+		directory[i].size = dataBuff[i+7];
+	}
+	
+	// Read FAT
+	if (eDisk_ReadBlock(FAT, 1)) 
+		return FAIL;
+	
+	for (freeFile_idx = 1; freeFile_idx < NUM_FILES; freeFile_idx++){
+		if (directory[freeFile_idx].name[0] == '*') break;
+	}
+	
+	if (strlen(name) > NAME) 
+		return FAIL;
+	
+	
+	for (i = 0; i < NAME; i++){
+		directory[freeFile_idx].name[i] = name[i];
+	}
+	
+	if (directory[0].size < 1) 
+		return FAIL;						// don't got space
+	
+	freeStartSector_idx = directory[0].startSector;
+	
+	newfreeSector_idx = FAT[freeStartSector_idx];	// new startSector for free
+	
+	// assign a sector to the new file
+	directory[freeFile_idx].startSector = freeStartSector_idx;
+	directory[freeFile_idx].size = 1;
+	FAT[freeStartSector_idx] = 0;
+	
+	//new free start sector
+	directory[0].startSector = newfreeSector_idx;
+	directory[0].size--;
+	
+	
+	//write directory and FAT to disk (use helper functions)
+	
   return SUCCESS;     
 }
 
