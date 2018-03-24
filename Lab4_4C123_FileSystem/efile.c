@@ -25,7 +25,7 @@
 #define DIR_SIZE 8
 
 uint8_t RAM[BLOCK_SIZE], FAT[BLOCK_SIZE], Curr_numFiles = 0, idxWrite_OpenFile = 0, idxRead_OpenFile = 0; // 0 if none open else index into the FAT directory
-
+int nextByteRead = 0;
 
 int BytesWritten[NUM_SECTOR];
 
@@ -84,7 +84,7 @@ int readFAT(void){
 
 int compareName(char name[], int length){
 	int currDir_idx, i;
-	char dirName[length]; 
+	char dirName[NAME]; 
 	for (currDir_idx = 1; currDir_idx < NUM_FILES; currDir_idx++){
 		// compare names, if matches, then break
 		for(i = 0; i < NAME; i++){
@@ -250,13 +250,14 @@ int eFile_WOpen(char name[]){      // open a file for writing
 int eFile_Write(char data){
 	int lastSector;
 	
+	//we should be able to read a file within a write but not the other way around***
 	if ((!idxWrite_OpenFile)  || (idxWrite_OpenFile && idxRead_OpenFile))
 		return FAIL; 
 	
 	// Find the last sector of the open file
 	lastSector = findLastSector(idxWrite_OpenFile);
 	
-	if (BytesWritten[lastSector] == BLOCK_SIZE) { // allocate a new block/sector
+	if(BytesWritten[lastSector] == BLOCK_SIZE) { // allocate a new block/sector
 			if (allocateBlock(idxWrite_OpenFile, lastSector)) 
 				return FAIL;
 			lastSector = FAT[lastSector];	
@@ -302,8 +303,23 @@ int eFile_WClose(void){ // close the file for writing
 // Open the file, read first block into RAM 
 // Input: file name is a single ASCII letter
 // Output: 0 if successful and 1 on failure (e.g., trouble read to flash)
-int eFile_ROpen( char name[]){      // open a file for reading 
+int eFile_ROpen(char name[]){      // open a file for reading 
+	int dir_idx = 0, firstSector = 0;
 	
+	readDIR(DIR_SECTOR);
+	readFAT();
+	
+	if(strlen(name) > NAME)
+		return FAIL;
+	dir_idx = compareName(name, strlen(name));
+	if(dir_idx == 0)
+		return FAIL;
+	firstSector = directory[dir_idx].startSector;
+	if(firstSector < 2) // 0-->directory; 1-->FATTable (mapping to disk)
+		return FAIL;
+	if(eDisk_ReadBlock(RAM, firstSector))
+		return FAIL;
+	idxRead_OpenFile = firstSector;
   return SUCCESS;     
 }
  
@@ -312,7 +328,22 @@ int eFile_ROpen( char name[]){      // open a file for reading
 // Input: none
 // Output: return by reference data
 //         0 if successful and 1 on failure (e.g., end of file)
-int eFile_ReadNext( char *pt){       // get next byte 
+int eFile_ReadNext(char *pt){       // get next byte 
+
+	if(idxRead_OpenFile == 0)
+		return FAIL;
+	
+	if((BytesWritten[idxRead_OpenFile] == 0)|| (nextByteRead > BytesWritten[idxRead_OpenFile]))
+		return FAIL; 
+		
+	if(nextByteRead == BLOCK_SIZE){
+		idxRead_OpenFile = FAT[idxRead_OpenFile];
+		if(eDisk_ReadBlock(RAM, idxRead_OpenFile))
+			return FAIL;
+		nextByteRead = 0;
+	}
+	*pt = RAM[nextByteRead];
+	nextByteRead++;
 
   return SUCCESS; 
 }
@@ -323,8 +354,11 @@ int eFile_ReadNext( char *pt){       // get next byte
 // Input: none
 // Output: 0 if successful and 1 on failure (e.g., wasn't open)
 int eFile_RClose(void){ // close the file for writing
-
+	if(idxRead_OpenFile == 0)
+		return FAIL;
+	
 	idxRead_OpenFile = 0;
+	
   return SUCCESS;
 }
 
@@ -336,8 +370,20 @@ int eFile_RClose(void){ // close the file for writing
 // Input: pointer to a function that outputs ASCII characters to display
 // Output: none
 //         0 if successful and 1 on failure (e.g., trouble reading from flash)
-int eFile_Directory(void(*fp)(char)){   
-	
+int eFile_Directory(void(*fp)(char)){  
+	int i, j;
+	if(readDIR(DIR_SECTOR))
+		return FAIL;
+	for(i = 1; i < NUM_FILES; i+= DIR_SIZE){ 
+		if(directory[i].name[0] != '*'){//skip free space
+			for(j = 0; j < NAME; j++){
+				fp((char)directory[i].name[j]);
+			}
+			fp('\t');
+			fp(directory[i].size);
+		}
+		fp('\n');
+	}
   return SUCCESS;
 }
 
