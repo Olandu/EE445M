@@ -24,7 +24,11 @@
 #define NULL 0
 #define DIR_SIZE 8
 
-uint8_t RAM[BLOCK_SIZE], FAT[BLOCK_SIZE], Curr_numFiles = 0;
+uint8_t RAM[BLOCK_SIZE], FAT[BLOCK_SIZE], Curr_numFiles = 0, idxWrite_OpenFile = 0, idxRead_OpenFile = 0; // 0 if none open else index into the FAT directory
+
+
+int BytesWritten[NUM_SECTOR];
+
 
 
 struct FATdirectory{ 					// Size: (NAME + 1 + 1) bytes
@@ -78,9 +82,9 @@ int readFAT(void){
 	return SUCCESS;
 }
 
-int compareName(char name[]){
+int compareName(char name[], int length){
 	int currDir_idx, i;
-	char dirName[strlen(name)]; 
+	char dirName[length]; 
 	for (currDir_idx = 1; currDir_idx < NUM_FILES; currDir_idx++){
 		// compare names, if matches, then break
 		for(i = 0; i < NAME; i++){
@@ -91,6 +95,45 @@ int compareName(char name[]){
 		}
 	}
 	return currDir_idx;
+}
+
+int allocateBlock(int file_idx, int lastSector){
+	int freeStartSector_idx;
+	
+	//No free space in Directory
+	if (directory[FREE].size < 1) 
+		return FAIL;	
+	
+	freeStartSector_idx = directory[FREE].startSector;
+	
+	// assign a sector to the new file (one block only)
+	if (!lastSector){
+		directory[file_idx].startSector = freeStartSector_idx;
+	} else {
+		FAT[lastSector] = freeStartSector_idx;
+	}
+	BytesWritten[freeStartSector_idx] = 0;
+	directory[file_idx].size++;
+	
+	//new free start sector
+	directory[FREE].startSector = FAT[freeStartSector_idx]; 
+	FAT[freeStartSector_idx] = NULL;									// points to Null
+	
+	directory[FREE].size--; //should not be less than zero
+	
+	return SUCCESS;
+}
+
+int findLastSector(int file_idx){
+	int startSector, lastSector;
+	
+	startSector = directory[file_idx].startSector;
+	lastSector = FAT[startSector];
+	while (lastSector > 0){
+		lastSector = FAT[lastSector];
+	}
+	
+	return lastSector;
 }
 
 //---------- eFile_Init-----------------
@@ -126,6 +169,11 @@ int eFile_Format(void){ // erase disk, add format
 	}
 	FAT[FREE_SPACE] = NULL; // null pointer
 	
+	// Number of Bytes written in each data sector
+	for (i = 0; i < NUM_SECTOR; i++){
+		BytesWritten[i] = 0;
+	}
+	
 	// Writing the directory and the FAT to the disk;
 	convert_Dir2Buff ();
 	if (write_DirFAT()) return FAIL;
@@ -139,7 +187,7 @@ int eFile_Format(void){ // erase disk, add format
 // Input: file name is an ASCII string up to seven characters 
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Create( char name[]){  // create new file, make it empty 
-	int i,freeFile_idx , freeStartSector_idx;
+	int i,freeFile_idx;
 	
 	readDIR(DIR_SECTOR);
 	readFAT();
@@ -161,23 +209,12 @@ int eFile_Create( char name[]){  // create new file, make it empty
 		directory[freeFile_idx].name[i] = name[i];
 	}
 	
-	freeStartSector_idx = directory[FREE].startSector;
-	
-	// assign a sector to the new file (one block only)
-	directory[freeFile_idx].startSector = freeStartSector_idx;
-	directory[freeFile_idx].size = 1;
-	FAT[freeStartSector_idx] = NULL;									// points to Null
-	
-	//new free start sector
-	directory[FREE].startSector = FAT[freeStartSector_idx]; 
-	
-	directory[FREE].size--; //should not be less than zero
+	allocateBlock(freeFile_idx, 0); 
 	
 	// Writing the directory and the FAT to the disk;
 	convert_Dir2Buff ();
 	if (write_DirFAT()) return FAIL;
 	
-	Curr_numFiles++;
   return SUCCESS;     
 }
 
@@ -186,23 +223,20 @@ int eFile_Create( char name[]){  // create new file, make it empty
 // Input: file name is a single ASCII letter
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_WOpen(char name[]){      // open a file for writing 
-	int dirIdx = 0, startSector = 0, lastSector = 0;
-//	if (!Curr_numFiles) return FAIL;	// no files in the directory
+	int dirIdx, lastSector, length;
 	
 	readDIR(DIR_SECTOR);
 	readFAT();
 	
-	if(strlen(name) > NAME)
+	length = strlen(name);
+	if ((length > NAME) || !length)
 		return FAIL;
 	
-	dirIdx = compareName(name);
+	dirIdx = compareName(name, length);
 	if(dirIdx == 0) return FAIL;
 	
-	startSector = directory[dirIdx].startSector;
-	lastSector = FAT[startSector];
-	while (lastSector > 0){
-		lastSector = FAT[lastSector];
-	}
+	lastSector = findLastSector(dirIdx);
+	
 	readDIR(lastSector);
 	// read the last block of the given file
 	
@@ -214,18 +248,41 @@ int eFile_WOpen(char name[]){      // open a file for writing
 // Input: data to be saved
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Write(char data){
+	int lastSector;
 	
+	if ((!idxWrite_OpenFile)  || (idxWrite_OpenFile && idxRead_OpenFile))
+		return FAIL; 
+	
+	// Find the last sector of the open file
+	lastSector = findLastSector(idxWrite_OpenFile);
+	
+	if (BytesWritten[lastSector] == BLOCK_SIZE) { // allocate a new block/sector
+			if (allocateBlock(idxWrite_OpenFile, lastSector)) 
+				return FAIL;
+			lastSector = FAT[lastSector];	
+	}
+		
+	RAM[BytesWritten[lastSector]] = data;
+	BytesWritten[lastSector]++;
+	
+	// Writing the directory and the FAT to the disk;
+	convert_Dir2Buff ();
+	if (write_DirFAT()) return FAIL;
+		
   return SUCCESS;  
 }
 
+int eFile_WClose(void);
+int eFile_RClose(void);
 
 //---------- eFile_Close-----------------
 // Deactivate the file system
 // Input: none
 // Output: 0 if successful and 1 on failure (not currently open)
 int eFile_Close(void){ 
-	
-  return SUCCESS;     
+	if (write_DirFAT() || eFile_WClose() || eFile_RClose()) return FAIL;
+  
+	return SUCCESS;     
 }
 
 //---------- eFile_WClose-----------------
@@ -233,6 +290,9 @@ int eFile_Close(void){
 // Input: none
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_WClose(void){ // close the file for writing
+	
+	if (!idxWrite_OpenFile) return FAIL;
+	idxWrite_OpenFile = 0;
   
   return SUCCESS;     
 }
@@ -264,6 +324,7 @@ int eFile_ReadNext( char *pt){       // get next byte
 // Output: 0 if successful and 1 on failure (e.g., wasn't open)
 int eFile_RClose(void){ // close the file for writing
 
+	idxRead_OpenFile = 0;
   return SUCCESS;
 }
 
@@ -285,6 +346,35 @@ int eFile_Directory(void(*fp)(char)){
 // Input: file name is a single ASCII letter
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Delete( char name[]){  // remove this file 
+	int i, dirIdx = 0, sector = 0, lastFreeSector = 0, length = strlen(name);
+	
+	readDIR(DIR_SECTOR);
+	readFAT();
+	
+	if(strlen(name) > NAME)
+		return FAIL;
+	
+	dirIdx = compareName(name, length);
+	if(dirIdx == 0) return FAIL;
+	
+	lastFreeSector = findLastSector(FREE);
+	
+	// Free space
+	FAT[lastFreeSector] = directory[dirIdx].startSector;
+	
+	sector = directory[dirIdx].startSector;
+	for (i = 0; i < directory[dirIdx].size; i++){
+		BytesWritten[sector] = 0;
+		sector = FAT[sector];
+	}
+	
+	directory[dirIdx].name[0] = '*';
+	directory[dirIdx].size = 0;
+	directory[dirIdx].startSector = 0;
+	
+	// Writing the directory and the FAT to the disk
+	convert_Dir2Buff ();
+	if (write_DirFAT()) return FAIL;
 
   return SUCCESS;    // restore directory back to flash
 }
