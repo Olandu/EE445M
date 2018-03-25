@@ -160,72 +160,7 @@
           <Name>-O207 -S0 -C0 -FO7 -FD20000000 -FC800 -FN1 -FF0TM4C123_256 -FS00 -FL040000)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>491</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>5652</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\Lab4.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab4\Lab4.c\491</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>411</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>10596</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\efile.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab4\efile.c\411</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>412</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>10604</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\efile.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab4\efile.c\412</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>412</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>10620</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\efile.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lab4\efile.c\412</Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -367,7 +302,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>274</TopLine>
+      <TopLine>269</TopLine>
       <CurrentLine>277</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\startup.s</PathWithFileName>
@@ -415,7 +350,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>226</TopLine>
+      <TopLine>227</TopLine>
       <CurrentLine>234</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\UART2.c</PathWithFileName>
@@ -429,10 +364,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>15</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>179</TopLine>
-      <CurrentLine>180</CurrentLine>
+      <CurrentLine>191</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\OS.c</PathWithFileName>
       <FilenameWithoutPath>OS.c</FilenameWithoutPath>
@@ -525,10 +460,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>34</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>405</TopLine>
-      <CurrentLine>411</CurrentLine>
+      <TopLine>311</TopLine>
+      <CurrentLine>317</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\efile.c</PathWithFileName>
       <FilenameWithoutPath>efile.c</FilenameWithoutPath>
@@ -541,10 +476,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>12</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>473</TopLine>
-      <CurrentLine>490</CurrentLine>
+      <TopLine>501</TopLine>
+      <CurrentLine>502</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Lab4.c</PathWithFileName>
       <FilenameWithoutPath>Lab4.c</FilenameWithoutPath>

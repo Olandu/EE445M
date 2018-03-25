@@ -501,6 +501,66 @@ void TestFile(void){   int i; char data;
   Running=0; // launch again
   OS_Kill();
 }
+
+
+
+void TestFile2(void){   int i; char data; 
+  printf("\n\rEE445M/EE380L, Lab 4 eFile test\n\r");
+  ST7735_OutString(0, 1, "eFile test      ", ST7735_WHITE);
+  // simple test of eFile
+  if(eFile_Init())              diskError("eFile_Init",0); 
+  if(eFile_Format())            diskError("eFile_Format",0); 
+  eFile_Directory(&UART_OutChar);
+  if(eFile_Create("file1"))     diskError("eFile_Create",0);
+	if(eFile_Create("file2"))     diskError("eFile_Create",0);
+	if(eFile_Create("file3"))     diskError("eFile_Create",0);
+	
+	eFile_Directory(&UART_OutChar);
+	printf("\n\r");
+	
+  if(eFile_WOpen("file1"))      diskError("eFile_WOpen",0);
+  for(i=0;i<1000;i++){
+    if(eFile_Write('a'+i%26))   diskError("eFile_Write",i);
+		if(i%52==51){
+      if(eFile_Write('\n'))     diskError("eFile_Write",i);  
+      if(eFile_Write('\r'))     diskError("eFile_Write",i);
+    }
+  }
+  if(eFile_WClose())            diskError("eFile_WClose",0);
+	
+	eFile_Directory(&UART_OutChar);
+	
+	if(eFile_WOpen("file2"))      diskError("eFile_WOpen",0);
+	if(eFile_ROpen("file1"))      diskError("eFile_ROpen",0);
+  for(i=0;i<1000;i++){
+    if(eFile_ReadNext(&data))   diskError("eFile_ReadNext",i);
+		UART_OutChar(data);
+  }
+	printf("\n\r");
+  for(i=0;i<1000;i++){
+    if(eFile_Write('a'+i%26))   diskError("eFile_Write",i);
+		if(i%52==51){
+      if(eFile_Write('\n'))     diskError("eFile_Write",i);  
+      if(eFile_Write('\r'))     diskError("eFile_Write",i);
+    }
+  }
+	
+  if(eFile_WClose())            diskError("eFile_WClose",0);
+	if(eFile_RClose())            diskError("eFile_WClose",0);
+	
+	eFile_Directory(&UART_OutChar);
+	printf("\n\r");
+  if(eFile_Delete("file3"))     diskError("eFile_Delete",0);
+  eFile_Directory(&UART_OutChar);
+	
+  if(eFile_Close())             diskError("eFile_Close",0);
+	
+  printf("Successful test of creating a file\n\r");
+  ST7735_OutString(0, 1, "eFile successful", ST7735_YELLOW);
+  Running=0; // launch again
+  OS_Kill();
+}
+
 //************SW1Push2*************
 // Called when SW1 Button pushed
 // background threads execute once and return
@@ -524,7 +584,7 @@ int main(void){
   OS_AddSW2Task(&SW1Push2,2);    // PF0, SW2
   NumCreated = 0 ;
 // create initial foreground threads
-  NumCreated += OS_AddThread(&TestFile,128,1);  
+  NumCreated += OS_AddThread(&TestFile2,128,1);  
   NumCreated += OS_AddThread(&IdleTask,128,3); 
  
   OS_Launch(10*TIME_1MS); // doesn't return, interrupts enabled in here
