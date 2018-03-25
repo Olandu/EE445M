@@ -818,14 +818,14 @@ Removing Unused input sections from the image.
     Removing efile.o(i.eFile_Close), (28 bytes).
     Removing efile.o(i.eFile_Create), (116 bytes).
     Removing efile.o(i.eFile_Delete), (176 bytes).
-    Removing efile.o(i.eFile_Directory), (88 bytes).
-    Removing efile.o(i.eFile_Format), (128 bytes).
+    Removing efile.o(i.eFile_Directory), (84 bytes).
+    Removing efile.o(i.eFile_Format), (124 bytes).
     Removing efile.o(i.eFile_Init), (18 bytes).
     Removing efile.o(i.eFile_RClose), (24 bytes).
     Removing efile.o(i.eFile_ROpen), (112 bytes).
     Removing efile.o(i.eFile_ReadNext), (140 bytes).
     Removing efile.o(i.eFile_RedirectToFile), (36 bytes).
-    Removing efile.o(i.eFile_WOpen), (70 bytes).
+    Removing efile.o(i.eFile_WOpen), (76 bytes).
     Removing efile.o(i.fgetc), (20 bytes).
     Removing efile.o(i.readDIR), (92 bytes).
     Removing efile.o(i.readFAT), (24 bytes).
@@ -855,7 +855,7 @@ Removing Unused input sections from the image.
     Removing cdrcmple.o(.text), (40 bytes).
     Removing depilogue.o(.text), (190 bytes).
 
-96 unused section(s) (total 12071 bytes) removed from the image.
+96 unused section(s) (total 12069 bytes) removed from the image.
 
 ==============================================================================
 
@@ -1014,61 +1014,61 @@ Image Symbol Table
     i.commonInit                             0x00001ea4   Section        0  st7735.o(i.commonInit)
     commonInit                               0x00001ea5   Thumb Code   330  st7735.o(i.commonInit)
     i.convert_Dir2Buff                       0x0000201c   Section        0  efile.o(i.convert_Dir2Buff)
-    i.copyHardwareToSoftware                 0x0000205c   Section        0  uart2.o(i.copyHardwareToSoftware)
-    copyHardwareToSoftware                   0x0000205d   Thumb Code    36  uart2.o(i.copyHardwareToSoftware)
-    i.copySoftwareToHardware                 0x00002084   Section        0  uart2.o(i.copySoftwareToHardware)
-    copySoftwareToHardware                   0x00002085   Thumb Code    38  uart2.o(i.copySoftwareToHardware)
-    i.deselect                               0x000020b0   Section        0  edisk.o(i.deselect)
-    deselect                                 0x000020b1   Thumb Code    16  edisk.o(i.deselect)
-    i.diskError                              0x000020c4   Section        0  lab4.o(i.diskError)
-    i.disk_timerproc                         0x000020f0   Section        0  edisk.o(i.disk_timerproc)
-    i.eDisk_Init                             0x00002130   Section        0  edisk.o(i.eDisk_Init)
-    i.eDisk_Read                             0x0000228c   Section        0  edisk.o(i.eDisk_Read)
-    i.eDisk_ReadBlock                        0x0000231c   Section        0  edisk.o(i.eDisk_ReadBlock)
-    i.eDisk_Write                            0x00002330   Section        0  edisk.o(i.eDisk_Write)
-    i.eDisk_WriteBlock                       0x000023e4   Section        0  edisk.o(i.eDisk_WriteBlock)
-    i.eFile_EndRedirectToFile                0x000023f8   Section        0  efile.o(i.eFile_EndRedirectToFile)
-    i.eFile_WClose                           0x00002414   Section        0  efile.o(i.eFile_WClose)
-    i.eFile_Write                            0x0000242c   Section        0  efile.o(i.eFile_Write)
-    i.findLastSector                         0x000024b0   Section        0  efile.o(i.findLastSector)
-    i.fputc                                  0x000024d4   Section        0  efile.o(i.fputc)
-    i.init_spi                               0x00002504   Section        0  edisk.o(i.init_spi)
-    init_spi                                 0x00002505   Thumb Code    32  edisk.o(i.init_spi)
-    i.main                                   0x0000252c   Section        0  lab4.o(i.main)
-    i.pushColor                              0x000025ac   Section        0  st7735.o(i.pushColor)
-    pushColor                                0x000025ad   Thumb Code    18  st7735.o(i.pushColor)
-    i.rcvr_datablock                         0x000025c0   Section        0  edisk.o(i.rcvr_datablock)
-    rcvr_datablock                           0x000025c1   Thumb Code    66  edisk.o(i.rcvr_datablock)
-    i.rcvr_spi                               0x00002608   Section        0  edisk.o(i.rcvr_spi)
-    rcvr_spi                                 0x00002609   Thumb Code    40  edisk.o(i.rcvr_spi)
-    i.rcvr_spi_multi                         0x00002634   Section        0  edisk.o(i.rcvr_spi_multi)
-    rcvr_spi_multi                           0x00002635   Thumb Code    24  edisk.o(i.rcvr_spi_multi)
-    i.select                                 0x0000264c   Section        0  edisk.o(i.select)
-    select                                   0x0000264d   Thumb Code    44  edisk.o(i.select)
-    i.send_cmd                               0x0000267c   Section        0  edisk.o(i.send_cmd)
-    send_cmd                                 0x0000267d   Thumb Code   150  edisk.o(i.send_cmd)
-    i.setAddrWindow                          0x00002714   Section        0  st7735.o(i.setAddrWindow)
-    setAddrWindow                            0x00002715   Thumb Code   106  st7735.o(i.setAddrWindow)
-    i.wait_ready                             0x00002788   Section        0  edisk.o(i.wait_ready)
-    wait_ready                               0x00002789   Thumb Code    42  edisk.o(i.wait_ready)
-    i.write_DirFAT                           0x000027b8   Section        0  efile.o(i.write_DirFAT)
-    i.writecommand                           0x000027e4   Section        0  st7735.o(i.writecommand)
-    writecommand                             0x000027e5   Thumb Code    66  st7735.o(i.writecommand)
-    i.writedata                              0x00002834   Section        0  st7735.o(i.writedata)
-    writedata                                0x00002835   Thumb Code    68  st7735.o(i.writedata)
-    i.xchg_spi                               0x00002884   Section        0  edisk.o(i.xchg_spi)
-    xchg_spi                                 0x00002885   Thumb Code    48  edisk.o(i.xchg_spi)
-    i.xmit_datablock                         0x000028b8   Section        0  edisk.o(i.xmit_datablock)
-    xmit_datablock                           0x000028b9   Thumb Code    76  edisk.o(i.xmit_datablock)
-    i.xmit_spi_multi                         0x00002904   Section        0  edisk.o(i.xmit_spi_multi)
-    xmit_spi_multi                           0x00002905   Thumb Code    40  edisk.o(i.xmit_spi_multi)
-    .constdata                               0x00002930   Section     1506  st7735.o(.constdata)
-    Font                                     0x00002930   Data        1275  st7735.o(.constdata)
-    Bcmd                                     0x00002e2b   Data         103  st7735.o(.constdata)
-    Rcmd1                                    0x00002e92   Data          59  st7735.o(.constdata)
-    Rcmd2green                               0x00002ecd   Data          13  st7735.o(.constdata)
-    Rcmd2red                                 0x00002eda   Data          13  st7735.o(.constdata)
-    Rcmd3                                    0x00002ee7   Data          43  st7735.o(.constdata)
+    i.copyHardwareToSoftware                 0x0000206c   Section        0  uart2.o(i.copyHardwareToSoftware)
+    copyHardwareToSoftware                   0x0000206d   Thumb Code    36  uart2.o(i.copyHardwareToSoftware)
+    i.copySoftwareToHardware                 0x00002094   Section        0  uart2.o(i.copySoftwareToHardware)
+    copySoftwareToHardware                   0x00002095   Thumb Code    38  uart2.o(i.copySoftwareToHardware)
+    i.deselect                               0x000020c0   Section        0  edisk.o(i.deselect)
+    deselect                                 0x000020c1   Thumb Code    16  edisk.o(i.deselect)
+    i.diskError                              0x000020d4   Section        0  lab4.o(i.diskError)
+    i.disk_timerproc                         0x00002100   Section        0  edisk.o(i.disk_timerproc)
+    i.eDisk_Init                             0x00002140   Section        0  edisk.o(i.eDisk_Init)
+    i.eDisk_Read                             0x0000229c   Section        0  edisk.o(i.eDisk_Read)
+    i.eDisk_ReadBlock                        0x0000232c   Section        0  edisk.o(i.eDisk_ReadBlock)
+    i.eDisk_Write                            0x00002340   Section        0  edisk.o(i.eDisk_Write)
+    i.eDisk_WriteBlock                       0x000023f4   Section        0  edisk.o(i.eDisk_WriteBlock)
+    i.eFile_EndRedirectToFile                0x00002408   Section        0  efile.o(i.eFile_EndRedirectToFile)
+    i.eFile_WClose                           0x00002424   Section        0  efile.o(i.eFile_WClose)
+    i.eFile_Write                            0x0000243c   Section        0  efile.o(i.eFile_Write)
+    i.findLastSector                         0x000024b4   Section        0  efile.o(i.findLastSector)
+    i.fputc                                  0x000024d8   Section        0  efile.o(i.fputc)
+    i.init_spi                               0x00002508   Section        0  edisk.o(i.init_spi)
+    init_spi                                 0x00002509   Thumb Code    32  edisk.o(i.init_spi)
+    i.main                                   0x00002530   Section        0  lab4.o(i.main)
+    i.pushColor                              0x000025b0   Section        0  st7735.o(i.pushColor)
+    pushColor                                0x000025b1   Thumb Code    18  st7735.o(i.pushColor)
+    i.rcvr_datablock                         0x000025c4   Section        0  edisk.o(i.rcvr_datablock)
+    rcvr_datablock                           0x000025c5   Thumb Code    66  edisk.o(i.rcvr_datablock)
+    i.rcvr_spi                               0x0000260c   Section        0  edisk.o(i.rcvr_spi)
+    rcvr_spi                                 0x0000260d   Thumb Code    40  edisk.o(i.rcvr_spi)
+    i.rcvr_spi_multi                         0x00002638   Section        0  edisk.o(i.rcvr_spi_multi)
+    rcvr_spi_multi                           0x00002639   Thumb Code    24  edisk.o(i.rcvr_spi_multi)
+    i.select                                 0x00002650   Section        0  edisk.o(i.select)
+    select                                   0x00002651   Thumb Code    44  edisk.o(i.select)
+    i.send_cmd                               0x00002680   Section        0  edisk.o(i.send_cmd)
+    send_cmd                                 0x00002681   Thumb Code   150  edisk.o(i.send_cmd)
+    i.setAddrWindow                          0x00002718   Section        0  st7735.o(i.setAddrWindow)
+    setAddrWindow                            0x00002719   Thumb Code   106  st7735.o(i.setAddrWindow)
+    i.wait_ready                             0x0000278c   Section        0  edisk.o(i.wait_ready)
+    wait_ready                               0x0000278d   Thumb Code    42  edisk.o(i.wait_ready)
+    i.write_DirFAT                           0x000027bc   Section        0  efile.o(i.write_DirFAT)
+    i.writecommand                           0x000027e8   Section        0  st7735.o(i.writecommand)
+    writecommand                             0x000027e9   Thumb Code    66  st7735.o(i.writecommand)
+    i.writedata                              0x00002838   Section        0  st7735.o(i.writedata)
+    writedata                                0x00002839   Thumb Code    68  st7735.o(i.writedata)
+    i.xchg_spi                               0x00002888   Section        0  edisk.o(i.xchg_spi)
+    xchg_spi                                 0x00002889   Thumb Code    48  edisk.o(i.xchg_spi)
+    i.xmit_datablock                         0x000028bc   Section        0  edisk.o(i.xmit_datablock)
+    xmit_datablock                           0x000028bd   Thumb Code    76  edisk.o(i.xmit_datablock)
+    i.xmit_spi_multi                         0x00002908   Section        0  edisk.o(i.xmit_spi_multi)
+    xmit_spi_multi                           0x00002909   Thumb Code    40  edisk.o(i.xmit_spi_multi)
+    .constdata                               0x00002934   Section     1506  st7735.o(.constdata)
+    Font                                     0x00002934   Data        1275  st7735.o(.constdata)
+    Bcmd                                     0x00002e2f   Data         103  st7735.o(.constdata)
+    Rcmd1                                    0x00002e96   Data          59  st7735.o(.constdata)
+    Rcmd2green                               0x00002ed1   Data          13  st7735.o(.constdata)
+    Rcmd2red                                 0x00002ede   Data          13  st7735.o(.constdata)
+    Rcmd3                                    0x00002eeb   Data          43  st7735.o(.constdata)
     .data                                    0x20000000   Section       36  st7735.o(.data)
     _width                                   0x20000000   Data           2  st7735.o(.data)
     _height                                  0x20000002   Data           2  st7735.o(.data)
@@ -1353,23 +1353,23 @@ Image Symbol Table
     __scatterload_null                       0x00001a87   Thumb Code     2  handlers.o(i.__scatterload_null)
     __scatterload_zeroinit                   0x00001a89   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
     allocateBlock                            0x00001de5   Thumb Code    92  efile.o(i.allocateBlock)
-    convert_Dir2Buff                         0x0000201d   Thumb Code    54  efile.o(i.convert_Dir2Buff)
-    diskError                                0x000020c5   Thumb Code    26  lab4.o(i.diskError)
-    disk_timerproc                           0x000020f1   Thumb Code    52  edisk.o(i.disk_timerproc)
-    eDisk_Init                               0x00002131   Thumb Code   330  edisk.o(i.eDisk_Init)
-    eDisk_Read                               0x0000228d   Thumb Code   136  edisk.o(i.eDisk_Read)
-    eDisk_ReadBlock                          0x0000231d   Thumb Code    20  edisk.o(i.eDisk_ReadBlock)
-    eDisk_Write                              0x00002331   Thumb Code   170  edisk.o(i.eDisk_Write)
-    eDisk_WriteBlock                         0x000023e5   Thumb Code    20  edisk.o(i.eDisk_WriteBlock)
-    eFile_EndRedirectToFile                  0x000023f9   Thumb Code    22  efile.o(i.eFile_EndRedirectToFile)
-    eFile_WClose                             0x00002415   Thumb Code    20  efile.o(i.eFile_WClose)
-    eFile_Write                              0x0000242d   Thumb Code   110  efile.o(i.eFile_Write)
-    findLastSector                           0x000024b1   Thumb Code    26  efile.o(i.findLastSector)
-    fputc                                    0x000024d5   Thumb Code    42  efile.o(i.fputc)
-    main                                     0x0000252d   Thumb Code    98  lab4.o(i.main)
-    write_DirFAT                             0x000027b9   Thumb Code    34  efile.o(i.write_DirFAT)
-    Region$$Table$$Base                      0x00002f14   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00002f34   Number         0  anon$$obj.o(Region$$Table)
+    convert_Dir2Buff                         0x0000201d   Thumb Code    70  efile.o(i.convert_Dir2Buff)
+    diskError                                0x000020d5   Thumb Code    26  lab4.o(i.diskError)
+    disk_timerproc                           0x00002101   Thumb Code    52  edisk.o(i.disk_timerproc)
+    eDisk_Init                               0x00002141   Thumb Code   330  edisk.o(i.eDisk_Init)
+    eDisk_Read                               0x0000229d   Thumb Code   136  edisk.o(i.eDisk_Read)
+    eDisk_ReadBlock                          0x0000232d   Thumb Code    20  edisk.o(i.eDisk_ReadBlock)
+    eDisk_Write                              0x00002341   Thumb Code   170  edisk.o(i.eDisk_Write)
+    eDisk_WriteBlock                         0x000023f5   Thumb Code    20  edisk.o(i.eDisk_WriteBlock)
+    eFile_EndRedirectToFile                  0x00002409   Thumb Code    22  efile.o(i.eFile_EndRedirectToFile)
+    eFile_WClose                             0x00002425   Thumb Code    20  efile.o(i.eFile_WClose)
+    eFile_Write                              0x0000243d   Thumb Code   104  efile.o(i.eFile_Write)
+    findLastSector                           0x000024b5   Thumb Code    26  efile.o(i.findLastSector)
+    fputc                                    0x000024d9   Thumb Code    42  efile.o(i.fputc)
+    main                                     0x00002531   Thumb Code    98  lab4.o(i.main)
+    write_DirFAT                             0x000027bd   Thumb Code    34  efile.o(i.write_DirFAT)
+    Region$$Table$$Base                      0x00002f18   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00002f38   Number         0  anon$$obj.o(Region$$Table)
     Semi                                     0x20000004   Data           8  st7735.o(.data)
     LCDFree                                  0x20000010   Data           8  st7735.o(.data)
     Messageindex                             0x20000018   Data           4  st7735.o(.data)
@@ -1406,9 +1406,8 @@ Image Symbol Table
     GetPt                                    0x200000a4   Data           4  os.o(.data)
     CurrentFIFOSize                          0x200000a8   Data           8  os.o(.data)
     ADCTask                                  0x200000b0   Data           4  adc.o(.data)
-    Curr_numFiles                            0x200000c4   Data           1  efile.o(.data)
-    idxWrite_OpenFile                        0x200000c5   Data           1  efile.o(.data)
-    idxRead_OpenFile                         0x200000c6   Data           1  efile.o(.data)
+    idxWrite_OpenFile                        0x200000c4   Data           1  efile.o(.data)
+    idxRead_OpenFile                         0x200000c5   Data           1  efile.o(.data)
     nextByteRead                             0x200000c8   Data           4  efile.o(.data)
     StreamToFile                             0x200000cc   Data           4  efile.o(.data)
     Name                                     0x200000d0   Data           8  lab4.o(.data)
@@ -1460,9 +1459,9 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x0000305c, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00003060, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x00002f34, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x00002f38, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1557,43 +1556,43 @@ Memory Map of the image
     0x00001e4c   0x00000056   Code   RO           53    i.commandList       st7735.o
     0x00001ea2   0x00000002   PAD
     0x00001ea4   0x00000178   Code   RO           54    i.commonInit        st7735.o
-    0x0000201c   0x00000040   Code   RO          892    i.convert_Dir2Buff  efile.o
-    0x0000205c   0x00000028   Code   RO          231    i.copyHardwareToSoftware  uart2.o
-    0x00002084   0x0000002c   Code   RO          232    i.copySoftwareToHardware  uart2.o
-    0x000020b0   0x00000014   Code   RO          772    i.deselect          edisk.o
-    0x000020c4   0x0000002c   Code   RO         1058    i.diskError         lab4.o
-    0x000020f0   0x00000040   Code   RO          773    i.disk_timerproc    edisk.o
-    0x00002130   0x0000015c   Code   RO          774    i.eDisk_Init        edisk.o
-    0x0000228c   0x00000090   Code   RO          775    i.eDisk_Read        edisk.o
-    0x0000231c   0x00000014   Code   RO          776    i.eDisk_ReadBlock   edisk.o
-    0x00002330   0x000000b4   Code   RO          778    i.eDisk_Write       edisk.o
-    0x000023e4   0x00000014   Code   RO          779    i.eDisk_WriteBlock  edisk.o
-    0x000023f8   0x0000001c   Code   RO          897    i.eFile_EndRedirectToFile  efile.o
-    0x00002414   0x00000018   Code   RO          904    i.eFile_WClose      efile.o
-    0x0000242c   0x00000084   Code   RO          906    i.eFile_Write       efile.o
-    0x000024b0   0x00000024   Code   RO          908    i.findLastSector    efile.o
-    0x000024d4   0x00000030   Code   RO          909    i.fputc             efile.o
-    0x00002504   0x00000028   Code   RO          780    i.init_spi          edisk.o
-    0x0000252c   0x00000080   Code   RO         1059    i.main              lab4.o
-    0x000025ac   0x00000012   Code   RO           56    i.pushColor         st7735.o
-    0x000025be   0x00000002   PAD
-    0x000025c0   0x00000048   Code   RO          781    i.rcvr_datablock    edisk.o
-    0x00002608   0x0000002c   Code   RO          782    i.rcvr_spi          edisk.o
-    0x00002634   0x00000018   Code   RO          783    i.rcvr_spi_multi    edisk.o
-    0x0000264c   0x00000030   Code   RO          784    i.select            edisk.o
-    0x0000267c   0x00000096   Code   RO          785    i.send_cmd          edisk.o
-    0x00002712   0x00000002   PAD
-    0x00002714   0x00000074   Code   RO           57    i.setAddrWindow     st7735.o
-    0x00002788   0x00000030   Code   RO          786    i.wait_ready        edisk.o
-    0x000027b8   0x0000002c   Code   RO          912    i.write_DirFAT      efile.o
-    0x000027e4   0x00000050   Code   RO           58    i.writecommand      st7735.o
-    0x00002834   0x00000050   Code   RO           59    i.writedata         st7735.o
-    0x00002884   0x00000034   Code   RO          787    i.xchg_spi          edisk.o
-    0x000028b8   0x0000004c   Code   RO          788    i.xmit_datablock    edisk.o
-    0x00002904   0x0000002c   Code   RO          789    i.xmit_spi_multi    edisk.o
-    0x00002930   0x000005e2   Data   RO           61    .constdata          st7735.o
-    0x00002f12   0x00000002   PAD
-    0x00002f14   0x00000020   Data   RO         1508    Region$$Table       anon$$obj.o
+    0x0000201c   0x00000050   Code   RO          892    i.convert_Dir2Buff  efile.o
+    0x0000206c   0x00000028   Code   RO          231    i.copyHardwareToSoftware  uart2.o
+    0x00002094   0x0000002c   Code   RO          232    i.copySoftwareToHardware  uart2.o
+    0x000020c0   0x00000014   Code   RO          772    i.deselect          edisk.o
+    0x000020d4   0x0000002c   Code   RO         1058    i.diskError         lab4.o
+    0x00002100   0x00000040   Code   RO          773    i.disk_timerproc    edisk.o
+    0x00002140   0x0000015c   Code   RO          774    i.eDisk_Init        edisk.o
+    0x0000229c   0x00000090   Code   RO          775    i.eDisk_Read        edisk.o
+    0x0000232c   0x00000014   Code   RO          776    i.eDisk_ReadBlock   edisk.o
+    0x00002340   0x000000b4   Code   RO          778    i.eDisk_Write       edisk.o
+    0x000023f4   0x00000014   Code   RO          779    i.eDisk_WriteBlock  edisk.o
+    0x00002408   0x0000001c   Code   RO          897    i.eFile_EndRedirectToFile  efile.o
+    0x00002424   0x00000018   Code   RO          904    i.eFile_WClose      efile.o
+    0x0000243c   0x00000078   Code   RO          906    i.eFile_Write       efile.o
+    0x000024b4   0x00000024   Code   RO          908    i.findLastSector    efile.o
+    0x000024d8   0x00000030   Code   RO          909    i.fputc             efile.o
+    0x00002508   0x00000028   Code   RO          780    i.init_spi          edisk.o
+    0x00002530   0x00000080   Code   RO         1059    i.main              lab4.o
+    0x000025b0   0x00000012   Code   RO           56    i.pushColor         st7735.o
+    0x000025c2   0x00000002   PAD
+    0x000025c4   0x00000048   Code   RO          781    i.rcvr_datablock    edisk.o
+    0x0000260c   0x0000002c   Code   RO          782    i.rcvr_spi          edisk.o
+    0x00002638   0x00000018   Code   RO          783    i.rcvr_spi_multi    edisk.o
+    0x00002650   0x00000030   Code   RO          784    i.select            edisk.o
+    0x00002680   0x00000096   Code   RO          785    i.send_cmd          edisk.o
+    0x00002716   0x00000002   PAD
+    0x00002718   0x00000074   Code   RO           57    i.setAddrWindow     st7735.o
+    0x0000278c   0x00000030   Code   RO          786    i.wait_ready        edisk.o
+    0x000027bc   0x0000002c   Code   RO          912    i.write_DirFAT      efile.o
+    0x000027e8   0x00000050   Code   RO           58    i.writecommand      st7735.o
+    0x00002838   0x00000050   Code   RO           59    i.writedata         st7735.o
+    0x00002888   0x00000034   Code   RO          787    i.xchg_spi          edisk.o
+    0x000028bc   0x0000004c   Code   RO          788    i.xmit_datablock    edisk.o
+    0x00002908   0x0000002c   Code   RO          789    i.xmit_spi_multi    edisk.o
+    0x00002934   0x000005e2   Data   RO           61    .constdata          st7735.o
+    0x00002f16   0x00000002   PAD
+    0x00002f18   0x00000020   Data   RO         1508    Region$$Table       anon$$obj.o
 
 
     Execution Region ER_RW (Base: 0x20000000, Size: 0x00000128, Max: 0xffffffff, ABSOLUTE)
@@ -1630,20 +1629,20 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-        36         10          0          4          0       1201   adc.o
-      1862        146          0         13          0      14508   edisk.o
-       480         80          0         12       2560       6174   efile.o
+        36         10          0          4          0        985   adc.o
+      1862        146          0         13          0      12948   edisk.o
+       484         74          0         12       2560       5460   efile.o
          0          0          0          0          0       1200   interpreter.o
-       892        362          0         84       1024       5334   lab4.o
-      3112        422          0        108       7108      24101   os.o
-        80         10          0          0          0        284   osasm.o
-       124          6          0          0          0       4755   pll.o
-      1518        152       1506         36          0      13963   st7735.o
-       672        622          0          0       1024       1100   startup.o
-       744        142          0         32         48       8178   uart2.o
+       892        362          0         84       1024       4754   lab4.o
+      3112        422          0        108       7108      21437   os.o
+        80         10          0          0          0        212   osasm.o
+       124          6          0          0          0       4683   pll.o
+      1518        152       1506         36          0      12687   st7735.o
+       672        622          0          0       1024        956   startup.o
+       744        142          0         32         48       7182   uart2.o
 
     ----------------------------------------------------------------------
-      9536       1952       1540        292      11768      80798   Object Totals
+      9540       1946       1540        292      11768      72504   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         16          0          2          3          4          0   (incl. Padding)
 
@@ -1685,15 +1684,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     10544       1984       1540        296      11768      72342   Grand Totals
-     10544       1984       1540        296      11768      72342   ELF Image Totals
-     10544       1984       1540        296          0          0   ROM Totals
+     10548       1978       1540        296      11768      64048   Grand Totals
+     10548       1978       1540        296      11768      64048   ELF Image Totals
+     10548       1978       1540        296          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                12084 (  11.80kB)
+    Total RO  Size (Code + RO Data)                12088 (  11.80kB)
     Total RW  Size (RW Data + ZI Data)             12064 (  11.78kB)
-    Total ROM Size (Code + RO Data + RW Data)      12380 (  12.09kB)
+    Total ROM Size (Code + RO Data + RW Data)      12384 (  12.09kB)
 
 ==============================================================================
 

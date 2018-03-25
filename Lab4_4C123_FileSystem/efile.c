@@ -24,10 +24,10 @@
 #define NULL 0
 #define DIR_SIZE 8
 
-uint8_t RAM[BLOCK_SIZE], FAT[BLOCK_SIZE], Curr_numFiles = 0, idxWrite_OpenFile = 0, idxRead_OpenFile = 0; // 0 if none open else index into the FAT directory
+uint8_t RAM[BLOCK_SIZE], FAT[BLOCK_SIZE], idxWrite_OpenFile = 0, idxRead_OpenFile = 0; // 0 if none open else index into the FAT directory
 int nextByteRead = 0;
 
-int BytesWritten[NUM_SECTOR];
+int BytesWritten[NUM_SECTOR]; 
 
 
 
@@ -41,9 +41,11 @@ dType directory[NUM_FILES];
 
 //----------Helper functions------------
 void convert_Dir2Buff (void){
-	int i;
+	int i, j;
 	for (i = 0; i < BLOCK_SIZE; i += DIR_SIZE){
-		RAM[i] = directory[i].name[0];
+		for (j = 0; j < NAME; j++){
+			RAM[i + j] = directory[i].name[j];
+		}
 		RAM[i+ NAME] = directory[i+NAME].size;
 		RAM[i+ (NAME + 1)] = directory[i+ (NAME + 1)].startSector;
 	}
@@ -101,13 +103,13 @@ int allocateBlock(int file_idx, int lastSector){
 	int freeStartSector_idx;
 	
 	//No free space in Directory
-	if (directory[FREE].size < 1) 
+	if (directory[FREE].size <= 0) 
 		return FAIL;	
 	
 	freeStartSector_idx = directory[FREE].startSector;
 	
 	// assign a sector to the new file (one block only)
-	if (!lastSector){
+	if (lastSector == 0){
 		directory[file_idx].startSector = freeStartSector_idx;
 	} else {
 		FAT[lastSector] = freeStartSector_idx;
@@ -141,9 +143,11 @@ int findLastSector(int file_idx){
 // Input: none
 // Output: 0 if successful and 1 on failure (already initialized)
 int eFile_Init(void){ // initialize file system
+	
 	if(eDisk_Init(0)) 
 		return FAIL;
-  return SUCCESS;
+  
+	return SUCCESS;
 }
 
 //---------- eFile_Format-----------------
@@ -159,8 +163,8 @@ int eFile_Format(void){ // erase disk, add format
 	
 	for(i = 1; i < NUM_FILES; i++){
 		directory[i].name[0] = '*';
-		directory[i].size = FREE_SECTORS;	
-		directory[i].startSector = 2;
+		directory[i].size = 0;	
+		directory[i].startSector = 0;
 	}		
 	
 	// Link free space in FAT
@@ -237,6 +241,8 @@ int eFile_WOpen(char name[]){      // open a file for writing
 	
 	lastSector = findLastSector(dirIdx);
 	
+	if (lastSector == 0) return FAIL;
+	
 	readDIR(lastSector);
 	// read the last block of the given file
 	
@@ -251,22 +257,25 @@ int eFile_Write(char data){
 	int lastSector;
 	
 	//we should be able to read a file within a write but not the other way around***
-	if ((!idxWrite_OpenFile)  || (idxWrite_OpenFile && idxRead_OpenFile))
+	if (idxWrite_OpenFile == 0)
 		return FAIL; 
 	
 	// Find the last sector of the open file
 	lastSector = findLastSector(idxWrite_OpenFile);
 	
+	if (lastSector == 0) 
+		return FAIL;
+	
 	if(BytesWritten[lastSector] == BLOCK_SIZE) { // allocate a new block/sector
 			if (allocateBlock(idxWrite_OpenFile, lastSector)) 
-				return FAIL;
+				return FAIL; 
 			lastSector = FAT[lastSector];	
 	}
 		
 	RAM[BytesWritten[lastSector]] = data;
 	BytesWritten[lastSector]++;
 	
-	// Writing the directory and the FAT to the disk;
+	// Writing the directory and the FAT to the disk
 	convert_Dir2Buff ();
 	if (write_DirFAT()) return FAIL;
 		
@@ -375,7 +384,7 @@ int eFile_Directory(void(*fp)(char)){
 	if(readDIR(DIR_SECTOR))
 		return FAIL;
 	for(i = 1; i < NUM_FILES; i+= DIR_SIZE){ 
-		if(directory[i].name[0] != '*'){//skip free space
+		if(directory[i].name[0] != 0){//skip free space
 			for(j = 0; j < NAME; j++){
 				fp((char)directory[i].name[j]);
 			}
@@ -414,7 +423,7 @@ int eFile_Delete( char name[]){  // remove this file
 		sector = FAT[sector];
 	}
 	
-	directory[dirIdx].name[0] = '*';
+	directory[dirIdx].name[0] = 0;
 	directory[dirIdx].size = 0;
 	directory[dirIdx].startSector = 0;
 	

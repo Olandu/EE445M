@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Lab4.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Lab4.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Sat Mar 24 16:50:44 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Sat Mar 24 19:09:50 2018
 <BR><P>
 <H3>Maximum Stack Usage =        168 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -974,8 +974,8 @@ Global Symbols
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Init
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Address Reference Count : 2]<UL><LI> lab4.o(i.main)
-<LI> lab4.o(i.SW1Push1)
+<BR>[Address Reference Count : 2]<UL><LI> lab4.o(i.SW1Push1)
+<LI> lab4.o(i.main)
 </UL>
 <P><STRONG><a name="[1d]"></a>Timer0A_Handler</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, os.o(i.Timer0A_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
@@ -1148,8 +1148,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Write
 </UL>
 
-<P><STRONG><a name="[da]"></a>convert_Dir2Buff</STRONG> (Thumb, 54 bytes, Stack size 0 bytes, efile.o(i.convert_Dir2Buff))
-<BR><BR>[Called By]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Write
+<P><STRONG><a name="[da]"></a>convert_Dir2Buff</STRONG> (Thumb, 70 bytes, Stack size 8 bytes, efile.o(i.convert_Dir2Buff))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = convert_Dir2Buff
+</UL>
+<BR>[Called By]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Write
 </UL>
 
 <P><STRONG><a name="[b8]"></a>diskError</STRONG> (Thumb, 26 bytes, Stack size 16 bytes, lab4.o(i.diskError))
@@ -1225,7 +1227,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_EndRedirectToFile
 </UL>
 
-<P><STRONG><a name="[d7]"></a>eFile_Write</STRONG> (Thumb, 110 bytes, Stack size 16 bytes, efile.o(i.eFile_Write))
+<P><STRONG><a name="[d7]"></a>eFile_Write</STRONG> (Thumb, 104 bytes, Stack size 16 bytes, efile.o(i.eFile_Write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = eFile_Write &rArr; write_DirFAT &rArr; eDisk_WriteBlock &rArr; eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
