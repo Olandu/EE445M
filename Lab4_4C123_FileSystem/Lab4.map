@@ -451,12 +451,14 @@ Section Cross References
     lab4.o(i.main) refers to lab4.o(i.PortD_Init) for PortD_Init
     lab4.o(i.main) refers to os.o(i.OS_AddPeriodicThread) for OS_AddPeriodicThread
     lab4.o(i.main) refers to os.o(i.OS_AddSW1Task) for OS_AddSW1Task
+    lab4.o(i.main) refers to os.o(i.OS_AddSW2Task) for OS_AddSW2Task
     lab4.o(i.main) refers to os.o(i.OS_AddThread) for OS_AddThread
     lab4.o(i.main) refers to os.o(i.OS_Launch) for OS_Launch
+    lab4.o(i.main) refers to lab4.o(.data) for Running
     lab4.o(i.main) refers to edisk.o(i.disk_timerproc) for disk_timerproc
     lab4.o(i.main) refers to lab4.o(i.SW1Push1) for SW1Push1
-    lab4.o(i.main) refers to lab4.o(.data) for NumCreated
-    lab4.o(i.main) refers to lab4.o(i.TestDisk) for TestDisk
+    lab4.o(i.main) refers to lab4.o(i.SW1Push2) for SW1Push2
+    lab4.o(i.main) refers to lab4.o(i.TestFile) for TestFile
     lab4.o(i.main) refers to lab4.o(i.IdleTask) for IdleTask
     lab4.o(i.realmain) refers to os.o(i.OS_Init) for OS_Init
     lab4.o(i.realmain) refers to lab4.o(i.PortD_Init) for PortD_Init
@@ -477,19 +479,17 @@ Section Cross References
     lab4.o(i.realmain) refers to interpreter.o(i.Interpreter) for Interpreter
     lab4.o(i.realmain) refers to lab4.o(i.DSP) for DSP
     lab4.o(i.realmain) refers to lab4.o(i.IdleTask) for IdleTask
-    lab4.o(i.testmain2) refers to os.o(i.OS_Init) for OS_Init
-    lab4.o(i.testmain2) refers to lab4.o(i.PortD_Init) for PortD_Init
-    lab4.o(i.testmain2) refers to os.o(i.OS_AddPeriodicThread) for OS_AddPeriodicThread
-    lab4.o(i.testmain2) refers to os.o(i.OS_AddSW1Task) for OS_AddSW1Task
-    lab4.o(i.testmain2) refers to os.o(i.OS_AddSW2Task) for OS_AddSW2Task
-    lab4.o(i.testmain2) refers to os.o(i.OS_AddThread) for OS_AddThread
-    lab4.o(i.testmain2) refers to os.o(i.OS_Launch) for OS_Launch
-    lab4.o(i.testmain2) refers to lab4.o(.data) for Running
-    lab4.o(i.testmain2) refers to edisk.o(i.disk_timerproc) for disk_timerproc
-    lab4.o(i.testmain2) refers to lab4.o(i.SW1Push1) for SW1Push1
-    lab4.o(i.testmain2) refers to lab4.o(i.SW1Push2) for SW1Push2
-    lab4.o(i.testmain2) refers to lab4.o(i.TestFile) for TestFile
-    lab4.o(i.testmain2) refers to lab4.o(i.IdleTask) for IdleTask
+    lab4.o(i.testmain1) refers to os.o(i.OS_Init) for OS_Init
+    lab4.o(i.testmain1) refers to lab4.o(i.PortD_Init) for PortD_Init
+    lab4.o(i.testmain1) refers to os.o(i.OS_AddPeriodicThread) for OS_AddPeriodicThread
+    lab4.o(i.testmain1) refers to os.o(i.OS_AddSW1Task) for OS_AddSW1Task
+    lab4.o(i.testmain1) refers to os.o(i.OS_AddThread) for OS_AddThread
+    lab4.o(i.testmain1) refers to os.o(i.OS_Launch) for OS_Launch
+    lab4.o(i.testmain1) refers to edisk.o(i.disk_timerproc) for disk_timerproc
+    lab4.o(i.testmain1) refers to lab4.o(i.SW1Push1) for SW1Push1
+    lab4.o(i.testmain1) refers to lab4.o(.data) for NumCreated
+    lab4.o(i.testmain1) refers to lab4.o(i.TestDisk) for TestDisk
+    lab4.o(i.testmain1) refers to lab4.o(i.IdleTask) for IdleTask
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry10a.o(.ARM.Collect$$$$0000000D) for __rt_final_cpp
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry11a.o(.ARM.Collect$$$$0000000F) for __rt_final_exit
     entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry7b.o(.ARM.Collect$$$$00000008) for _main_clock
@@ -789,7 +789,6 @@ Removing Unused input sections from the image.
     Removing uart2.o(i.UART_OutUHex), (52 bytes).
     Removing os.o(i.AddPriThread), (100 bytes).
     Removing os.o(i.Jitter), (56 bytes).
-    Removing os.o(i.OS_AddSW2Task), (24 bytes).
     Removing os.o(i.OS_ClearMsTime), (12 bytes).
     Removing os.o(i.OS_Fifo_Get), (76 bytes).
     Removing os.o(i.OS_Fifo_Init), (52 bytes).
@@ -802,7 +801,6 @@ Removing Unused input sections from the image.
     Removing os.o(i.OS_MsTime), (12 bytes).
     Removing os.o(i.OS_bSignal), (36 bytes).
     Removing os.o(i.OS_bWait), (32 bytes).
-    Removing os.o(i.SW2_init), (264 bytes).
     Removing os.o(.constdata), (4 bytes).
     Removing adc.o(i.ADC_Collect), (1160 bytes).
     Removing adc.o(i.ADC_In), (44 bytes).
@@ -814,21 +812,8 @@ Removing Unused input sections from the image.
     Removing interpreter.o(i.cmdLine_Start), (368 bytes).
     Removing interpreter.o(.data), (1 bytes).
     Removing edisk.o(i.eDisk_Status), (20 bytes).
-    Removing efile.o(i.compareName), (68 bytes).
-    Removing efile.o(i.eFile_Close), (28 bytes).
-    Removing efile.o(i.eFile_Create), (116 bytes).
-    Removing efile.o(i.eFile_Delete), (176 bytes).
-    Removing efile.o(i.eFile_Directory), (84 bytes).
-    Removing efile.o(i.eFile_Format), (124 bytes).
-    Removing efile.o(i.eFile_Init), (18 bytes).
-    Removing efile.o(i.eFile_RClose), (24 bytes).
-    Removing efile.o(i.eFile_ROpen), (112 bytes).
-    Removing efile.o(i.eFile_ReadNext), (140 bytes).
     Removing efile.o(i.eFile_RedirectToFile), (36 bytes).
-    Removing efile.o(i.eFile_WOpen), (76 bytes).
     Removing efile.o(i.fgetc), (20 bytes).
-    Removing efile.o(i.readDIR), (92 bytes).
-    Removing efile.o(i.readFAT), (24 bytes).
     Removing lab4.o(i.ADC2millimeter), (32 bytes).
     Removing lab4.o(i.DAS), (184 bytes).
     Removing lab4.o(i.DSP), (96 bytes).
@@ -836,9 +821,7 @@ Removing Unused input sections from the image.
     Removing lab4.o(i.Robot), (308 bytes).
     Removing lab4.o(i.RunTest), (32 bytes).
     Removing lab4.o(i.SW1Push), (48 bytes).
-    Removing lab4.o(i.SW1Push2), (48 bytes).
     Removing lab4.o(i.SW2Push), (2 bytes).
-    Removing lab4.o(i.TestFile), (588 bytes).
     Removing lab4.o(i.TestRead), (244 bytes).
     Removing lab4.o(i.TestWrite), (216 bytes).
     Removing lab4.o(i.Testmain0), (108 bytes).
@@ -847,7 +830,7 @@ Removing Unused input sections from the image.
     Removing lab4.o(i.Thread3), (40 bytes).
     Removing lab4.o(i.median), (46 bytes).
     Removing lab4.o(i.realmain), (216 bytes).
-    Removing lab4.o(i.testmain2), (132 bytes).
+    Removing lab4.o(i.testmain1), (128 bytes).
     Removing dadd.o(.text), (334 bytes).
     Removing dmul.o(.text), (228 bytes).
     Removing ddiv.o(.text), (222 bytes).
@@ -855,7 +838,7 @@ Removing Unused input sections from the image.
     Removing cdrcmple.o(.text), (40 bytes).
     Removing depilogue.o(.text), (190 bytes).
 
-96 unused section(s) (total 12069 bytes) removed from the image.
+79 unused section(s) (total 10059 bytes) removed from the image.
 
 ==============================================================================
 
@@ -868,33 +851,33 @@ Image Symbol Table
     RESET                                    0x00000000   Section      644  startup.o(RESET)
     ../clib/microlib/division.c              0x00000000   Number         0  uidiv.o ABSOLUTE
     ../clib/microlib/division.c              0x00000000   Number         0  uldiv.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry5.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11b.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry2.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry5.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
+    ../clib/microlib/longlong.c              0x00000000   Number         0  llsshr.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llshl.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llushr.o ABSOLUTE
-    ../clib/microlib/longlong.c              0x00000000   Number         0  llsshr.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf3.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf2.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf1.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfb.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf5.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf0.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfa.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf8.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf7.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf6.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf5.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf3.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf4.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfb.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf0.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf1.o ABSOLUTE
     ../clib/microlib/printf/stubs.s          0x00000000   Number         0  stubs.o ABSOLUTE
     ../clib/microlib/stdio/streams.c         0x00000000   Number         0  stdout.o ABSOLUTE
     ../clib/microlib/string/strcmp.c         0x00000000   Number         0  strcmp.o ABSOLUTE
@@ -937,138 +920,157 @@ Image Symbol Table
     $v0                                      0x00000298   Number         0  startup.o(.text)
     .text                                    0x000002b4   Section       80  osasm.o(.text)
     $v0                                      0x000002b4   Number         0  osasm.o(.text)
-    .text                                    0x00000304   Section        0  uidiv.o(.text)
-    .text                                    0x00000330   Section       36  init.o(.text)
-    i.ADC0Seq0_Handler                       0x00000354   Section        0  adc.o(i.ADC0Seq0_Handler)
-    i.AddBlockedTCB_Sema4                    0x00000378   Section        0  os.o(i.AddBlockedTCB_Sema4)
-    i.Block                                  0x000003ac   Section        0  os.o(i.Block)
-    i.CS_Init                                0x000003e8   Section        0  edisk.o(i.CS_Init)
-    i.ChainTCB                               0x00000470   Section        0  os.o(i.ChainTCB)
-    i.Delay1ms                               0x000004b4   Section        0  st7735.o(i.Delay1ms)
-    i.GPIOPortF_Handler                      0x000004d4   Section        0  os.o(i.GPIOPortF_Handler)
-    i.IdleTask                               0x000005a8   Section        0  lab4.o(i.IdleTask)
-    i.OS_AddPeriodicThread                   0x000005bc   Section        0  os.o(i.OS_AddPeriodicThread)
-    i.OS_AddSW1Task                          0x00000610   Section        0  os.o(i.OS_AddSW1Task)
-    i.OS_AddThread                           0x00000628   Section        0  os.o(i.OS_AddThread)
-    i.OS_Init                                0x00000748   Section        0  os.o(i.OS_Init)
-    i.OS_InitSemaphore                       0x00000810   Section        0  os.o(i.OS_InitSemaphore)
-    i.OS_Kill                                0x0000082c   Section        0  os.o(i.OS_Kill)
-    i.OS_Launch                              0x00000860   Section        0  os.o(i.OS_Launch)
-    i.OS_Signal                              0x00000876   Section        0  os.o(i.OS_Signal)
-    i.OS_Sleep                               0x0000089c   Section        0  os.o(i.OS_Sleep)
-    i.OS_Suspend                             0x000008b8   Section        0  os.o(i.OS_Suspend)
-    i.OS_Time                                0x000008d0   Section        0  os.o(i.OS_Time)
-    i.OS_TimeDifference                      0x000008dc   Section        0  os.o(i.OS_TimeDifference)
-    i.OS_Wait                                0x000008ee   Section        0  os.o(i.OS_Wait)
-    i.PLL_Init                               0x00000914   Section        0  pll.o(i.PLL_Init)
-    i.PortD_Init                             0x00000990   Section        0  lab4.o(i.PortD_Init)
-    i.RemoveBlockedTCB_sema4                 0x000009fc   Section        0  os.o(i.RemoveBlockedTCB_sema4)
-    i.RxFifo_Init                            0x00000a08   Section        0  uart2.o(i.RxFifo_Init)
-    i.RxFifo_Put                             0x00000a30   Section        0  uart2.o(i.RxFifo_Put)
-    i.RxFifo_Size                            0x00000a74   Section        0  uart2.o(i.RxFifo_Size)
-    i.SSI0_Init                              0x00000a8c   Section        0  edisk.o(i.SSI0_Init)
-    i.ST7735_DrawCharS                       0x00000bd8   Section        0  st7735.o(i.ST7735_DrawCharS)
-    i.ST7735_DrawPixel                       0x00000cd4   Section        0  st7735.o(i.ST7735_DrawPixel)
-    i.ST7735_FillRect                        0x00000d20   Section        0  st7735.o(i.ST7735_FillRect)
-    i.ST7735_FillScreen                      0x00000dcc   Section        0  st7735.o(i.ST7735_FillScreen)
-    i.ST7735_InitR                           0x00000df0   Section        0  st7735.o(i.ST7735_InitR)
-    i.ST7735_OutString                       0x00000e5c   Section        0  st7735.o(i.ST7735_OutString)
-    i.SW1Push1                               0x00000eb4   Section        0  lab4.o(i.SW1Push1)
-    i.SW1_Debounce                           0x00000ee4   Section        0  os.o(i.SW1_Debounce)
-    i.SW1_init                               0x00000f18   Section        0  os.o(i.SW1_init)
-    i.SW2_Debounce                           0x00001014   Section        0  os.o(i.SW2_Debounce)
-    i.SetInitialStack                        0x00001048   Section        0  os.o(i.SetInitialStack)
-    i.SysTick_Handler                        0x00001134   Section        0  os.o(i.SysTick_Handler)
-    i.TestDisk                               0x000011b4   Section        0  lab4.o(i.TestDisk)
-    i.Timer0A_Handler                        0x000013d4   Section        0  os.o(i.Timer0A_Handler)
-    i.Timer0A_Init                           0x000013e0   Section        0  os.o(i.Timer0A_Init)
-    i.Timer1A_Handler                        0x00001444   Section        0  os.o(i.Timer1A_Handler)
-    i.Timer1_Init                            0x00001540   Section        0  os.o(i.Timer1_Init)
-    i.Timer3A_Handler                        0x000015b8   Section        0  os.o(i.Timer3A_Handler)
-    i.Timer3_MS                              0x000015d8   Section        0  os.o(i.Timer3_MS)
-    i.Timer4A_Handler                        0x00001640   Section        0  os.o(i.Timer4A_Handler)
-    i.Timer4_Init                            0x0000173c   Section        0  os.o(i.Timer4_Init)
-    i.TxFifo_Get                             0x000017bc   Section        0  uart2.o(i.TxFifo_Get)
-    i.TxFifo_Init                            0x0000180c   Section        0  uart2.o(i.TxFifo_Init)
-    i.TxFifo_Put                             0x00001834   Section        0  uart2.o(i.TxFifo_Put)
-    i.TxFifo_Size                            0x0000186c   Section        0  uart2.o(i.TxFifo_Size)
-    i.UART0_Handler                          0x00001884   Section        0  uart2.o(i.UART0_Handler)
-    i.UART_Init                              0x000018dc   Section        0  uart2.o(i.UART_Init)
-    i.UART_OutChar                           0x000019a0   Section        0  uart2.o(i.UART_OutChar)
-    i.UnBlock                                0x000019cc   Section        0  os.o(i.UnBlock)
-    i.UnchainTCB                             0x000019e4   Section        0  os.o(i.UnchainTCB)
-    i.WakeUpThreads                          0x00001a14   Section        0  os.o(i.WakeUpThreads)
-    i.__0printf$6                            0x00001a58   Section        0  printf6.o(i.__0printf$6)
-    i.__scatterload_copy                     0x00001a78   Section       14  handlers.o(i.__scatterload_copy)
-    i.__scatterload_null                     0x00001a86   Section        2  handlers.o(i.__scatterload_null)
-    i.__scatterload_zeroinit                 0x00001a88   Section       14  handlers.o(i.__scatterload_zeroinit)
-    i._printf_core                           0x00001a98   Section        0  printf6.o(i._printf_core)
-    _printf_core                             0x00001a99   Thumb Code   750  printf6.o(i._printf_core)
-    i._printf_post_padding                   0x00001d8c   Section        0  printf6.o(i._printf_post_padding)
-    _printf_post_padding                     0x00001d8d   Thumb Code    38  printf6.o(i._printf_post_padding)
-    i._printf_pre_padding                    0x00001db2   Section        0  printf6.o(i._printf_pre_padding)
-    _printf_pre_padding                      0x00001db3   Thumb Code    48  printf6.o(i._printf_pre_padding)
-    i.allocateBlock                          0x00001de4   Section        0  efile.o(i.allocateBlock)
-    i.commandList                            0x00001e4c   Section        0  st7735.o(i.commandList)
-    commandList                              0x00001e4d   Thumb Code    86  st7735.o(i.commandList)
-    i.commonInit                             0x00001ea4   Section        0  st7735.o(i.commonInit)
-    commonInit                               0x00001ea5   Thumb Code   330  st7735.o(i.commonInit)
-    i.convert_Dir2Buff                       0x0000201c   Section        0  efile.o(i.convert_Dir2Buff)
-    i.copyHardwareToSoftware                 0x0000206c   Section        0  uart2.o(i.copyHardwareToSoftware)
-    copyHardwareToSoftware                   0x0000206d   Thumb Code    36  uart2.o(i.copyHardwareToSoftware)
-    i.copySoftwareToHardware                 0x00002094   Section        0  uart2.o(i.copySoftwareToHardware)
-    copySoftwareToHardware                   0x00002095   Thumb Code    38  uart2.o(i.copySoftwareToHardware)
-    i.deselect                               0x000020c0   Section        0  edisk.o(i.deselect)
-    deselect                                 0x000020c1   Thumb Code    16  edisk.o(i.deselect)
-    i.diskError                              0x000020d4   Section        0  lab4.o(i.diskError)
-    i.disk_timerproc                         0x00002100   Section        0  edisk.o(i.disk_timerproc)
-    i.eDisk_Init                             0x00002140   Section        0  edisk.o(i.eDisk_Init)
-    i.eDisk_Read                             0x0000229c   Section        0  edisk.o(i.eDisk_Read)
-    i.eDisk_ReadBlock                        0x0000232c   Section        0  edisk.o(i.eDisk_ReadBlock)
-    i.eDisk_Write                            0x00002340   Section        0  edisk.o(i.eDisk_Write)
-    i.eDisk_WriteBlock                       0x000023f4   Section        0  edisk.o(i.eDisk_WriteBlock)
-    i.eFile_EndRedirectToFile                0x00002408   Section        0  efile.o(i.eFile_EndRedirectToFile)
-    i.eFile_WClose                           0x00002424   Section        0  efile.o(i.eFile_WClose)
-    i.eFile_Write                            0x0000243c   Section        0  efile.o(i.eFile_Write)
-    i.findLastSector                         0x000024b4   Section        0  efile.o(i.findLastSector)
-    i.fputc                                  0x000024d8   Section        0  efile.o(i.fputc)
-    i.init_spi                               0x00002508   Section        0  edisk.o(i.init_spi)
-    init_spi                                 0x00002509   Thumb Code    32  edisk.o(i.init_spi)
-    i.main                                   0x00002530   Section        0  lab4.o(i.main)
-    i.pushColor                              0x000025b0   Section        0  st7735.o(i.pushColor)
-    pushColor                                0x000025b1   Thumb Code    18  st7735.o(i.pushColor)
-    i.rcvr_datablock                         0x000025c4   Section        0  edisk.o(i.rcvr_datablock)
-    rcvr_datablock                           0x000025c5   Thumb Code    66  edisk.o(i.rcvr_datablock)
-    i.rcvr_spi                               0x0000260c   Section        0  edisk.o(i.rcvr_spi)
-    rcvr_spi                                 0x0000260d   Thumb Code    40  edisk.o(i.rcvr_spi)
-    i.rcvr_spi_multi                         0x00002638   Section        0  edisk.o(i.rcvr_spi_multi)
-    rcvr_spi_multi                           0x00002639   Thumb Code    24  edisk.o(i.rcvr_spi_multi)
-    i.select                                 0x00002650   Section        0  edisk.o(i.select)
-    select                                   0x00002651   Thumb Code    44  edisk.o(i.select)
-    i.send_cmd                               0x00002680   Section        0  edisk.o(i.send_cmd)
-    send_cmd                                 0x00002681   Thumb Code   150  edisk.o(i.send_cmd)
-    i.setAddrWindow                          0x00002718   Section        0  st7735.o(i.setAddrWindow)
-    setAddrWindow                            0x00002719   Thumb Code   106  st7735.o(i.setAddrWindow)
-    i.wait_ready                             0x0000278c   Section        0  edisk.o(i.wait_ready)
-    wait_ready                               0x0000278d   Thumb Code    42  edisk.o(i.wait_ready)
-    i.write_DirFAT                           0x000027bc   Section        0  efile.o(i.write_DirFAT)
-    i.writecommand                           0x000027e8   Section        0  st7735.o(i.writecommand)
-    writecommand                             0x000027e9   Thumb Code    66  st7735.o(i.writecommand)
-    i.writedata                              0x00002838   Section        0  st7735.o(i.writedata)
-    writedata                                0x00002839   Thumb Code    68  st7735.o(i.writedata)
-    i.xchg_spi                               0x00002888   Section        0  edisk.o(i.xchg_spi)
-    xchg_spi                                 0x00002889   Thumb Code    48  edisk.o(i.xchg_spi)
-    i.xmit_datablock                         0x000028bc   Section        0  edisk.o(i.xmit_datablock)
-    xmit_datablock                           0x000028bd   Thumb Code    76  edisk.o(i.xmit_datablock)
-    i.xmit_spi_multi                         0x00002908   Section        0  edisk.o(i.xmit_spi_multi)
-    xmit_spi_multi                           0x00002909   Thumb Code    40  edisk.o(i.xmit_spi_multi)
-    .constdata                               0x00002934   Section     1506  st7735.o(.constdata)
-    Font                                     0x00002934   Data        1275  st7735.o(.constdata)
-    Bcmd                                     0x00002e2f   Data         103  st7735.o(.constdata)
-    Rcmd1                                    0x00002e96   Data          59  st7735.o(.constdata)
-    Rcmd2green                               0x00002ed1   Data          13  st7735.o(.constdata)
-    Rcmd2red                                 0x00002ede   Data          13  st7735.o(.constdata)
-    Rcmd3                                    0x00002eeb   Data          43  st7735.o(.constdata)
+    .text                                    0x00000304   Section        0  strlen.o(.text)
+    .text                                    0x00000312   Section        0  strcmp.o(.text)
+    .text                                    0x0000032e   Section        0  uidiv.o(.text)
+    .text                                    0x0000035c   Section       36  init.o(.text)
+    i.ADC0Seq0_Handler                       0x00000380   Section        0  adc.o(i.ADC0Seq0_Handler)
+    i.AddBlockedTCB_Sema4                    0x000003a4   Section        0  os.o(i.AddBlockedTCB_Sema4)
+    i.Block                                  0x000003d8   Section        0  os.o(i.Block)
+    i.CS_Init                                0x00000414   Section        0  edisk.o(i.CS_Init)
+    i.ChainTCB                               0x0000049c   Section        0  os.o(i.ChainTCB)
+    i.Delay1ms                               0x000004e0   Section        0  st7735.o(i.Delay1ms)
+    i.GPIOPortF_Handler                      0x00000500   Section        0  os.o(i.GPIOPortF_Handler)
+    i.IdleTask                               0x000005d4   Section        0  lab4.o(i.IdleTask)
+    i.OS_AddPeriodicThread                   0x000005e8   Section        0  os.o(i.OS_AddPeriodicThread)
+    i.OS_AddSW1Task                          0x0000063c   Section        0  os.o(i.OS_AddSW1Task)
+    i.OS_AddSW2Task                          0x00000654   Section        0  os.o(i.OS_AddSW2Task)
+    i.OS_AddThread                           0x0000066c   Section        0  os.o(i.OS_AddThread)
+    i.OS_Init                                0x0000078c   Section        0  os.o(i.OS_Init)
+    i.OS_InitSemaphore                       0x00000854   Section        0  os.o(i.OS_InitSemaphore)
+    i.OS_Kill                                0x00000870   Section        0  os.o(i.OS_Kill)
+    i.OS_Launch                              0x000008a4   Section        0  os.o(i.OS_Launch)
+    i.OS_Signal                              0x000008ba   Section        0  os.o(i.OS_Signal)
+    i.OS_Sleep                               0x000008e0   Section        0  os.o(i.OS_Sleep)
+    i.OS_Suspend                             0x000008fc   Section        0  os.o(i.OS_Suspend)
+    i.OS_Time                                0x00000914   Section        0  os.o(i.OS_Time)
+    i.OS_TimeDifference                      0x00000920   Section        0  os.o(i.OS_TimeDifference)
+    i.OS_Wait                                0x00000932   Section        0  os.o(i.OS_Wait)
+    i.PLL_Init                               0x00000958   Section        0  pll.o(i.PLL_Init)
+    i.PortD_Init                             0x000009d4   Section        0  lab4.o(i.PortD_Init)
+    i.RemoveBlockedTCB_sema4                 0x00000a40   Section        0  os.o(i.RemoveBlockedTCB_sema4)
+    i.RxFifo_Init                            0x00000a4c   Section        0  uart2.o(i.RxFifo_Init)
+    i.RxFifo_Put                             0x00000a74   Section        0  uart2.o(i.RxFifo_Put)
+    i.RxFifo_Size                            0x00000ab8   Section        0  uart2.o(i.RxFifo_Size)
+    i.SSI0_Init                              0x00000ad0   Section        0  edisk.o(i.SSI0_Init)
+    i.ST7735_DrawCharS                       0x00000c1c   Section        0  st7735.o(i.ST7735_DrawCharS)
+    i.ST7735_DrawPixel                       0x00000d18   Section        0  st7735.o(i.ST7735_DrawPixel)
+    i.ST7735_FillRect                        0x00000d64   Section        0  st7735.o(i.ST7735_FillRect)
+    i.ST7735_FillScreen                      0x00000e10   Section        0  st7735.o(i.ST7735_FillScreen)
+    i.ST7735_InitR                           0x00000e34   Section        0  st7735.o(i.ST7735_InitR)
+    i.ST7735_OutString                       0x00000ea0   Section        0  st7735.o(i.ST7735_OutString)
+    i.SW1Push1                               0x00000ef8   Section        0  lab4.o(i.SW1Push1)
+    i.SW1Push2                               0x00000f28   Section        0  lab4.o(i.SW1Push2)
+    i.SW1_Debounce                           0x00000f58   Section        0  os.o(i.SW1_Debounce)
+    i.SW1_init                               0x00000f8c   Section        0  os.o(i.SW1_init)
+    i.SW2_Debounce                           0x00001088   Section        0  os.o(i.SW2_Debounce)
+    i.SW2_init                               0x000010bc   Section        0  os.o(i.SW2_init)
+    i.SetInitialStack                        0x000011c4   Section        0  os.o(i.SetInitialStack)
+    i.SysTick_Handler                        0x000012b0   Section        0  os.o(i.SysTick_Handler)
+    i.TestDisk                               0x00001330   Section        0  lab4.o(i.TestDisk)
+    i.TestFile                               0x00001550   Section        0  lab4.o(i.TestFile)
+    i.Timer0A_Handler                        0x0000179c   Section        0  os.o(i.Timer0A_Handler)
+    i.Timer0A_Init                           0x000017a8   Section        0  os.o(i.Timer0A_Init)
+    i.Timer1A_Handler                        0x0000180c   Section        0  os.o(i.Timer1A_Handler)
+    i.Timer1_Init                            0x00001908   Section        0  os.o(i.Timer1_Init)
+    i.Timer3A_Handler                        0x00001980   Section        0  os.o(i.Timer3A_Handler)
+    i.Timer3_MS                              0x000019a0   Section        0  os.o(i.Timer3_MS)
+    i.Timer4A_Handler                        0x00001a08   Section        0  os.o(i.Timer4A_Handler)
+    i.Timer4_Init                            0x00001b04   Section        0  os.o(i.Timer4_Init)
+    i.TxFifo_Get                             0x00001b84   Section        0  uart2.o(i.TxFifo_Get)
+    i.TxFifo_Init                            0x00001bd4   Section        0  uart2.o(i.TxFifo_Init)
+    i.TxFifo_Put                             0x00001bfc   Section        0  uart2.o(i.TxFifo_Put)
+    i.TxFifo_Size                            0x00001c34   Section        0  uart2.o(i.TxFifo_Size)
+    i.UART0_Handler                          0x00001c4c   Section        0  uart2.o(i.UART0_Handler)
+    i.UART_Init                              0x00001ca4   Section        0  uart2.o(i.UART_Init)
+    i.UART_OutChar                           0x00001d68   Section        0  uart2.o(i.UART_OutChar)
+    i.UnBlock                                0x00001d94   Section        0  os.o(i.UnBlock)
+    i.UnchainTCB                             0x00001dac   Section        0  os.o(i.UnchainTCB)
+    i.WakeUpThreads                          0x00001ddc   Section        0  os.o(i.WakeUpThreads)
+    i.__0printf$6                            0x00001e20   Section        0  printf6.o(i.__0printf$6)
+    i.__scatterload_copy                     0x00001e40   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x00001e4e   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x00001e50   Section       14  handlers.o(i.__scatterload_zeroinit)
+    i._printf_core                           0x00001e60   Section        0  printf6.o(i._printf_core)
+    _printf_core                             0x00001e61   Thumb Code   750  printf6.o(i._printf_core)
+    i._printf_post_padding                   0x00002154   Section        0  printf6.o(i._printf_post_padding)
+    _printf_post_padding                     0x00002155   Thumb Code    38  printf6.o(i._printf_post_padding)
+    i._printf_pre_padding                    0x0000217a   Section        0  printf6.o(i._printf_pre_padding)
+    _printf_pre_padding                      0x0000217b   Thumb Code    48  printf6.o(i._printf_pre_padding)
+    i.allocateBlock                          0x000021ac   Section        0  efile.o(i.allocateBlock)
+    i.commandList                            0x00002214   Section        0  st7735.o(i.commandList)
+    commandList                              0x00002215   Thumb Code    86  st7735.o(i.commandList)
+    i.commonInit                             0x0000226c   Section        0  st7735.o(i.commonInit)
+    commonInit                               0x0000226d   Thumb Code   330  st7735.o(i.commonInit)
+    i.compareName                            0x000023e4   Section        0  efile.o(i.compareName)
+    i.convert_Dir2Buff                       0x00002428   Section        0  efile.o(i.convert_Dir2Buff)
+    i.copyHardwareToSoftware                 0x00002478   Section        0  uart2.o(i.copyHardwareToSoftware)
+    copyHardwareToSoftware                   0x00002479   Thumb Code    36  uart2.o(i.copyHardwareToSoftware)
+    i.copySoftwareToHardware                 0x000024a0   Section        0  uart2.o(i.copySoftwareToHardware)
+    copySoftwareToHardware                   0x000024a1   Thumb Code    38  uart2.o(i.copySoftwareToHardware)
+    i.deselect                               0x000024cc   Section        0  edisk.o(i.deselect)
+    deselect                                 0x000024cd   Thumb Code    16  edisk.o(i.deselect)
+    i.diskError                              0x000024e0   Section        0  lab4.o(i.diskError)
+    i.disk_timerproc                         0x0000250c   Section        0  edisk.o(i.disk_timerproc)
+    i.eDisk_Init                             0x0000254c   Section        0  edisk.o(i.eDisk_Init)
+    i.eDisk_Read                             0x000026a8   Section        0  edisk.o(i.eDisk_Read)
+    i.eDisk_ReadBlock                        0x00002738   Section        0  edisk.o(i.eDisk_ReadBlock)
+    i.eDisk_Write                            0x0000274c   Section        0  edisk.o(i.eDisk_Write)
+    i.eDisk_WriteBlock                       0x00002800   Section        0  edisk.o(i.eDisk_WriteBlock)
+    i.eFile_Close                            0x00002814   Section        0  efile.o(i.eFile_Close)
+    i.eFile_Create                           0x00002830   Section        0  efile.o(i.eFile_Create)
+    i.eFile_Delete                           0x000028a0   Section        0  efile.o(i.eFile_Delete)
+    i.eFile_Directory                        0x00002950   Section        0  efile.o(i.eFile_Directory)
+    i.eFile_EndRedirectToFile                0x000029a4   Section        0  efile.o(i.eFile_EndRedirectToFile)
+    i.eFile_Format                           0x000029c0   Section        0  efile.o(i.eFile_Format)
+    i.eFile_Init                             0x00002a4c   Section        0  efile.o(i.eFile_Init)
+    i.eFile_RClose                           0x00002a60   Section        0  efile.o(i.eFile_RClose)
+    i.eFile_ROpen                            0x00002a78   Section        0  efile.o(i.eFile_ROpen)
+    i.eFile_ReadNext                         0x00002ae8   Section        0  efile.o(i.eFile_ReadNext)
+    i.eFile_WClose                           0x00002b74   Section        0  efile.o(i.eFile_WClose)
+    i.eFile_WOpen                            0x00002b8c   Section        0  efile.o(i.eFile_WOpen)
+    i.eFile_Write                            0x00002bd8   Section        0  efile.o(i.eFile_Write)
+    i.findLastSector                         0x00002c50   Section        0  efile.o(i.findLastSector)
+    i.fputc                                  0x00002c74   Section        0  efile.o(i.fputc)
+    i.init_spi                               0x00002ca4   Section        0  edisk.o(i.init_spi)
+    init_spi                                 0x00002ca5   Thumb Code    32  edisk.o(i.init_spi)
+    i.main                                   0x00002ccc   Section        0  lab4.o(i.main)
+    i.pushColor                              0x00002d50   Section        0  st7735.o(i.pushColor)
+    pushColor                                0x00002d51   Thumb Code    18  st7735.o(i.pushColor)
+    i.rcvr_datablock                         0x00002d64   Section        0  edisk.o(i.rcvr_datablock)
+    rcvr_datablock                           0x00002d65   Thumb Code    66  edisk.o(i.rcvr_datablock)
+    i.rcvr_spi                               0x00002dac   Section        0  edisk.o(i.rcvr_spi)
+    rcvr_spi                                 0x00002dad   Thumb Code    40  edisk.o(i.rcvr_spi)
+    i.rcvr_spi_multi                         0x00002dd8   Section        0  edisk.o(i.rcvr_spi_multi)
+    rcvr_spi_multi                           0x00002dd9   Thumb Code    24  edisk.o(i.rcvr_spi_multi)
+    i.readDIR                                0x00002df0   Section        0  efile.o(i.readDIR)
+    i.readFAT                                0x00002e4c   Section        0  efile.o(i.readFAT)
+    i.select                                 0x00002e64   Section        0  edisk.o(i.select)
+    select                                   0x00002e65   Thumb Code    44  edisk.o(i.select)
+    i.send_cmd                               0x00002e94   Section        0  edisk.o(i.send_cmd)
+    send_cmd                                 0x00002e95   Thumb Code   150  edisk.o(i.send_cmd)
+    i.setAddrWindow                          0x00002f2c   Section        0  st7735.o(i.setAddrWindow)
+    setAddrWindow                            0x00002f2d   Thumb Code   106  st7735.o(i.setAddrWindow)
+    i.wait_ready                             0x00002fa0   Section        0  edisk.o(i.wait_ready)
+    wait_ready                               0x00002fa1   Thumb Code    42  edisk.o(i.wait_ready)
+    i.write_DirFAT                           0x00002fd0   Section        0  efile.o(i.write_DirFAT)
+    i.writecommand                           0x00002ffc   Section        0  st7735.o(i.writecommand)
+    writecommand                             0x00002ffd   Thumb Code    66  st7735.o(i.writecommand)
+    i.writedata                              0x0000304c   Section        0  st7735.o(i.writedata)
+    writedata                                0x0000304d   Thumb Code    68  st7735.o(i.writedata)
+    i.xchg_spi                               0x0000309c   Section        0  edisk.o(i.xchg_spi)
+    xchg_spi                                 0x0000309d   Thumb Code    48  edisk.o(i.xchg_spi)
+    i.xmit_datablock                         0x000030d0   Section        0  edisk.o(i.xmit_datablock)
+    xmit_datablock                           0x000030d1   Thumb Code    76  edisk.o(i.xmit_datablock)
+    i.xmit_spi_multi                         0x0000311c   Section        0  edisk.o(i.xmit_spi_multi)
+    xmit_spi_multi                           0x0000311d   Thumb Code    40  edisk.o(i.xmit_spi_multi)
+    .constdata                               0x00003148   Section     1506  st7735.o(.constdata)
+    Font                                     0x00003148   Data        1275  st7735.o(.constdata)
+    Bcmd                                     0x00003643   Data         103  st7735.o(.constdata)
+    Rcmd1                                    0x000036aa   Data          59  st7735.o(.constdata)
+    Rcmd2green                               0x000036e5   Data          13  st7735.o(.constdata)
+    Rcmd2red                                 0x000036f2   Data          13  st7735.o(.constdata)
+    Rcmd3                                    0x000036ff   Data          43  st7735.o(.constdata)
     .data                                    0x20000000   Section       36  st7735.o(.data)
     _width                                   0x20000000   Data           2  st7735.o(.data)
     _height                                  0x20000002   Data           2  st7735.o(.data)
@@ -1283,93 +1285,112 @@ Image Symbol Table
     OS_EnableInterrupts                      0x000002b9   Thumb Code     0  osasm.o(.text)
     PendSV_Handler                           0x000002bd   Thumb Code     0  osasm.o(.text)
     StartOS                                  0x000002dd   Thumb Code     0  osasm.o(.text)
-    __aeabi_uidiv                            0x00000305   Thumb Code     0  uidiv.o(.text)
-    __aeabi_uidivmod                         0x00000305   Thumb Code    44  uidiv.o(.text)
-    __scatterload                            0x00000331   Thumb Code    28  init.o(.text)
-    __scatterload_rt2                        0x00000331   Thumb Code     0  init.o(.text)
-    ADC0Seq0_Handler                         0x00000355   Thumb Code    26  adc.o(i.ADC0Seq0_Handler)
-    AddBlockedTCB_Sema4                      0x00000379   Thumb Code    46  os.o(i.AddBlockedTCB_Sema4)
-    Block                                    0x000003ad   Thumb Code    52  os.o(i.Block)
-    CS_Init                                  0x000003e9   Thumb Code   116  edisk.o(i.CS_Init)
-    ChainTCB                                 0x00000471   Thumb Code    54  os.o(i.ChainTCB)
-    Delay1ms                                 0x000004b5   Thumb Code    32  st7735.o(i.Delay1ms)
-    GPIOPortF_Handler                        0x000004d5   Thumb Code   172  os.o(i.GPIOPortF_Handler)
-    IdleTask                                 0x000005a9   Thumb Code    14  lab4.o(i.IdleTask)
-    OS_AddPeriodicThread                     0x000005bd   Thumb Code    72  os.o(i.OS_AddPeriodicThread)
-    OS_AddSW1Task                            0x00000611   Thumb Code    20  os.o(i.OS_AddSW1Task)
-    OS_AddThread                             0x00000629   Thumb Code   270  os.o(i.OS_AddThread)
-    OS_Init                                  0x00000749   Thumb Code   172  os.o(i.OS_Init)
-    OS_InitSemaphore                         0x00000811   Thumb Code    26  os.o(i.OS_InitSemaphore)
-    OS_Kill                                  0x0000082d   Thumb Code    42  os.o(i.OS_Kill)
-    OS_Launch                                0x00000861   Thumb Code    22  os.o(i.OS_Launch)
-    OS_Signal                                0x00000877   Thumb Code    36  os.o(i.OS_Signal)
-    OS_Sleep                                 0x0000089d   Thumb Code    24  os.o(i.OS_Sleep)
-    OS_Suspend                               0x000008b9   Thumb Code    18  os.o(i.OS_Suspend)
-    OS_Time                                  0x000008d1   Thumb Code     6  os.o(i.OS_Time)
-    OS_TimeDifference                        0x000008dd   Thumb Code    18  os.o(i.OS_TimeDifference)
-    OS_Wait                                  0x000008ef   Thumb Code    36  os.o(i.OS_Wait)
-    PLL_Init                                 0x00000915   Thumb Code   118  pll.o(i.PLL_Init)
-    PortD_Init                               0x00000991   Thumb Code    86  lab4.o(i.PortD_Init)
-    RemoveBlockedTCB_sema4                   0x000009fd   Thumb Code    10  os.o(i.RemoveBlockedTCB_sema4)
-    RxFifo_Init                              0x00000a09   Thumb Code    22  uart2.o(i.RxFifo_Init)
-    RxFifo_Put                               0x00000a31   Thumb Code    52  uart2.o(i.RxFifo_Put)
-    RxFifo_Size                              0x00000a75   Thumb Code    16  uart2.o(i.RxFifo_Size)
-    SSI0_Init                                0x00000a8d   Thumb Code   294  edisk.o(i.SSI0_Init)
-    ST7735_DrawCharS                         0x00000bd9   Thumb Code   238  st7735.o(i.ST7735_DrawCharS)
-    ST7735_DrawPixel                         0x00000cd5   Thumb Code    68  st7735.o(i.ST7735_DrawPixel)
-    ST7735_FillRect                          0x00000d21   Thumb Code   164  st7735.o(i.ST7735_FillRect)
-    ST7735_FillScreen                        0x00000dcd   Thumb Code    28  st7735.o(i.ST7735_FillScreen)
-    ST7735_InitR                             0x00000df1   Thumb Code    76  st7735.o(i.ST7735_InitR)
-    ST7735_OutString                         0x00000e5d   Thumb Code    86  st7735.o(i.ST7735_OutString)
-    SW1Push1                                 0x00000eb5   Thumb Code    36  lab4.o(i.SW1Push1)
-    SW1_Debounce                             0x00000ee5   Thumb Code    40  os.o(i.SW1_Debounce)
-    SW1_init                                 0x00000f19   Thumb Code   218  os.o(i.SW1_init)
-    SW2_Debounce                             0x00001015   Thumb Code    40  os.o(i.SW2_Debounce)
-    SetInitialStack                          0x00001049   Thumb Code   228  os.o(i.SetInitialStack)
-    SysTick_Handler                          0x00001135   Thumb Code   106  os.o(i.SysTick_Handler)
-    TestDisk                                 0x000011b5   Thumb Code   270  lab4.o(i.TestDisk)
-    Timer0A_Handler                          0x000013d5   Thumb Code     8  os.o(i.Timer0A_Handler)
-    Timer0A_Init                             0x000013e1   Thumb Code    82  os.o(i.Timer0A_Init)
-    Timer1A_Handler                          0x00001445   Thumb Code   214  os.o(i.Timer1A_Handler)
-    Timer1_Init                              0x00001541   Thumb Code   100  os.o(i.Timer1_Init)
-    Timer3A_Handler                          0x000015b9   Thumb Code    24  os.o(i.Timer3A_Handler)
-    Timer3_MS                                0x000015d9   Thumb Code    86  os.o(i.Timer3_MS)
-    Timer4A_Handler                          0x00001641   Thumb Code   214  os.o(i.Timer4A_Handler)
-    Timer4_Init                              0x0000173d   Thumb Code   106  os.o(i.Timer4_Init)
-    TxFifo_Get                               0x000017bd   Thumb Code    64  uart2.o(i.TxFifo_Get)
-    TxFifo_Init                              0x0000180d   Thumb Code    22  uart2.o(i.TxFifo_Init)
-    TxFifo_Put                               0x00001835   Thumb Code    44  uart2.o(i.TxFifo_Put)
-    TxFifo_Size                              0x0000186d   Thumb Code    16  uart2.o(i.TxFifo_Size)
-    UART0_Handler                            0x00001885   Thumb Code    82  uart2.o(i.UART0_Handler)
-    UART_Init                                0x000018dd   Thumb Code   170  uart2.o(i.UART_Init)
-    UART_OutChar                             0x000019a1   Thumb Code    40  uart2.o(i.UART_OutChar)
-    UnBlock                                  0x000019cd   Thumb Code    24  os.o(i.UnBlock)
-    UnchainTCB                               0x000019e5   Thumb Code    40  os.o(i.UnchainTCB)
-    WakeUpThreads                            0x00001a15   Thumb Code    64  os.o(i.WakeUpThreads)
-    __0printf$6                              0x00001a59   Thumb Code    22  printf6.o(i.__0printf$6)
-    __1printf$6                              0x00001a59   Thumb Code     0  printf6.o(i.__0printf$6)
-    __2printf                                0x00001a59   Thumb Code     0  printf6.o(i.__0printf$6)
-    __scatterload_copy                       0x00001a79   Thumb Code    14  handlers.o(i.__scatterload_copy)
-    __scatterload_null                       0x00001a87   Thumb Code     2  handlers.o(i.__scatterload_null)
-    __scatterload_zeroinit                   0x00001a89   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    allocateBlock                            0x00001de5   Thumb Code    92  efile.o(i.allocateBlock)
-    convert_Dir2Buff                         0x0000201d   Thumb Code    70  efile.o(i.convert_Dir2Buff)
-    diskError                                0x000020d5   Thumb Code    26  lab4.o(i.diskError)
-    disk_timerproc                           0x00002101   Thumb Code    52  edisk.o(i.disk_timerproc)
-    eDisk_Init                               0x00002141   Thumb Code   330  edisk.o(i.eDisk_Init)
-    eDisk_Read                               0x0000229d   Thumb Code   136  edisk.o(i.eDisk_Read)
-    eDisk_ReadBlock                          0x0000232d   Thumb Code    20  edisk.o(i.eDisk_ReadBlock)
-    eDisk_Write                              0x00002341   Thumb Code   170  edisk.o(i.eDisk_Write)
-    eDisk_WriteBlock                         0x000023f5   Thumb Code    20  edisk.o(i.eDisk_WriteBlock)
-    eFile_EndRedirectToFile                  0x00002409   Thumb Code    22  efile.o(i.eFile_EndRedirectToFile)
-    eFile_WClose                             0x00002425   Thumb Code    20  efile.o(i.eFile_WClose)
-    eFile_Write                              0x0000243d   Thumb Code   104  efile.o(i.eFile_Write)
-    findLastSector                           0x000024b5   Thumb Code    26  efile.o(i.findLastSector)
-    fputc                                    0x000024d9   Thumb Code    42  efile.o(i.fputc)
-    main                                     0x00002531   Thumb Code    98  lab4.o(i.main)
-    write_DirFAT                             0x000027bd   Thumb Code    34  efile.o(i.write_DirFAT)
-    Region$$Table$$Base                      0x00002f18   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00002f38   Number         0  anon$$obj.o(Region$$Table)
+    strlen                                   0x00000305   Thumb Code    14  strlen.o(.text)
+    strcmp                                   0x00000313   Thumb Code    28  strcmp.o(.text)
+    __aeabi_uidiv                            0x0000032f   Thumb Code     0  uidiv.o(.text)
+    __aeabi_uidivmod                         0x0000032f   Thumb Code    44  uidiv.o(.text)
+    __scatterload                            0x0000035d   Thumb Code    28  init.o(.text)
+    __scatterload_rt2                        0x0000035d   Thumb Code     0  init.o(.text)
+    ADC0Seq0_Handler                         0x00000381   Thumb Code    26  adc.o(i.ADC0Seq0_Handler)
+    AddBlockedTCB_Sema4                      0x000003a5   Thumb Code    46  os.o(i.AddBlockedTCB_Sema4)
+    Block                                    0x000003d9   Thumb Code    52  os.o(i.Block)
+    CS_Init                                  0x00000415   Thumb Code   116  edisk.o(i.CS_Init)
+    ChainTCB                                 0x0000049d   Thumb Code    54  os.o(i.ChainTCB)
+    Delay1ms                                 0x000004e1   Thumb Code    32  st7735.o(i.Delay1ms)
+    GPIOPortF_Handler                        0x00000501   Thumb Code   172  os.o(i.GPIOPortF_Handler)
+    IdleTask                                 0x000005d5   Thumb Code    14  lab4.o(i.IdleTask)
+    OS_AddPeriodicThread                     0x000005e9   Thumb Code    72  os.o(i.OS_AddPeriodicThread)
+    OS_AddSW1Task                            0x0000063d   Thumb Code    20  os.o(i.OS_AddSW1Task)
+    OS_AddSW2Task                            0x00000655   Thumb Code    20  os.o(i.OS_AddSW2Task)
+    OS_AddThread                             0x0000066d   Thumb Code   270  os.o(i.OS_AddThread)
+    OS_Init                                  0x0000078d   Thumb Code   172  os.o(i.OS_Init)
+    OS_InitSemaphore                         0x00000855   Thumb Code    26  os.o(i.OS_InitSemaphore)
+    OS_Kill                                  0x00000871   Thumb Code    42  os.o(i.OS_Kill)
+    OS_Launch                                0x000008a5   Thumb Code    22  os.o(i.OS_Launch)
+    OS_Signal                                0x000008bb   Thumb Code    36  os.o(i.OS_Signal)
+    OS_Sleep                                 0x000008e1   Thumb Code    24  os.o(i.OS_Sleep)
+    OS_Suspend                               0x000008fd   Thumb Code    18  os.o(i.OS_Suspend)
+    OS_Time                                  0x00000915   Thumb Code     6  os.o(i.OS_Time)
+    OS_TimeDifference                        0x00000921   Thumb Code    18  os.o(i.OS_TimeDifference)
+    OS_Wait                                  0x00000933   Thumb Code    36  os.o(i.OS_Wait)
+    PLL_Init                                 0x00000959   Thumb Code   118  pll.o(i.PLL_Init)
+    PortD_Init                               0x000009d5   Thumb Code    86  lab4.o(i.PortD_Init)
+    RemoveBlockedTCB_sema4                   0x00000a41   Thumb Code    10  os.o(i.RemoveBlockedTCB_sema4)
+    RxFifo_Init                              0x00000a4d   Thumb Code    22  uart2.o(i.RxFifo_Init)
+    RxFifo_Put                               0x00000a75   Thumb Code    52  uart2.o(i.RxFifo_Put)
+    RxFifo_Size                              0x00000ab9   Thumb Code    16  uart2.o(i.RxFifo_Size)
+    SSI0_Init                                0x00000ad1   Thumb Code   294  edisk.o(i.SSI0_Init)
+    ST7735_DrawCharS                         0x00000c1d   Thumb Code   238  st7735.o(i.ST7735_DrawCharS)
+    ST7735_DrawPixel                         0x00000d19   Thumb Code    68  st7735.o(i.ST7735_DrawPixel)
+    ST7735_FillRect                          0x00000d65   Thumb Code   164  st7735.o(i.ST7735_FillRect)
+    ST7735_FillScreen                        0x00000e11   Thumb Code    28  st7735.o(i.ST7735_FillScreen)
+    ST7735_InitR                             0x00000e35   Thumb Code    76  st7735.o(i.ST7735_InitR)
+    ST7735_OutString                         0x00000ea1   Thumb Code    86  st7735.o(i.ST7735_OutString)
+    SW1Push1                                 0x00000ef9   Thumb Code    36  lab4.o(i.SW1Push1)
+    SW1Push2                                 0x00000f29   Thumb Code    36  lab4.o(i.SW1Push2)
+    SW1_Debounce                             0x00000f59   Thumb Code    40  os.o(i.SW1_Debounce)
+    SW1_init                                 0x00000f8d   Thumb Code   218  os.o(i.SW1_init)
+    SW2_Debounce                             0x00001089   Thumb Code    40  os.o(i.SW2_Debounce)
+    SW2_init                                 0x000010bd   Thumb Code   222  os.o(i.SW2_init)
+    SetInitialStack                          0x000011c5   Thumb Code   228  os.o(i.SetInitialStack)
+    SysTick_Handler                          0x000012b1   Thumb Code   106  os.o(i.SysTick_Handler)
+    TestDisk                                 0x00001331   Thumb Code   270  lab4.o(i.TestDisk)
+    TestFile                                 0x00001551   Thumb Code   316  lab4.o(i.TestFile)
+    Timer0A_Handler                          0x0000179d   Thumb Code     8  os.o(i.Timer0A_Handler)
+    Timer0A_Init                             0x000017a9   Thumb Code    82  os.o(i.Timer0A_Init)
+    Timer1A_Handler                          0x0000180d   Thumb Code   214  os.o(i.Timer1A_Handler)
+    Timer1_Init                              0x00001909   Thumb Code   100  os.o(i.Timer1_Init)
+    Timer3A_Handler                          0x00001981   Thumb Code    24  os.o(i.Timer3A_Handler)
+    Timer3_MS                                0x000019a1   Thumb Code    86  os.o(i.Timer3_MS)
+    Timer4A_Handler                          0x00001a09   Thumb Code   214  os.o(i.Timer4A_Handler)
+    Timer4_Init                              0x00001b05   Thumb Code   106  os.o(i.Timer4_Init)
+    TxFifo_Get                               0x00001b85   Thumb Code    64  uart2.o(i.TxFifo_Get)
+    TxFifo_Init                              0x00001bd5   Thumb Code    22  uart2.o(i.TxFifo_Init)
+    TxFifo_Put                               0x00001bfd   Thumb Code    44  uart2.o(i.TxFifo_Put)
+    TxFifo_Size                              0x00001c35   Thumb Code    16  uart2.o(i.TxFifo_Size)
+    UART0_Handler                            0x00001c4d   Thumb Code    82  uart2.o(i.UART0_Handler)
+    UART_Init                                0x00001ca5   Thumb Code   170  uart2.o(i.UART_Init)
+    UART_OutChar                             0x00001d69   Thumb Code    40  uart2.o(i.UART_OutChar)
+    UnBlock                                  0x00001d95   Thumb Code    24  os.o(i.UnBlock)
+    UnchainTCB                               0x00001dad   Thumb Code    40  os.o(i.UnchainTCB)
+    WakeUpThreads                            0x00001ddd   Thumb Code    64  os.o(i.WakeUpThreads)
+    __0printf$6                              0x00001e21   Thumb Code    22  printf6.o(i.__0printf$6)
+    __1printf$6                              0x00001e21   Thumb Code     0  printf6.o(i.__0printf$6)
+    __2printf                                0x00001e21   Thumb Code     0  printf6.o(i.__0printf$6)
+    __scatterload_copy                       0x00001e41   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x00001e4f   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x00001e51   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    allocateBlock                            0x000021ad   Thumb Code    92  efile.o(i.allocateBlock)
+    compareName                              0x000023e5   Thumb Code    62  efile.o(i.compareName)
+    convert_Dir2Buff                         0x00002429   Thumb Code    70  efile.o(i.convert_Dir2Buff)
+    diskError                                0x000024e1   Thumb Code    26  lab4.o(i.diskError)
+    disk_timerproc                           0x0000250d   Thumb Code    52  edisk.o(i.disk_timerproc)
+    eDisk_Init                               0x0000254d   Thumb Code   330  edisk.o(i.eDisk_Init)
+    eDisk_Read                               0x000026a9   Thumb Code   136  edisk.o(i.eDisk_Read)
+    eDisk_ReadBlock                          0x00002739   Thumb Code    20  edisk.o(i.eDisk_ReadBlock)
+    eDisk_Write                              0x0000274d   Thumb Code   170  edisk.o(i.eDisk_Write)
+    eDisk_WriteBlock                         0x00002801   Thumb Code    20  edisk.o(i.eDisk_WriteBlock)
+    eFile_Close                              0x00002815   Thumb Code    28  efile.o(i.eFile_Close)
+    eFile_Create                             0x00002831   Thumb Code   108  efile.o(i.eFile_Create)
+    eFile_Delete                             0x000028a1   Thumb Code   162  efile.o(i.eFile_Delete)
+    eFile_Directory                          0x00002951   Thumb Code    80  efile.o(i.eFile_Directory)
+    eFile_EndRedirectToFile                  0x000029a5   Thumb Code    22  efile.o(i.eFile_EndRedirectToFile)
+    eFile_Format                             0x000029c1   Thumb Code   128  efile.o(i.eFile_Format)
+    eFile_Init                               0x00002a4d   Thumb Code    18  efile.o(i.eFile_Init)
+    eFile_RClose                             0x00002a61   Thumb Code    20  efile.o(i.eFile_RClose)
+    eFile_ROpen                              0x00002a79   Thumb Code    98  efile.o(i.eFile_ROpen)
+    eFile_ReadNext                           0x00002ae9   Thumb Code   118  efile.o(i.eFile_ReadNext)
+    eFile_WClose                             0x00002b75   Thumb Code    20  efile.o(i.eFile_WClose)
+    eFile_WOpen                              0x00002b8d   Thumb Code    76  efile.o(i.eFile_WOpen)
+    eFile_Write                              0x00002bd9   Thumb Code   104  efile.o(i.eFile_Write)
+    findLastSector                           0x00002c51   Thumb Code    26  efile.o(i.findLastSector)
+    fputc                                    0x00002c75   Thumb Code    42  efile.o(i.fputc)
+    main                                     0x00002ccd   Thumb Code    98  lab4.o(i.main)
+    readDIR                                  0x00002df1   Thumb Code    84  efile.o(i.readDIR)
+    readFAT                                  0x00002e4d   Thumb Code    20  efile.o(i.readFAT)
+    write_DirFAT                             0x00002fd1   Thumb Code    34  efile.o(i.write_DirFAT)
+    Region$$Table$$Base                      0x0000372c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x0000374c   Number         0  anon$$obj.o(Region$$Table)
     Semi                                     0x20000004   Data           8  st7735.o(.data)
     LCDFree                                  0x20000010   Data           8  st7735.o(.data)
     Messageindex                             0x20000018   Data           4  st7735.o(.data)
@@ -1459,9 +1480,9 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00003060, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00003874, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x00002f38, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x0000374c, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1477,122 +1498,143 @@ Memory Map of the image
     0x00000294   0x00000004   Code   RO         1469    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
     0x00000298   0x0000001c   Code   RO            4    .text               startup.o
     0x000002b4   0x00000050   Code   RO          691    .text               osasm.o
-    0x00000304   0x0000002c   Code   RO         1483    .text               mc_w.l(uidiv.o)
-    0x00000330   0x00000024   Code   RO         1498    .text               mc_w.l(init.o)
-    0x00000354   0x00000024   Code   RO          694    i.ADC0Seq0_Handler  adc.o
-    0x00000378   0x00000034   Code   RO          377    i.AddBlockedTCB_Sema4  os.o
-    0x000003ac   0x0000003c   Code   RO          379    i.Block             os.o
-    0x000003e8   0x00000088   Code   RO          770    i.CS_Init           edisk.o
-    0x00000470   0x00000044   Code   RO          380    i.ChainTCB          os.o
-    0x000004b4   0x00000020   Code   RO           34    i.Delay1ms          st7735.o
-    0x000004d4   0x000000d4   Code   RO          381    i.GPIOPortF_Handler  os.o
-    0x000005a8   0x00000014   Code   RO         1041    i.IdleTask          lab4.o
-    0x000005bc   0x00000054   Code   RO          383    i.OS_AddPeriodicThread  os.o
-    0x00000610   0x00000018   Code   RO          384    i.OS_AddSW1Task     os.o
-    0x00000628   0x00000120   Code   RO          386    i.OS_AddThread      os.o
-    0x00000748   0x000000c8   Code   RO          393    i.OS_Init           os.o
-    0x00000810   0x0000001a   Code   RO          394    i.OS_InitSemaphore  os.o
-    0x0000082a   0x00000002   PAD
-    0x0000082c   0x00000034   Code   RO          395    i.OS_Kill           os.o
-    0x00000860   0x00000016   Code   RO          396    i.OS_Launch         os.o
-    0x00000876   0x00000024   Code   RO          401    i.OS_Signal         os.o
-    0x0000089a   0x00000002   PAD
-    0x0000089c   0x0000001c   Code   RO          402    i.OS_Sleep          os.o
-    0x000008b8   0x00000018   Code   RO          403    i.OS_Suspend        os.o
-    0x000008d0   0x0000000c   Code   RO          404    i.OS_Time           os.o
-    0x000008dc   0x00000012   Code   RO          405    i.OS_TimeDifference  os.o
-    0x000008ee   0x00000024   Code   RO          406    i.OS_Wait           os.o
-    0x00000912   0x00000002   PAD
-    0x00000914   0x0000007c   Code   RO           12    i.PLL_Init          pll.o
-    0x00000990   0x0000006c   Code   RO         1042    i.PortD_Init        lab4.o
-    0x000009fc   0x0000000a   Code   RO          409    i.RemoveBlockedTCB_sema4  os.o
-    0x00000a06   0x00000002   PAD
-    0x00000a08   0x00000028   Code   RO          210    i.RxFifo_Init       uart2.o
-    0x00000a30   0x00000044   Code   RO          211    i.RxFifo_Put        uart2.o
-    0x00000a74   0x00000018   Code   RO          212    i.RxFifo_Size       uart2.o
-    0x00000a8c   0x0000014c   Code   RO          771    i.SSI0_Init         edisk.o
-    0x00000bd8   0x000000fc   Code   RO           38    i.ST7735_DrawCharS  st7735.o
-    0x00000cd4   0x0000004c   Code   RO           41    i.ST7735_DrawPixel  st7735.o
-    0x00000d20   0x000000ac   Code   RO           42    i.ST7735_FillRect   st7735.o
-    0x00000dcc   0x00000024   Code   RO           43    i.ST7735_FillScreen  st7735.o
-    0x00000df0   0x0000006c   Code   RO           45    i.ST7735_InitR      st7735.o
-    0x00000e5c   0x00000056   Code   RO           48    i.ST7735_OutString  st7735.o
-    0x00000eb2   0x00000002   PAD
-    0x00000eb4   0x00000030   Code   RO         1047    i.SW1Push1          lab4.o
-    0x00000ee4   0x00000034   Code   RO          410    i.SW1_Debounce      os.o
-    0x00000f18   0x000000fc   Code   RO          411    i.SW1_init          os.o
-    0x00001014   0x00000034   Code   RO          412    i.SW2_Debounce      os.o
-    0x00001048   0x000000ec   Code   RO          414    i.SetInitialStack   os.o
-    0x00001134   0x00000080   Code   RO          415    i.SysTick_Handler   os.o
-    0x000011b4   0x00000220   Code   RO         1050    i.TestDisk          lab4.o
-    0x000013d4   0x0000000c   Code   RO          416    i.Timer0A_Handler   os.o
-    0x000013e0   0x00000064   Code   RO          417    i.Timer0A_Init      os.o
-    0x00001444   0x000000fc   Code   RO          418    i.Timer1A_Handler   os.o
-    0x00001540   0x00000078   Code   RO          419    i.Timer1_Init       os.o
-    0x000015b8   0x00000020   Code   RO          420    i.Timer3A_Handler   os.o
-    0x000015d8   0x00000068   Code   RO          421    i.Timer3_MS         os.o
-    0x00001640   0x000000fc   Code   RO          422    i.Timer4A_Handler   os.o
-    0x0000173c   0x00000080   Code   RO          423    i.Timer4_Init       os.o
-    0x000017bc   0x00000050   Code   RO          213    i.TxFifo_Get        uart2.o
-    0x0000180c   0x00000028   Code   RO          214    i.TxFifo_Init       uart2.o
-    0x00001834   0x00000038   Code   RO          215    i.TxFifo_Put        uart2.o
-    0x0000186c   0x00000018   Code   RO          216    i.TxFifo_Size       uart2.o
-    0x00001884   0x00000058   Code   RO          217    i.UART0_Handler     uart2.o
-    0x000018dc   0x000000c4   Code   RO          223    i.UART_Init         uart2.o
-    0x000019a0   0x0000002c   Code   RO          224    i.UART_OutChar      uart2.o
-    0x000019cc   0x00000018   Code   RO          424    i.UnBlock           os.o
-    0x000019e4   0x00000030   Code   RO          425    i.UnchainTCB        os.o
-    0x00001a14   0x00000044   Code   RO          426    i.WakeUpThreads     os.o
-    0x00001a58   0x00000020   Code   RO         1362    i.__0printf$6       mc_w.l(printf6.o)
-    0x00001a78   0x0000000e   Code   RO         1510    i.__scatterload_copy  mc_w.l(handlers.o)
-    0x00001a86   0x00000002   Code   RO         1511    i.__scatterload_null  mc_w.l(handlers.o)
-    0x00001a88   0x0000000e   Code   RO         1512    i.__scatterload_zeroinit  mc_w.l(handlers.o)
-    0x00001a96   0x00000002   PAD
-    0x00001a98   0x000002f4   Code   RO         1369    i._printf_core      mc_w.l(printf6.o)
-    0x00001d8c   0x00000026   Code   RO         1370    i._printf_post_padding  mc_w.l(printf6.o)
-    0x00001db2   0x00000030   Code   RO         1371    i._printf_pre_padding  mc_w.l(printf6.o)
-    0x00001de2   0x00000002   PAD
-    0x00001de4   0x00000068   Code   RO          890    i.allocateBlock     efile.o
-    0x00001e4c   0x00000056   Code   RO           53    i.commandList       st7735.o
-    0x00001ea2   0x00000002   PAD
-    0x00001ea4   0x00000178   Code   RO           54    i.commonInit        st7735.o
-    0x0000201c   0x00000050   Code   RO          892    i.convert_Dir2Buff  efile.o
-    0x0000206c   0x00000028   Code   RO          231    i.copyHardwareToSoftware  uart2.o
-    0x00002094   0x0000002c   Code   RO          232    i.copySoftwareToHardware  uart2.o
-    0x000020c0   0x00000014   Code   RO          772    i.deselect          edisk.o
-    0x000020d4   0x0000002c   Code   RO         1058    i.diskError         lab4.o
-    0x00002100   0x00000040   Code   RO          773    i.disk_timerproc    edisk.o
-    0x00002140   0x0000015c   Code   RO          774    i.eDisk_Init        edisk.o
-    0x0000229c   0x00000090   Code   RO          775    i.eDisk_Read        edisk.o
-    0x0000232c   0x00000014   Code   RO          776    i.eDisk_ReadBlock   edisk.o
-    0x00002340   0x000000b4   Code   RO          778    i.eDisk_Write       edisk.o
-    0x000023f4   0x00000014   Code   RO          779    i.eDisk_WriteBlock  edisk.o
-    0x00002408   0x0000001c   Code   RO          897    i.eFile_EndRedirectToFile  efile.o
-    0x00002424   0x00000018   Code   RO          904    i.eFile_WClose      efile.o
-    0x0000243c   0x00000078   Code   RO          906    i.eFile_Write       efile.o
-    0x000024b4   0x00000024   Code   RO          908    i.findLastSector    efile.o
-    0x000024d8   0x00000030   Code   RO          909    i.fputc             efile.o
-    0x00002508   0x00000028   Code   RO          780    i.init_spi          edisk.o
-    0x00002530   0x00000080   Code   RO         1059    i.main              lab4.o
-    0x000025b0   0x00000012   Code   RO           56    i.pushColor         st7735.o
-    0x000025c2   0x00000002   PAD
-    0x000025c4   0x00000048   Code   RO          781    i.rcvr_datablock    edisk.o
-    0x0000260c   0x0000002c   Code   RO          782    i.rcvr_spi          edisk.o
-    0x00002638   0x00000018   Code   RO          783    i.rcvr_spi_multi    edisk.o
-    0x00002650   0x00000030   Code   RO          784    i.select            edisk.o
-    0x00002680   0x00000096   Code   RO          785    i.send_cmd          edisk.o
-    0x00002716   0x00000002   PAD
-    0x00002718   0x00000074   Code   RO           57    i.setAddrWindow     st7735.o
-    0x0000278c   0x00000030   Code   RO          786    i.wait_ready        edisk.o
-    0x000027bc   0x0000002c   Code   RO          912    i.write_DirFAT      efile.o
-    0x000027e8   0x00000050   Code   RO           58    i.writecommand      st7735.o
-    0x00002838   0x00000050   Code   RO           59    i.writedata         st7735.o
-    0x00002888   0x00000034   Code   RO          787    i.xchg_spi          edisk.o
-    0x000028bc   0x0000004c   Code   RO          788    i.xmit_datablock    edisk.o
-    0x00002908   0x0000002c   Code   RO          789    i.xmit_spi_multi    edisk.o
-    0x00002934   0x000005e2   Data   RO           61    .constdata          st7735.o
-    0x00002f16   0x00000002   PAD
-    0x00002f18   0x00000020   Data   RO         1508    Region$$Table       anon$$obj.o
+    0x00000304   0x0000000e   Code   RO         1201    .text               mc_w.l(strlen.o)
+    0x00000312   0x0000001c   Code   RO         1203    .text               mc_w.l(strcmp.o)
+    0x0000032e   0x0000002c   Code   RO         1483    .text               mc_w.l(uidiv.o)
+    0x0000035a   0x00000002   PAD
+    0x0000035c   0x00000024   Code   RO         1498    .text               mc_w.l(init.o)
+    0x00000380   0x00000024   Code   RO          694    i.ADC0Seq0_Handler  adc.o
+    0x000003a4   0x00000034   Code   RO          377    i.AddBlockedTCB_Sema4  os.o
+    0x000003d8   0x0000003c   Code   RO          379    i.Block             os.o
+    0x00000414   0x00000088   Code   RO          770    i.CS_Init           edisk.o
+    0x0000049c   0x00000044   Code   RO          380    i.ChainTCB          os.o
+    0x000004e0   0x00000020   Code   RO           34    i.Delay1ms          st7735.o
+    0x00000500   0x000000d4   Code   RO          381    i.GPIOPortF_Handler  os.o
+    0x000005d4   0x00000014   Code   RO         1041    i.IdleTask          lab4.o
+    0x000005e8   0x00000054   Code   RO          383    i.OS_AddPeriodicThread  os.o
+    0x0000063c   0x00000018   Code   RO          384    i.OS_AddSW1Task     os.o
+    0x00000654   0x00000018   Code   RO          385    i.OS_AddSW2Task     os.o
+    0x0000066c   0x00000120   Code   RO          386    i.OS_AddThread      os.o
+    0x0000078c   0x000000c8   Code   RO          393    i.OS_Init           os.o
+    0x00000854   0x0000001a   Code   RO          394    i.OS_InitSemaphore  os.o
+    0x0000086e   0x00000002   PAD
+    0x00000870   0x00000034   Code   RO          395    i.OS_Kill           os.o
+    0x000008a4   0x00000016   Code   RO          396    i.OS_Launch         os.o
+    0x000008ba   0x00000024   Code   RO          401    i.OS_Signal         os.o
+    0x000008de   0x00000002   PAD
+    0x000008e0   0x0000001c   Code   RO          402    i.OS_Sleep          os.o
+    0x000008fc   0x00000018   Code   RO          403    i.OS_Suspend        os.o
+    0x00000914   0x0000000c   Code   RO          404    i.OS_Time           os.o
+    0x00000920   0x00000012   Code   RO          405    i.OS_TimeDifference  os.o
+    0x00000932   0x00000024   Code   RO          406    i.OS_Wait           os.o
+    0x00000956   0x00000002   PAD
+    0x00000958   0x0000007c   Code   RO           12    i.PLL_Init          pll.o
+    0x000009d4   0x0000006c   Code   RO         1042    i.PortD_Init        lab4.o
+    0x00000a40   0x0000000a   Code   RO          409    i.RemoveBlockedTCB_sema4  os.o
+    0x00000a4a   0x00000002   PAD
+    0x00000a4c   0x00000028   Code   RO          210    i.RxFifo_Init       uart2.o
+    0x00000a74   0x00000044   Code   RO          211    i.RxFifo_Put        uart2.o
+    0x00000ab8   0x00000018   Code   RO          212    i.RxFifo_Size       uart2.o
+    0x00000ad0   0x0000014c   Code   RO          771    i.SSI0_Init         edisk.o
+    0x00000c1c   0x000000fc   Code   RO           38    i.ST7735_DrawCharS  st7735.o
+    0x00000d18   0x0000004c   Code   RO           41    i.ST7735_DrawPixel  st7735.o
+    0x00000d64   0x000000ac   Code   RO           42    i.ST7735_FillRect   st7735.o
+    0x00000e10   0x00000024   Code   RO           43    i.ST7735_FillScreen  st7735.o
+    0x00000e34   0x0000006c   Code   RO           45    i.ST7735_InitR      st7735.o
+    0x00000ea0   0x00000056   Code   RO           48    i.ST7735_OutString  st7735.o
+    0x00000ef6   0x00000002   PAD
+    0x00000ef8   0x00000030   Code   RO         1047    i.SW1Push1          lab4.o
+    0x00000f28   0x00000030   Code   RO         1048    i.SW1Push2          lab4.o
+    0x00000f58   0x00000034   Code   RO          410    i.SW1_Debounce      os.o
+    0x00000f8c   0x000000fc   Code   RO          411    i.SW1_init          os.o
+    0x00001088   0x00000034   Code   RO          412    i.SW2_Debounce      os.o
+    0x000010bc   0x00000108   Code   RO          413    i.SW2_init          os.o
+    0x000011c4   0x000000ec   Code   RO          414    i.SetInitialStack   os.o
+    0x000012b0   0x00000080   Code   RO          415    i.SysTick_Handler   os.o
+    0x00001330   0x00000220   Code   RO         1050    i.TestDisk          lab4.o
+    0x00001550   0x0000024c   Code   RO         1051    i.TestFile          lab4.o
+    0x0000179c   0x0000000c   Code   RO          416    i.Timer0A_Handler   os.o
+    0x000017a8   0x00000064   Code   RO          417    i.Timer0A_Init      os.o
+    0x0000180c   0x000000fc   Code   RO          418    i.Timer1A_Handler   os.o
+    0x00001908   0x00000078   Code   RO          419    i.Timer1_Init       os.o
+    0x00001980   0x00000020   Code   RO          420    i.Timer3A_Handler   os.o
+    0x000019a0   0x00000068   Code   RO          421    i.Timer3_MS         os.o
+    0x00001a08   0x000000fc   Code   RO          422    i.Timer4A_Handler   os.o
+    0x00001b04   0x00000080   Code   RO          423    i.Timer4_Init       os.o
+    0x00001b84   0x00000050   Code   RO          213    i.TxFifo_Get        uart2.o
+    0x00001bd4   0x00000028   Code   RO          214    i.TxFifo_Init       uart2.o
+    0x00001bfc   0x00000038   Code   RO          215    i.TxFifo_Put        uart2.o
+    0x00001c34   0x00000018   Code   RO          216    i.TxFifo_Size       uart2.o
+    0x00001c4c   0x00000058   Code   RO          217    i.UART0_Handler     uart2.o
+    0x00001ca4   0x000000c4   Code   RO          223    i.UART_Init         uart2.o
+    0x00001d68   0x0000002c   Code   RO          224    i.UART_OutChar      uart2.o
+    0x00001d94   0x00000018   Code   RO          424    i.UnBlock           os.o
+    0x00001dac   0x00000030   Code   RO          425    i.UnchainTCB        os.o
+    0x00001ddc   0x00000044   Code   RO          426    i.WakeUpThreads     os.o
+    0x00001e20   0x00000020   Code   RO         1362    i.__0printf$6       mc_w.l(printf6.o)
+    0x00001e40   0x0000000e   Code   RO         1510    i.__scatterload_copy  mc_w.l(handlers.o)
+    0x00001e4e   0x00000002   Code   RO         1511    i.__scatterload_null  mc_w.l(handlers.o)
+    0x00001e50   0x0000000e   Code   RO         1512    i.__scatterload_zeroinit  mc_w.l(handlers.o)
+    0x00001e5e   0x00000002   PAD
+    0x00001e60   0x000002f4   Code   RO         1369    i._printf_core      mc_w.l(printf6.o)
+    0x00002154   0x00000026   Code   RO         1370    i._printf_post_padding  mc_w.l(printf6.o)
+    0x0000217a   0x00000030   Code   RO         1371    i._printf_pre_padding  mc_w.l(printf6.o)
+    0x000021aa   0x00000002   PAD
+    0x000021ac   0x00000068   Code   RO          890    i.allocateBlock     efile.o
+    0x00002214   0x00000056   Code   RO           53    i.commandList       st7735.o
+    0x0000226a   0x00000002   PAD
+    0x0000226c   0x00000178   Code   RO           54    i.commonInit        st7735.o
+    0x000023e4   0x00000044   Code   RO          891    i.compareName       efile.o
+    0x00002428   0x00000050   Code   RO          892    i.convert_Dir2Buff  efile.o
+    0x00002478   0x00000028   Code   RO          231    i.copyHardwareToSoftware  uart2.o
+    0x000024a0   0x0000002c   Code   RO          232    i.copySoftwareToHardware  uart2.o
+    0x000024cc   0x00000014   Code   RO          772    i.deselect          edisk.o
+    0x000024e0   0x0000002c   Code   RO         1058    i.diskError         lab4.o
+    0x0000250c   0x00000040   Code   RO          773    i.disk_timerproc    edisk.o
+    0x0000254c   0x0000015c   Code   RO          774    i.eDisk_Init        edisk.o
+    0x000026a8   0x00000090   Code   RO          775    i.eDisk_Read        edisk.o
+    0x00002738   0x00000014   Code   RO          776    i.eDisk_ReadBlock   edisk.o
+    0x0000274c   0x000000b4   Code   RO          778    i.eDisk_Write       edisk.o
+    0x00002800   0x00000014   Code   RO          779    i.eDisk_WriteBlock  edisk.o
+    0x00002814   0x0000001c   Code   RO          893    i.eFile_Close       efile.o
+    0x00002830   0x00000070   Code   RO          894    i.eFile_Create      efile.o
+    0x000028a0   0x000000b0   Code   RO          895    i.eFile_Delete      efile.o
+    0x00002950   0x00000054   Code   RO          896    i.eFile_Directory   efile.o
+    0x000029a4   0x0000001c   Code   RO          897    i.eFile_EndRedirectToFile  efile.o
+    0x000029c0   0x0000008c   Code   RO          898    i.eFile_Format      efile.o
+    0x00002a4c   0x00000012   Code   RO          899    i.eFile_Init        efile.o
+    0x00002a5e   0x00000002   PAD
+    0x00002a60   0x00000018   Code   RO          900    i.eFile_RClose      efile.o
+    0x00002a78   0x00000070   Code   RO          901    i.eFile_ROpen       efile.o
+    0x00002ae8   0x0000008c   Code   RO          902    i.eFile_ReadNext    efile.o
+    0x00002b74   0x00000018   Code   RO          904    i.eFile_WClose      efile.o
+    0x00002b8c   0x0000004c   Code   RO          905    i.eFile_WOpen       efile.o
+    0x00002bd8   0x00000078   Code   RO          906    i.eFile_Write       efile.o
+    0x00002c50   0x00000024   Code   RO          908    i.findLastSector    efile.o
+    0x00002c74   0x00000030   Code   RO          909    i.fputc             efile.o
+    0x00002ca4   0x00000028   Code   RO          780    i.init_spi          edisk.o
+    0x00002ccc   0x00000084   Code   RO         1059    i.main              lab4.o
+    0x00002d50   0x00000012   Code   RO           56    i.pushColor         st7735.o
+    0x00002d62   0x00000002   PAD
+    0x00002d64   0x00000048   Code   RO          781    i.rcvr_datablock    edisk.o
+    0x00002dac   0x0000002c   Code   RO          782    i.rcvr_spi          edisk.o
+    0x00002dd8   0x00000018   Code   RO          783    i.rcvr_spi_multi    edisk.o
+    0x00002df0   0x0000005c   Code   RO          910    i.readDIR           efile.o
+    0x00002e4c   0x00000018   Code   RO          911    i.readFAT           efile.o
+    0x00002e64   0x00000030   Code   RO          784    i.select            edisk.o
+    0x00002e94   0x00000096   Code   RO          785    i.send_cmd          edisk.o
+    0x00002f2a   0x00000002   PAD
+    0x00002f2c   0x00000074   Code   RO           57    i.setAddrWindow     st7735.o
+    0x00002fa0   0x00000030   Code   RO          786    i.wait_ready        edisk.o
+    0x00002fd0   0x0000002c   Code   RO          912    i.write_DirFAT      efile.o
+    0x00002ffc   0x00000050   Code   RO           58    i.writecommand      st7735.o
+    0x0000304c   0x00000050   Code   RO           59    i.writedata         st7735.o
+    0x0000309c   0x00000034   Code   RO          787    i.xchg_spi          edisk.o
+    0x000030d0   0x0000004c   Code   RO          788    i.xmit_datablock    edisk.o
+    0x0000311c   0x0000002c   Code   RO          789    i.xmit_spi_multi    edisk.o
+    0x00003148   0x000005e2   Data   RO           61    .constdata          st7735.o
+    0x0000372a   0x00000002   PAD
+    0x0000372c   0x00000020   Data   RO         1508    Region$$Table       anon$$obj.o
 
 
     Execution Region ER_RW (Base: 0x20000000, Size: 0x00000128, Max: 0xffffffff, ABSOLUTE)
@@ -1629,22 +1671,22 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-        36         10          0          4          0        985   adc.o
-      1862        146          0         13          0      12948   edisk.o
-       484         74          0         12       2560       5460   efile.o
+        36         10          0          4          0       1201   adc.o
+      1862        146          0         13          0      14508   edisk.o
+      1578        166          0         12       2560      15168   efile.o
          0          0          0          0          0       1200   interpreter.o
-       892        362          0         84       1024       4754   lab4.o
-      3112        422          0        108       7108      21437   os.o
-        80         10          0          0          0        212   osasm.o
-       124          6          0          0          0       4683   pll.o
-      1518        152       1506         36          0      12687   st7735.o
-       672        622          0          0       1024        956   startup.o
-       744        142          0         32         48       7182   uart2.o
+      1532        650          0         84       1024       6592   lab4.o
+      3400        468          0        108       7108      25344   os.o
+        80         10          0          0          0        284   osasm.o
+       124          6          0          0          0       4755   pll.o
+      1518        152       1506         36          0      13963   st7735.o
+       672        622          0          0       1024       1100   startup.o
+       744        142          0         32         48       8178   uart2.o
 
     ----------------------------------------------------------------------
-      9540       1946       1540        292      11768      72504   Object Totals
+     11564       2372       1540        292      11768      92293   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-        16          0          2          3          4          0   (incl. Padding)
+        18          0          2          3          4          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -1662,20 +1704,22 @@ Image component sizes
         36          8          0          0          0         68   init.o
        874         16          0          0          0        352   printf6.o
          0          0          0          4          0          0   stdout.o
+        28          0          0          0          0         76   strcmp.o
+        14          0          0          0          0         68   strlen.o
         44          0          0          0          0         80   uidiv.o
 
     ----------------------------------------------------------------------
-      1008         32          0          4          0        500   Library Totals
-         4          0          0          0          0          0   (incl. Padding)
+      1052         32          0          4          0        644   Library Totals
+         6          0          0          0          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Library Name
 
-      1004         32          0          4          0        500   mc_w.l
+      1046         32          0          4          0        644   mc_w.l
 
     ----------------------------------------------------------------------
-      1008         32          0          4          0        500   Library Totals
+      1052         32          0          4          0        644   Library Totals
 
     ----------------------------------------------------------------------
 
@@ -1684,15 +1728,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     10548       1978       1540        296      11768      64048   Grand Totals
-     10548       1978       1540        296      11768      64048   ELF Image Totals
-     10548       1978       1540        296          0          0   ROM Totals
+     12616       2404       1540        296      11768      82229   Grand Totals
+     12616       2404       1540        296      11768      82229   ELF Image Totals
+     12616       2404       1540        296          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                12088 (  11.80kB)
+    Total RO  Size (Code + RO Data)                14156 (  13.82kB)
     Total RW  Size (RW Data + ZI Data)             12064 (  11.78kB)
-    Total ROM Size (Code + RO Data + RW Data)      12384 (  12.09kB)
+    Total ROM Size (Code + RO Data + RW Data)      14452 (  14.11kB)
 
 ==============================================================================
 

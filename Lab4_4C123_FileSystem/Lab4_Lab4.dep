@@ -1,62 +1,62 @@
 Dependencies for Project 'Lab4', Target 'Lab4': (DO NOT MODIFY !)
-F (.\startup.s)(0x5AB6D5B2)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
-F (.\PLL.c)(0x5AB6D5B2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+F (.\startup.s)(0x5AB58B8B)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\PLL.c)(0x5AB58B88)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (PLL.h)(0x5AB6D5B2)
-I (../inc/tm4c123gh6pm.h)(0x5AB6D5B2)
-F (.\ST7735.c)(0x5AB6D5B2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\st7735.o --omf_browse .\st7735.crf --depend .\st7735.d)
+I (PLL.h)(0x5AB58B88)
+I (../inc/tm4c123gh6pm.h)(0x5AB58B95)
+F (.\ST7735.c)(0x5AB58B89)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\st7735.o --omf_browse .\st7735.crf --depend .\st7735.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (ST7735.h)(0x5AB6D5B2)
-I (eDisk.h)(0x5AB6D5B2)
-I (..\inc/tm4c123gh6pm.h)(0x5AB6D5B2)
-I (OS.h)(0x5AB6D5B2)
-F (.\UART2.c)(0x5AB6D5B2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\uart2.o --omf_browse .\uart2.crf --depend .\uart2.d)
-I (..\inc/tm4c123gh6pm.h)(0x5AB6D5B2)
+I (ST7735.h)(0x5AB58B89)
+I (eDisk.h)(0x5AB58B89)
+I (..\inc/tm4c123gh6pm.h)(0x5AB58B95)
+I (OS.h)(0x5AB58B88)
+F (.\UART2.c)(0x5AB58B89)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\uart2.o --omf_browse .\uart2.crf --depend .\uart2.d)
+I (..\inc/tm4c123gh6pm.h)(0x5AB58B95)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (UART2.h)(0x5AB6D5B2)
+I (UART2.h)(0x5AB58B89)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
-I (OS.h)(0x5AB6D5B2)
-F (.\OS.c)(0x5AB6D5B2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\os.o --omf_browse .\os.crf --depend .\os.d)
+I (OS.h)(0x5AB58B88)
+F (.\OS.c)(0x5AB58B88)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\os.o --omf_browse .\os.crf --depend .\os.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (OS.h)(0x5AB6D5B2)
-I (PLL.h)(0x5AB6D5B2)
-I (../inc/tm4c123gh6pm.h)(0x5AB6D5B2)
-I (ST7735.h)(0x5AB6D5B2)
-I (UART2.h)(0x5AB6D5B2)
-F (.\osasm.s)(0x5AB6D5B2)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\osasm.lst --xref -o .\osasm.o --depend .\osasm.d)
-F (.\ADC.c)(0x5AB6D5B2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\adc.o --omf_browse .\adc.crf --depend .\adc.d)
-I (ADC.h)(0x5AB6D5B2)
-I (..\inc/tm4c123gh6pm.h)(0x5AB6D5B2)
+I (OS.h)(0x5AB58B88)
+I (PLL.h)(0x5AB58B88)
+I (../inc/tm4c123gh6pm.h)(0x5AB58B95)
+I (ST7735.h)(0x5AB58B89)
+I (UART2.h)(0x5AB58B89)
+F (.\osasm.s)(0x5AB58B8A)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\osasm.lst --xref -o .\osasm.o --depend .\osasm.d)
+F (.\ADC.c)(0x5AB58B87)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\adc.o --omf_browse .\adc.crf --depend .\adc.d)
+I (ADC.h)(0x5AB58B89)
+I (..\inc/tm4c123gh6pm.h)(0x5AB58B95)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-F (.\cr4_fft_64_stm32.s)(0x5AB6D5B2)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\cr4_fft_64_stm32.lst --xref -o .\cr4_fft_64_stm32.o --depend .\cr4_fft_64_stm32.d)
-F (.\Interpreter.c)(0x5AB6D5B2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\interpreter.o --omf_browse .\interpreter.crf --depend .\interpreter.d)
-I (ST7735.h)(0x5AB6D5B2)
-I (os.h)(0x5AB6D5B2)
-I (ADC.h)(0x5AB6D5B2)
-I (UART2.h)(0x5AB6D5B2)
-I (efile.h)(0x5AB6D5B2)
-I (eDisk.h)(0x5AB6D5B2)
-I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
-I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
-F (.\eDisk.c)(0x5AB6D5B2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\edisk.o --omf_browse .\edisk.crf --depend .\edisk.d)
-I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (../inc/tm4c123gh6pm.h)(0x5AB6D5B2)
-I (edisk.h)(0x5AB6D5B2)
-F (.\efile.c)(0x5AB6E8C9)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\efile.o --omf_browse .\efile.crf --depend .\efile.d)
-I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
-I (edisk.h)(0x5AB6D5B2)
-I (UART2.h)(0x5AB6D5B2)
-I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
-I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-F (.\Lab4.c)(0x5AB6D5B2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\lab4.o --omf_browse .\lab4.crf --depend .\lab4.d)
-I (OS.h)(0x5AB6D5B2)
-I (../inc/tm4c123gh6pm.h)(0x5AB6D5B2)
-I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (ST7735.h)(0x5AB6D5B2)
-I (ADC.h)(0x5AB6D5B2)
-I (UART2.h)(0x5AB6D5B2)
-I (eDisk.h)(0x5AB6D5B2)
-I (eFile.h)(0x5AB6D5B2)
+F (.\cr4_fft_64_stm32.s)(0x5AB58B89)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\cr4_fft_64_stm32.lst --xref -o .\cr4_fft_64_stm32.o --depend .\cr4_fft_64_stm32.d)
+F (.\Interpreter.c)(0x5AB58B87)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\interpreter.o --omf_browse .\interpreter.crf --depend .\interpreter.d)
+I (ST7735.h)(0x5AB58B89)
+I (os.h)(0x5AB58B88)
+I (ADC.h)(0x5AB58B89)
+I (UART2.h)(0x5AB58B89)
+I (efile.h)(0x5AB58B89)
+I (eDisk.h)(0x5AB58B89)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
-F (.\FIFO.h)(0x5AB6D5B2)()
+F (.\eDisk.c)(0x5AB58B89)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\edisk.o --omf_browse .\edisk.crf --depend .\edisk.d)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
+I (../inc/tm4c123gh6pm.h)(0x5AB58B95)
+I (edisk.h)(0x5AB58B89)
+F (.\efile.c)(0x5AB70617)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\efile.o --omf_browse .\efile.crf --depend .\efile.d)
+I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
+I (edisk.h)(0x5AB58B89)
+I (UART2.h)(0x5AB58B89)
+I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
+F (.\Lab4.c)(0x5AB6EB84)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\lab4.o --omf_browse .\lab4.crf --depend .\lab4.d)
+I (OS.h)(0x5AB58B88)
+I (../inc/tm4c123gh6pm.h)(0x5AB58B95)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
+I (ST7735.h)(0x5AB58B89)
+I (ADC.h)(0x5AB58B89)
+I (UART2.h)(0x5AB58B89)
+I (eDisk.h)(0x5AB58B89)
+I (eFile.h)(0x5AB58B89)
+I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
+I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
+F (.\FIFO.h)(0x5AB58B87)()

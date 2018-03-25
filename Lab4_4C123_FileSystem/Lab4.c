@@ -447,7 +447,7 @@ void SW1Push1(void){
 //******************* test main1 **********
 // SYSTICK interrupts, period established by OS_Launch
 // Timer interrupts, period established by first call to OS_AddPeriodicThread
-int main(void){   // testmain1
+int testmain1(void){   // testmain1
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
 //*******attach background tasks***********
@@ -513,7 +513,7 @@ void SW1Push2(void){
 //******************* test main2 **********
 // SYSTICK interrupts, period established by OS_Launch
 // Timer interrupts, period established by first call to OS_AddPeriodicThread
-int testmain2(void){ 
+int main(void){ 
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
   Running = 1; 

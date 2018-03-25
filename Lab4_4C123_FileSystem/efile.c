@@ -41,13 +41,14 @@ dType directory[NUM_FILES];
 
 //----------Helper functions------------
 void convert_Dir2Buff (void){
-	int i, j;
+	int i, j, numFile = 0;
 	for (i = 0; i < BLOCK_SIZE; i += DIR_SIZE){
 		for (j = 0; j < NAME; j++){
-			RAM[i + j] = directory[i].name[j];
+			RAM[i + j] = directory[numFile].name[j];
 		}
-		RAM[i+ NAME] = directory[i+NAME].size;
-		RAM[i+ (NAME + 1)] = directory[i+ (NAME + 1)].startSector;
+		RAM[i+ NAME] = directory[numFile].startSector;
+		RAM[i+ (NAME + 1)] = directory[numFile].size;
+		numFile++;
 	}
 }
 
@@ -155,14 +156,16 @@ int eFile_Init(void){ // initialize file system
 // Input: none
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Format(void){ // erase disk, add format
-	int i =0;
+	int i =0, j = 0;
 	// Initialize Free_space field in the directory (first entry)
-		directory[FREE].name[0] = '*';
-		directory[FREE].size = FREE_SECTORS;	
-		directory[FREE].startSector = 2;
+	directory[FREE].name[0] = '*';
+	directory[FREE].size = FREE_SECTORS;	
+	directory[FREE].startSector = 2;
 	
 	for(i = 1; i < NUM_FILES; i++){
-		directory[i].name[0] = '*';
+		for(j =0; j < NAME; j++){
+			directory[i].name[j] = 0;
+		}
 		directory[i].size = 0;	
 		directory[i].startSector = 0;
 	}		
@@ -197,11 +200,11 @@ int eFile_Create( char name[]){  // create new file, make it empty
 	readFAT();
 	
 	//No free space in Directory
-	if (directory[FREE].size < 1) 
+	if (directory[0].size < 1) 
 		return FAIL;					
 	
 	for (freeFile_idx = 1; freeFile_idx < NUM_FILES; freeFile_idx++){
-		if (directory[freeFile_idx].name[0] == '*') break;
+		if (directory[freeFile_idx].name[0] == 0) break;
 	}
 	
 	//File name is too long
