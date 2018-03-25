@@ -61,18 +61,20 @@ int write_DirFAT (void){
 }
 
 int readDIR (int dir){
-	int i, j;
+	int i, j, numFile = 0;
 	
 	// Read directory into the dataBuff array
 	if (eDisk_ReadBlock(RAM, dir)) 
 		return FAIL;
 	
-	for (i = 0; i < NUM_FILES; i++){
+	
+	for (i = 0; i < BLOCK_SIZE; i += DIR_SIZE){
 		for (j = 0; j < NAME; j++){
-			directory[i].name[j] = RAM[i+j];
+			directory[numFile].name[j] = RAM[i+j];
 		}
-		directory[i].startSector = RAM[i+NAME];
-		directory[i].size = RAM[i+(NAME+1)];
+		directory[numFile].startSector = RAM[i+NAME];
+		directory[numFile].size = RAM[i+(NAME+1)];
+		numFile++;
 	}
 	
 	return SUCCESS;
@@ -131,12 +133,28 @@ int findLastSector(int file_idx){
 	int startSector, lastSector;
 	
 	startSector = directory[file_idx].startSector;
+	if(FAT[startSector] == 0) return startSector;
+	
 	lastSector = FAT[startSector];
-	while (lastSector > 0){
+	while (FAT[lastSector] > 0){
 		lastSector = FAT[lastSector];
 	}
 	
 	return lastSector;
+}
+
+int readData(int dataSector){
+	if (eDisk_ReadBlock(RAM, dataSector)) 
+		return FAIL;
+
+	return SUCCESS;
+}
+
+int writeData(int dataSector){
+	if(eDisk_WriteBlock(RAM, dataSector)) 
+		return FAIL;
+
+	return SUCCESS;
 }
 
 //---------- eFile_Init-----------------
@@ -246,9 +264,9 @@ int eFile_WOpen(char name[]){      // open a file for writing
 	
 	if (lastSector == 0) return FAIL;
 	
-	readDIR(lastSector);
+	readData(lastSector);
 	// read the last block of the given file
-	
+	idxWrite_OpenFile = dirIdx;
   return SUCCESS;   
 }
 
@@ -266,8 +284,8 @@ int eFile_Write(char data){
 	// Find the last sector of the open file
 	lastSector = findLastSector(idxWrite_OpenFile);
 	
-	if (lastSector == 0) 
-		return FAIL;
+	
+	readData(lastSector);
 	
 	if(BytesWritten[lastSector] == BLOCK_SIZE) { // allocate a new block/sector
 			if (allocateBlock(idxWrite_OpenFile, lastSector)) 
@@ -277,6 +295,9 @@ int eFile_Write(char data){
 		
 	RAM[BytesWritten[lastSector]] = data;
 	BytesWritten[lastSector]++;
+
+	if(writeData(lastSector))
+		return FAIL;
 	
 	// Writing the directory and the FAT to the disk
 	convert_Dir2Buff ();
@@ -293,7 +314,7 @@ int eFile_RClose(void);
 // Input: none
 // Output: 0 if successful and 1 on failure (not currently open)
 int eFile_Close(void){ 
-	if (write_DirFAT() || eFile_WClose() || eFile_RClose()) return FAIL;
+	if (write_DirFAT()) return FAIL;
   
 	return SUCCESS;     
 }
@@ -386,15 +407,16 @@ int eFile_Directory(void(*fp)(char)){
 	int i, j;
 	if(readDIR(DIR_SECTOR))
 		return FAIL;
-	for(i = 1; i < NUM_FILES; i+= DIR_SIZE){ 
+	for(i = 1; i < NUM_FILES; i++){ 
 		if(directory[i].name[0] != 0){//skip free space
 			for(j = 0; j < NAME; j++){
 				fp((char)directory[i].name[j]);
 			}
 			fp('\t');
-			fp(directory[i].size);
+			fp(directory[i].size + 0x30);
+			fp('\n');
+			fp('\r');
 		}
-		fp('\n');
 	}
   return SUCCESS;
 }
