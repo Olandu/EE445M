@@ -503,7 +503,7 @@ void TestFile(void){   int i; char data;
 }
 
 
-
+//testing for 3 files
 void TestFile2(void){   int i; char data; 
   printf("\n\rEE445M/EE380L, Lab 4 eFile test\n\r");
   ST7735_OutString(0, 1, "eFile test      ", ST7735_WHITE);
@@ -561,6 +561,10 @@ void TestFile2(void){   int i; char data;
   OS_Kill();
 }
 
+//bad test case
+void TestFile3(void){
+	
+}
 //************SW1Push2*************
 // Called when SW1 Button pushed
 // background threads execute once and return
