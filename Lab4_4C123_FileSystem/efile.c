@@ -229,7 +229,8 @@ int eFile_Format(void){ // erase disk, add format
 // Input: file name is an ASCII string up to seven characters 
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_Create( char name[]){  // create new file, make it empty 
-	int i,freeFile_idx;
+	int i,freeFile_idx, dirIdx; 
+	char dirName[NAME];
 	
 	readDIR(DIR_SECTOR);
 	readFAT();
@@ -237,6 +238,10 @@ int eFile_Create( char name[]){  // create new file, make it empty
 	//No free space in Directory
 	if (directory[0].size < 1) 
 		return FAIL;					
+	
+	
+	dirIdx = compareName(name, 0);
+	if((dirIdx > 0)&&(dirIdx < NUM_FILES)) return FAIL;
 	
 	for (freeFile_idx = 1; freeFile_idx < NUM_FILES; freeFile_idx++){
 		if (directory[freeFile_idx].name[0] == 0) break;

@@ -289,13 +289,15 @@ int main(void){        // lab 4 real main
   OS_AddPeriodicThread(&DAS,10*TIME_1MS,1); // 100Hz real time sampling of PE0
 
 //*******attach background tasks***********
-  //OS_AddSW1Task(&SW1Push,2);    // PF4, SW1
-  OS_AddSW2Task(&SW1Push2,3);   // PF0
+  OS_AddSW1Task(&SW1Push,2);    // PF4, SW1
+  OS_AddSW2Task(&SW2Push,3);   // PF0
   OS_AddPeriodicThread(disk_timerproc,10*TIME_1MS,5);
-
+	
+	eFile_Init();
+	
   NumCreated = 0 ;
 // create initial foreground threads
-  //NumCreated += OS_AddThread(&Interpreter,128,2); 
+// NumCreated += OS_AddThread(&Interpreter,128,2); 
   NumCreated += OS_AddThread(&DSP,128,1); 
   NumCreated += OS_AddThread(&IdleTask,128,7);  // runs when nothing useful to do
  
@@ -438,6 +440,8 @@ void TestDisk(void){  DSTATUS result;  unsigned short block;  int i; unsigned lo
 void RunTest(void){
   NumCreated += OS_AddThread(&TestDisk,128,1);  
 }
+
+void TestFile(void);
 //************SW1Push*************
 // Called when SW1 Button pushed
 // background threads execute once and return
@@ -481,6 +485,7 @@ void TestFile(void){   int i; char data;
   if(eFile_Format())            diskError("eFile_Format",0); 
   eFile_Directory(&UART_OutChar);
   if(eFile_Create("file1"))     diskError("eFile_Create",0);
+  eFile_Directory(&UART_OutChar);
   if(eFile_WOpen("file1"))      diskError("eFile_WOpen",0);
   for(i=0;i<1000;i++){
     if(eFile_Write('a'+i%26))   diskError("eFile_Write",i);
@@ -580,6 +585,8 @@ void TestFile3(void){ int i; char data;
   if(eFile_Init())              diskError("eFile_Init",0); 
   if(eFile_Format())            diskError("eFile_Format",0); 
   if(eFile_Create("file1"))     diskError("eFile_Create",0);
+	//error: same created twice
+	if(eFile_Create("file1"))     diskError("eFile_Create",0);
 	
 	if(eFile_WOpen("file1"))      diskError("eFile_WOpen",0);
   for(i=0;i<1000;i++){
@@ -589,6 +596,7 @@ void TestFile3(void){ int i; char data;
       if(eFile_Write('\r'))     diskError("eFile_Write",i);
     }
   }
+	if(eFile_WClose())            diskError("eFile_WClose",0);
 	if(eFile_WClose())            diskError("eFile_WClose",0);
 	
 	printf("\n\r");
