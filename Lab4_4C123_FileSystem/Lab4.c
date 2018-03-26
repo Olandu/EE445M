@@ -505,8 +505,8 @@ void TestFile(void){   int i; char data;
 
 //testing for 3 files
 void TestFile2(void){   int i; char data; 
-  printf("\n\rEE445M/EE380L, Lab 4 eFile test\n\r");
-  ST7735_OutString(0, 1, "eFile test      ", ST7735_WHITE);
+  printf("\n\rEE445M/EE380L, Lab 4 eFile test 2\n\r");
+  ST7735_OutString(0, 1, "eFile test 2     ", ST7735_WHITE);
   // simple test of eFile
   if(eFile_Init())              diskError("eFile_Init",0); 
   if(eFile_Format())            diskError("eFile_Format",0); 
@@ -528,28 +528,35 @@ void TestFile2(void){   int i; char data;
   }
   if(eFile_WClose())            diskError("eFile_WClose",0);
 	
-	eFile_Directory(&UART_OutChar);
+	if(eFile_WOpen("file2"))  diskError("eFile_WOpen",0);
 	
-	if(eFile_WOpen("file2"))      diskError("eFile_WOpen",0);
+  if(eFile_Write('H')) 			diskError("eFile_Write",0);
+	if(eFile_Write('i')) 			diskError("eFile_Write",1);
+	if(eFile_Write('!')) 			diskError("eFile_Write",2);
+  if(eFile_Write('\n'))     diskError("eFile_Write",3);  
+  if(eFile_Write('\r'))     diskError("eFile_Write",4);
+	
+  if(eFile_WClose())            diskError("eFile_WClose",0);
+	
 	if(eFile_ROpen("file1"))      diskError("eFile_ROpen",0);
   for(i=0;i<1000;i++){
     if(eFile_ReadNext(&data))   diskError("eFile_ReadNext",i);
 		UART_OutChar(data);
   }
-	printf("\n\r");
-  for(i=0;i<1000;i++){
-    if(eFile_Write('a'+i%26))   diskError("eFile_Write",i);
-		if(i%52==51){
-      if(eFile_Write('\n'))     diskError("eFile_Write",i);  
-      if(eFile_Write('\r'))     diskError("eFile_Write",i);
-    }
-  }
-	
-  if(eFile_WClose())            diskError("eFile_WClose",0);
 	if(eFile_RClose())            diskError("eFile_WClose",0);
 	
+	printf("\n\r");
+	if(eFile_ROpen("file2"))      diskError("eFile_ROpen",0);
+	for(i=0;i<3;i++){
+    if(eFile_ReadNext(&data))   diskError("eFile_ReadNext",i);
+		UART_OutChar(data);
+  }
+	if(eFile_RClose())            diskError("eFile_WClose",0);
+	
+	printf("\n\r");
 	eFile_Directory(&UART_OutChar);
 	printf("\n\r");
+	
   if(eFile_Delete("file3"))     diskError("eFile_Delete",0);
   eFile_Directory(&UART_OutChar);
 	
@@ -561,9 +568,52 @@ void TestFile2(void){   int i; char data;
   OS_Kill();
 }
 
-//bad test case
-void TestFile3(void){
+
+// bad testcase
+void TestFile3(void){ int i; char data;
+	printf("\n\rEE445M/EE380L, Lab 4 eFile test 3\n\r");
+  ST7735_OutString(0, 1, "eFile test 3     ", ST7735_WHITE);
+  // simple test of eFile
+  if(eFile_Init())              diskError("eFile_Init",0); 
+  if(eFile_Format())            diskError("eFile_Format",0); 
+  if(eFile_Create("file1"))     diskError("eFile_Create",0);
 	
+	if(eFile_WOpen("file1"))      diskError("eFile_WOpen",0);
+  for(i=0;i<1000;i++){
+    if(eFile_Write('a'+i%26))   diskError("eFile_Write",i);
+		if(i%52==51){
+      if(eFile_Write('\n'))     diskError("eFile_Write",i);  
+      if(eFile_Write('\r'))     diskError("eFile_Write",i);
+    }
+  }
+	if(eFile_WClose())            diskError("eFile_WClose",0);
+	
+	printf("\n\r");
+	eFile_Directory(&UART_OutChar);
+	
+	//writing to a file that is not open for a write
+	if(eFile_Write('M'))   diskError("eFile_Write",0);
+	
+	if(eFile_ROpen("file1"))      diskError("eFile_ROpen",0);
+	for(i=0;i<1000;i++){
+		if(eFile_ReadNext(&data))   diskError("eFile_ReadNext",i);
+		UART_OutChar(data);
+  }
+	if(eFile_RClose())            diskError("eFile_WClose",0);
+	
+	printf("\n\r");
+	//reading a file after closing it
+	if(eFile_ReadNext(&data))   diskError("eFile_ReadNext",0);
+	
+	printf("\n\r");	
+	// error: cannot delete a file you never created
+	if(eFile_Delete("file3"))     diskError("eFile_Delete",0); 
+	
+	printf("\n\r");
+	printf("Successful test of creating a file\n\r");
+  ST7735_OutString(0, 1, "eFile successful", ST7735_YELLOW);
+  Running=0; // launch again
+  OS_Kill();
 }
 //************SW1Push2*************
 // Called when SW1 Button pushed
@@ -589,6 +639,32 @@ int main(void){
   NumCreated = 0 ;
 // create initial foreground threads
   NumCreated += OS_AddThread(&TestFile2,128,1);  
+  NumCreated += OS_AddThread(&IdleTask,128,3); 
+ 
+  OS_Launch(10*TIME_1MS); // doesn't return, interrupts enabled in here
+  return 0;               // this never executes
+}
+
+
+//******************* test main3 **********
+// SYSTICK interrupts, period established by OS_Launch
+// Timer interrupts, period established by first call to OS_AddPeriodicThread
+// eFile accessed by Multiple threads
+// Used to test Semaphore Implementations
+// trestFile4 has not been written
+int testmain3(void){ 
+  OS_Init();           // initialize, disable interrupts
+  PortD_Init();
+  Running = 1; 
+
+//*******attach background tasks***********
+  OS_AddPeriodicThread(&disk_timerproc,10*TIME_1MS,0);   // time out routines for disk
+  OS_AddSW1Task(&SW1Push1,2);    // PF4, SW1
+  OS_AddSW2Task(&SW1Push2,2);    // PF0, SW2
+  NumCreated = 0 ;
+// create initial foreground threads
+  NumCreated += OS_AddThread(&TestFile2,128,1); 
+//	NumCreated += OS_AddThread(&TestFile4,128,1); 
   NumCreated += OS_AddThread(&IdleTask,128,3); 
  
   OS_Launch(10*TIME_1MS); // doesn't return, interrupts enabled in here

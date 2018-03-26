@@ -3,11 +3,12 @@
 // Jonathan W. Valvano 3/9/17
 // Method: FAT (File Allocation Table) --> 1-to-1 mapping of the disk
 
+#include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include "edisk.h"
 #include "UART2.h"
-#include <stdio.h>
-#include <stdint.h>
+#include "OS.h"
 
 #define SUCCESS 0
 #define FAIL 1
@@ -29,6 +30,7 @@ int nextByteRead = 0;
 
 int BytesWritten[NUM_SECTOR]; 
 
+Sema4Type Read, Write;
 
 
 struct FATdirectory{ 					// Size: (NAME + 1 + 1) bytes
@@ -95,7 +97,7 @@ int compareName(char name[], int length){
 		for(i = 0; i < NAME; i++){
 			dirName[i] = directory[currDir_idx].name[i];
 		}
-		if(strcmp(name, dirName) == 0){
+		if(strncmp(name, dirName, strlen(name)) == 0){
 			break;
 		}
 	}
@@ -162,10 +164,10 @@ int writeData(int dataSector){
 // Input: none
 // Output: 0 if successful and 1 on failure (already initialized)
 int eFile_Init(void){ // initialize file system
-	
 	if(eDisk_Init(0)) 
 		return FAIL;
-  
+  OS_InitSemaphore(&Read,1);  // means Read free
+	OS_InitSemaphore(&Write,1);  // 
 	return SUCCESS;
 }
 
@@ -250,6 +252,7 @@ int eFile_Create( char name[]){  // create new file, make it empty
 int eFile_WOpen(char name[]){      // open a file for writing 
 	int dirIdx, lastSector, length;
 	
+	OS_Wait(&Write);
 	readDIR(DIR_SECTOR);
 	readFAT();
 	
@@ -324,10 +327,9 @@ int eFile_Close(void){
 // Input: none
 // Output: 0 if successful and 1 on failure (e.g., trouble writing to flash)
 int eFile_WClose(void){ // close the file for writing
-	
 	if (!idxWrite_OpenFile) return FAIL;
 	idxWrite_OpenFile = 0;
-  
+  OS_Signal(&Write);
   return SUCCESS;     
 }
 
@@ -339,6 +341,11 @@ int eFile_WClose(void){ // close the file for writing
 int eFile_ROpen(char name[]){      // open a file for reading 
 	int dir_idx = 0, firstSector = 0;
 	
+	OS_Wait(&Read);
+	OS_Wait(&Write);
+//	ReadCount ++;
+//	if(ReadCount == 1) OS_Wait(&Write);
+		
 	readDIR(DIR_SECTOR);
 	readFAT();
 	
@@ -353,6 +360,9 @@ int eFile_ROpen(char name[]){      // open a file for reading
 	if(eDisk_ReadBlock(RAM, firstSector))
 		return FAIL;
 	idxRead_OpenFile = firstSector;
+	
+//	OS_bSignal(&ReadMutex);
+	
   return SUCCESS;     
 }
  
@@ -366,9 +376,11 @@ int eFile_ReadNext(char *pt){       // get next byte
 	if(idxRead_OpenFile == 0)
 		return FAIL;
 	
-	if((BytesWritten[idxRead_OpenFile] == 0)|| (nextByteRead > BytesWritten[idxRead_OpenFile]))
+	if(BytesWritten[idxRead_OpenFile] == 0)
 		return FAIL; 
 		
+	readData(idxRead_OpenFile);
+	
 	if(nextByteRead == BLOCK_SIZE){
 		idxRead_OpenFile = FAT[idxRead_OpenFile];
 		if(eDisk_ReadBlock(RAM, idxRead_OpenFile))
@@ -387,11 +399,19 @@ int eFile_ReadNext(char *pt){       // get next byte
 // Input: none
 // Output: 0 if successful and 1 on failure (e.g., wasn't open)
 int eFile_RClose(void){ // close the file for writing
+//	OS_bWait(&ReadMutex);
+//	ReadCount--;
+//	if(ReadCount == 0)
+//		OS_Signal(&Write);
+	
 	if(idxRead_OpenFile == 0)
 		return FAIL;
 	
 	idxRead_OpenFile = 0;
+	nextByteRead = 0;
 	
+	OS_Signal(&Write);
+	OS_Signal(&Read);
   return SUCCESS;
 }
 
@@ -435,7 +455,7 @@ int eFile_Delete( char name[]){  // remove this file
 		return FAIL;
 	
 	dirIdx = compareName(name, length);
-	if(dirIdx == 0) return FAIL;
+	if((dirIdx == 0)||(dirIdx == NUM_FILES)) return FAIL;
 	
 	lastFreeSector = findLastSector(FREE);
 	

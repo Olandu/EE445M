@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Lab4.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Lab4.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Sun Mar 25 15:53:11 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Mar 26 09:02:24 2018
 <BR><P>
 <H3>Maximum Stack Usage =        168 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -35,7 +35,7 @@ Mutually Recursive functions
  <LI><a href="#[6]">SVC_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[6]">SVC_Handler</a><BR>
  <LI><a href="#[7]">DebugMon_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[7]">DebugMon_Handler</a><BR>
  <LI><a href="#[19]">ADC0Seq1_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[19]">ADC0Seq1_Handler</a><BR>
- <LI><a href="#[e3]">send_cmd</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[e3]">send_cmd</a><BR>
+ <LI><a href="#[e4]">send_cmd</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[e4]">send_cmd</a><BR>
 </UL>
 <P>
 <H3>
@@ -631,15 +631,16 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Launch
 </UL>
 
-<P><STRONG><a name="[eb]"></a>strlen</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, strlen.o(.text))
+<P><STRONG><a name="[de]"></a>strlen</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, strlen.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_WOpen
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_ROpen
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Delete
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Create
+<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareName
 </UL>
 
-<P><STRONG><a name="[de]"></a>strcmp</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, strcmp.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strcmp
+<P><STRONG><a name="[df]"></a>strncmp</STRONG> (Thumb, 30 bytes, Stack size 12 bytes, strncmp.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = strncmp
 </UL>
 <BR>[Called By]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareName
 </UL>
@@ -657,6 +658,10 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[102]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
+
+<P><STRONG><a name="[103]"></a>__decompress</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __dczerorl.o(.text), UNUSED)
+
+<P><STRONG><a name="[104]"></a>__decompress0</STRONG> (Thumb, 58 bytes, Stack size unknown bytes, __dczerorl.o(.text), UNUSED)
 
 <P><STRONG><a name="[18]"></a>ADC0Seq0_Handler</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, adc.o(i.ADC0Seq0_Handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = ADC0Seq0_Handler
@@ -771,6 +776,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TxFifo_Init
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RxFifo_Init
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Init
 </UL>
 
 <P><STRONG><a name="[a5]"></a>OS_Kill</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, os.o(i.OS_Kill))
@@ -806,6 +812,8 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TxFifo_Get
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RxFifo_Put
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_WClose
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_RClose
 </UL>
 
 <P><STRONG><a name="[ab]"></a>OS_Sleep</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, os.o(i.OS_Sleep))
@@ -846,6 +854,8 @@ Global Symbols
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StartCritical
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TxFifo_Put
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_WOpen
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_ROpen
 </UL>
 
 <P><STRONG><a name="[9e]"></a>PLL_Init</STRONG> (Thumb, 118 bytes, Stack size 0 bytes, pll.o(i.PLL_Init))
@@ -878,7 +888,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;copyHardwareToSoftware
 </UL>
 
-<P><STRONG><a name="[df]"></a>RxFifo_Size</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, uart2.o(i.RxFifo_Size))
+<P><STRONG><a name="[e0]"></a>RxFifo_Size</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, uart2.o(i.RxFifo_Size))
 <BR><BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;copyHardwareToSoftware
 </UL>
 
@@ -887,7 +897,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CS_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_spi
+<BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_spi
 </UL>
 
 <P><STRONG><a name="[b1]"></a>ST7735_DrawCharS</STRONG> (Thumb, 238 bytes, Stack size 48 bytes, st7735.o(i.ST7735_DrawCharS))
@@ -1041,7 +1051,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> lab4.o(i.SW1Push2)
 </UL>
-<P><STRONG><a name="[86]"></a>TestFile2</STRONG> (Thumb, 510 bytes, Stack size 16 bytes, lab4.o(i.TestFile2))
+<P><STRONG><a name="[86]"></a>TestFile2</STRONG> (Thumb, 566 bytes, Stack size 16 bytes, lab4.o(i.TestFile2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 168 + Unknown Stack Size
 <LI>Call Chain = TestFile2 &rArr; eFile_Delete &rArr; readDIR &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -1219,7 +1229,7 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>
 
-<P><STRONG><a name="[103]"></a>__1printf$6</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf6.o(i.__0printf$6), UNUSED)
+<P><STRONG><a name="[105]"></a>__1printf$6</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf6.o(i.__0printf$6), UNUSED)
 
 <P><STRONG><a name="[bc]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf6.o(i.__0printf$6))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
@@ -1230,11 +1240,11 @@ Global Symbols
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestDisk
 </UL>
 
-<P><STRONG><a name="[104]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[106]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[105]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[107]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[106]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[108]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[ec]"></a>allocateBlock</STRONG> (Thumb, 92 bytes, Stack size 8 bytes, efile.o(i.allocateBlock))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = allocateBlock
@@ -1243,10 +1253,11 @@ Global Symbols
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Create
 </UL>
 
-<P><STRONG><a name="[dd]"></a>compareName</STRONG> (Thumb, 62 bytes, Stack size 32 bytes, efile.o(i.compareName))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = compareName &rArr; strcmp
+<P><STRONG><a name="[dd]"></a>compareName</STRONG> (Thumb, 72 bytes, Stack size 32 bytes, efile.o(i.compareName))
+<BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = compareName &rArr; strncmp
 </UL>
-<BR>[Calls]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
+<BR>[Calls]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncmp
+<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_WOpen
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_ROpen
@@ -1280,21 +1291,21 @@ Global Symbols
 <P><STRONG><a name="[bd]"></a>eDisk_Init</STRONG> (Thumb, 330 bytes, Stack size 24 bytes, edisk.o(i.eDisk_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = eDisk_Init &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
-<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
-<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_spi
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
+<BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
+<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_spi
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestDisk
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Init
 </UL>
 
-<P><STRONG><a name="[e4]"></a>eDisk_Read</STRONG> (Thumb, 136 bytes, Stack size 24 bytes, edisk.o(i.eDisk_Read))
+<P><STRONG><a name="[e5]"></a>eDisk_Read</STRONG> (Thumb, 136 bytes, Stack size 24 bytes, edisk.o(i.eDisk_Read))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
-<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rcvr_datablock
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
+<BR>[Calls]<UL><LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
+<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rcvr_datablock
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_ReadBlock
 </UL>
@@ -1302,22 +1313,22 @@ Global Symbols
 <P><STRONG><a name="[c0]"></a>eDisk_ReadBlock</STRONG> (Thumb, 20 bytes, Stack size 16 bytes, edisk.o(i.eDisk_ReadBlock))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Read
+<BR>[Calls]<UL><LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Read
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestDisk
-<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
+<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
 <LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readData
-<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
+<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_ReadNext
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_ROpen
 </UL>
 
-<P><STRONG><a name="[e6]"></a>eDisk_Write</STRONG> (Thumb, 170 bytes, Stack size 24 bytes, edisk.o(i.eDisk_Write))
+<P><STRONG><a name="[e7]"></a>eDisk_Write</STRONG> (Thumb, 170 bytes, Stack size 24 bytes, edisk.o(i.eDisk_Write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xmit_datablock
-<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
+<BR>[Calls]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xmit_datablock
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
 </UL>
 <BR>[Called By]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_WriteBlock
 </UL>
@@ -1325,17 +1336,17 @@ Global Symbols
 <P><STRONG><a name="[bf]"></a>eDisk_WriteBlock</STRONG> (Thumb, 20 bytes, Stack size 16 bytes, edisk.o(i.eDisk_WriteBlock))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = eDisk_WriteBlock &rArr; eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Write
+<BR>[Calls]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestDisk
-<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
+<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
 <LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeData
 </UL>
 
 <P><STRONG><a name="[cb]"></a>eFile_Close</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, efile.o(i.eFile_Close))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = eFile_Close &rArr; write_DirFAT &rArr; eDisk_WriteBlock &rArr; eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
+<BR>[Calls]<UL><LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
 </UL>
 <BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile2
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile
@@ -1344,10 +1355,10 @@ Global Symbols
 <P><STRONG><a name="[c4]"></a>eFile_Create</STRONG> (Thumb, 108 bytes, Stack size 16 bytes, efile.o(i.eFile_Create))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = eFile_Create &rArr; readDIR &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
-<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
-<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
-<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
+<BR>[Calls]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
+<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
+<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
 <LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;convert_Dir2Buff
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;allocateBlock
 </UL>
@@ -1355,13 +1366,13 @@ Global Symbols
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile
 </UL>
 
-<P><STRONG><a name="[ca]"></a>eFile_Delete</STRONG> (Thumb, 162 bytes, Stack size 32 bytes, efile.o(i.eFile_Delete))
+<P><STRONG><a name="[ca]"></a>eFile_Delete</STRONG> (Thumb, 166 bytes, Stack size 32 bytes, efile.o(i.eFile_Delete))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = eFile_Delete &rArr; readDIR &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
-<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
-<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
-<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
+<BR>[Calls]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
+<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
+<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
 <LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;findLastSector
 <LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;convert_Dir2Buff
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareName
@@ -1373,14 +1384,15 @@ Global Symbols
 <P><STRONG><a name="[c3]"></a>eFile_Directory</STRONG> (Thumb, 86 bytes, Stack size 16 bytes, efile.o(i.eFile_Directory))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = eFile_Directory &rArr; readDIR &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
+<BR>[Calls]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
 </UL>
 <BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile2
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile
 </UL>
 
-<P><STRONG><a name="[ef]"></a>eFile_EndRedirectToFile</STRONG> (Thumb, 22 bytes, Stack size 4 bytes, efile.o(i.eFile_EndRedirectToFile))
-<BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = eFile_EndRedirectToFile
+<P><STRONG><a name="[ef]"></a>eFile_EndRedirectToFile</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, efile.o(i.eFile_EndRedirectToFile))
+<BR><BR>[Stack]<UL><LI>Max Depth = 52 + Unknown Stack Size
+<LI>Call Chain = eFile_EndRedirectToFile &rArr; eFile_WClose &rArr; OS_Signal &rArr; UnBlock &rArr; ChainTCB
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_WClose
 </UL>
@@ -1390,32 +1402,41 @@ Global Symbols
 <P><STRONG><a name="[c2]"></a>eFile_Format</STRONG> (Thumb, 128 bytes, Stack size 16 bytes, efile.o(i.eFile_Format))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = eFile_Format &rArr; write_DirFAT &rArr; eDisk_WriteBlock &rArr; eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
+<BR>[Calls]<UL><LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
 <LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;convert_Dir2Buff
 </UL>
 <BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile2
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile
 </UL>
 
-<P><STRONG><a name="[c1]"></a>eFile_Init</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, efile.o(i.eFile_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = eFile_Init &rArr; eDisk_Init &rArr; send_cmd &rArr;  send_cmd (Cycle)
+<P><STRONG><a name="[c1]"></a>eFile_Init</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, efile.o(i.eFile_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 88 + Unknown Stack Size
+<LI>Call Chain = eFile_Init &rArr; eDisk_Init &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Init
+<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_InitSemaphore
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile2
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile
 </UL>
 
-<P><STRONG><a name="[cc]"></a>eFile_RClose</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, efile.o(i.eFile_RClose))
-<BR><BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile2
+<P><STRONG><a name="[cc]"></a>eFile_RClose</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, efile.o(i.eFile_RClose))
+<BR><BR>[Stack]<UL><LI>Max Depth = 44 + Unknown Stack Size
+<LI>Call Chain = eFile_RClose &rArr; OS_Signal &rArr; UnBlock &rArr; ChainTCB
+</UL>
+<BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Signal
+</UL>
+<BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile2
 </UL>
 
-<P><STRONG><a name="[c8]"></a>eFile_ROpen</STRONG> (Thumb, 98 bytes, Stack size 24 bytes, efile.o(i.eFile_ROpen))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = eFile_ROpen &rArr; readDIR &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
+<P><STRONG><a name="[c8]"></a>eFile_ROpen</STRONG> (Thumb, 110 bytes, Stack size 24 bytes, efile.o(i.eFile_ROpen))
+<BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
+<LI>Call Chain = eFile_ROpen &rArr; readDIR &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
-<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
-<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
+<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Wait
+<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
+<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareName
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_ReadBlock
 </UL>
@@ -1423,28 +1444,36 @@ Global Symbols
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile
 </UL>
 
-<P><STRONG><a name="[c9]"></a>eFile_ReadNext</STRONG> (Thumb, 118 bytes, Stack size 8 bytes, efile.o(i.eFile_ReadNext))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = eFile_ReadNext &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
+<P><STRONG><a name="[c9]"></a>eFile_ReadNext</STRONG> (Thumb, 108 bytes, Stack size 8 bytes, efile.o(i.eFile_ReadNext))
+<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = eFile_ReadNext &rArr; readData &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_ReadBlock
+<BR>[Calls]<UL><LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readData
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_ReadBlock
 </UL>
 <BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile2
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile
 </UL>
 
-<P><STRONG><a name="[c7]"></a>eFile_WClose</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, efile.o(i.eFile_WClose))
-<BR><BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile2
+<P><STRONG><a name="[c7]"></a>eFile_WClose</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, efile.o(i.eFile_WClose))
+<BR><BR>[Stack]<UL><LI>Max Depth = 44 + Unknown Stack Size
+<LI>Call Chain = eFile_WClose &rArr; OS_Signal &rArr; UnBlock &rArr; ChainTCB
+</UL>
+<BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Signal
+</UL>
+<BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile2
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestFile
 <LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_EndRedirectToFile
 </UL>
 
-<P><STRONG><a name="[c5]"></a>eFile_WOpen</STRONG> (Thumb, 80 bytes, Stack size 24 bytes, efile.o(i.eFile_WOpen))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = eFile_WOpen &rArr; readDIR &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
+<P><STRONG><a name="[c5]"></a>eFile_WOpen</STRONG> (Thumb, 86 bytes, Stack size 24 bytes, efile.o(i.eFile_WOpen))
+<BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
+<LI>Call Chain = eFile_WOpen &rArr; readDIR &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
-<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
+<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Wait
+<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readFAT
 <LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readData
-<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
+<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readDIR
 <LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;findLastSector
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareName
 </UL>
@@ -1455,7 +1484,7 @@ Global Symbols
 <P><STRONG><a name="[c6]"></a>eFile_Write</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, efile.o(i.eFile_Write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = eFile_Write &rArr; write_DirFAT &rArr; eDisk_WriteBlock &rArr; eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
+<BR>[Calls]<UL><LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_DirFAT
 <LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeData
 <LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readData
 <LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;findLastSector
@@ -1497,7 +1526,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
-<P><STRONG><a name="[e9]"></a>readDIR</STRONG> (Thumb, 94 bytes, Stack size 24 bytes, efile.o(i.readDIR))
+<P><STRONG><a name="[ea]"></a>readDIR</STRONG> (Thumb, 94 bytes, Stack size 24 bytes, efile.o(i.readDIR))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = readDIR &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_ReadBlock
@@ -1516,9 +1545,10 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Write
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_WOpen
+<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_ReadNext
 </UL>
 
-<P><STRONG><a name="[ea]"></a>readFAT</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, efile.o(i.readFAT))
+<P><STRONG><a name="[eb]"></a>readFAT</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, efile.o(i.readFAT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = readFAT &rArr; eDisk_ReadBlock &rArr; eDisk_Read &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_ReadBlock
@@ -1537,7 +1567,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eFile_Write
 </UL>
 
-<P><STRONG><a name="[e8]"></a>write_DirFAT</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, efile.o(i.write_DirFAT))
+<P><STRONG><a name="[e9]"></a>write_DirFAT</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, efile.o(i.write_DirFAT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = write_DirFAT &rArr; eDisk_WriteBlock &rArr; eDisk_Write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_WriteBlock
@@ -1613,7 +1643,7 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 60 + Unknown Stack Size
 <LI>Call Chain = copyHardwareToSoftware &rArr; RxFifo_Put &rArr; OS_Signal &rArr; UnBlock &rArr; ChainTCB
 </UL>
-<BR>[Calls]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RxFifo_Size
+<BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RxFifo_Size
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RxFifo_Put
 </UL>
 <BR>[Called By]<UL><LI><a href="#[f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART0_Handler
@@ -1630,19 +1660,19 @@ Local Symbols
 <LI><a href="#[f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART0_Handler
 </UL>
 
-<P><STRONG><a name="[e0]"></a>deselect</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, edisk.o(i.deselect))
+<P><STRONG><a name="[e1]"></a>deselect</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, edisk.o(i.deselect))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = deselect &rArr; xchg_spi
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
+<BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Write
-<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Read
+<BR>[Called By]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Write
+<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Read
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Init
-<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
 <LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;select
 </UL>
 
-<P><STRONG><a name="[e2]"></a>init_spi</STRONG> (Thumb, 32 bytes, Stack size 4 bytes, edisk.o(i.init_spi))
+<P><STRONG><a name="[e3]"></a>init_spi</STRONG> (Thumb, 32 bytes, Stack size 4 bytes, edisk.o(i.init_spi))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = init_spi &rArr; SSI0_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SSI0_Init
@@ -1650,13 +1680,13 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Init
 </UL>
 
-<P><STRONG><a name="[e5]"></a>rcvr_datablock</STRONG> (Thumb, 66 bytes, Stack size 16 bytes, edisk.o(i.rcvr_datablock))
+<P><STRONG><a name="[e6]"></a>rcvr_datablock</STRONG> (Thumb, 66 bytes, Stack size 16 bytes, edisk.o(i.rcvr_datablock))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = rcvr_datablock &rArr; rcvr_spi_multi
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
+<BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rcvr_spi_multi
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Read
+<BR>[Called By]<UL><LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Read
 </UL>
 
 <P><STRONG><a name="[f4]"></a>rcvr_spi</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, edisk.o(i.rcvr_spi))
@@ -1668,69 +1698,69 @@ Local Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rcvr_spi
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rcvr_datablock
+<BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rcvr_datablock
 </UL>
 
 <P><STRONG><a name="[f5]"></a>select</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, edisk.o(i.select))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = select &rArr; wait_ready &rArr; xchg_spi
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
+<BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
 <LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_ready
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
+<BR>[Called By]<UL><LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
 </UL>
 
-<P><STRONG><a name="[e3]"></a>send_cmd</STRONG> (Thumb, 150 bytes, Stack size 24 bytes, edisk.o(i.send_cmd))
+<P><STRONG><a name="[e4]"></a>send_cmd</STRONG> (Thumb, 150 bytes, Stack size 24 bytes, edisk.o(i.send_cmd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56 + In Cycle
 <LI>Call Chain = send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
-<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
+<BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
 <LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;select
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Write
-<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Read
+<BR>[Called By]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Write
+<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Read
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Init
-<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
 </UL>
 
 <P><STRONG><a name="[f6]"></a>wait_ready</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, edisk.o(i.wait_ready))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = wait_ready &rArr; xchg_spi
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
+<BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xmit_datablock
+<BR>[Called By]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xmit_datablock
 <LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;select
 </UL>
 
-<P><STRONG><a name="[e1]"></a>xchg_spi</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, edisk.o(i.xchg_spi))
+<P><STRONG><a name="[e2]"></a>xchg_spi</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, edisk.o(i.xchg_spi))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = xchg_spi
 </UL>
 <BR>[Called By]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Init
-<LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xmit_datablock
+<LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xmit_datablock
 <LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_ready
-<LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
+<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_cmd
 <LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;select
-<LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rcvr_datablock
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
+<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rcvr_datablock
+<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
 </UL>
 
-<P><STRONG><a name="[e7]"></a>xmit_datablock</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, edisk.o(i.xmit_datablock))
+<P><STRONG><a name="[e8]"></a>xmit_datablock</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, edisk.o(i.xmit_datablock))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = xmit_datablock &rArr; wait_ready &rArr; xchg_spi
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xmit_spi_multi
-<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xchg_spi
 <LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_ready
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Write
+<BR>[Called By]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eDisk_Write
 </UL>
 
 <P><STRONG><a name="[f7]"></a>xmit_spi_multi</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, edisk.o(i.xmit_spi_multi))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = xmit_spi_multi
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xmit_datablock
+<BR>[Called By]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xmit_datablock
 </UL>
 
 <P><STRONG><a name="[d8]"></a>_printf_core</STRONG> (Thumb, 750 bytes, Stack size 96 bytes, printf6.o(i._printf_core), UNUSED)
