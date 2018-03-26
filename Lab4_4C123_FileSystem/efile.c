@@ -159,6 +159,21 @@ int writeData(int dataSector){
 	return SUCCESS;
 }
 
+// Helper functions to use with the Interpreter
+int get_DirIdx (char name[]){
+	return compareName (name, 0);
+}
+
+int get_BytesWritten (int dirIdx){
+	int i, bytes = 0, sector;
+	sector = directory[dirIdx].startSector;
+	for (i = 0; i < directory[dirIdx].size; i++){
+		bytes += BytesWritten[sector];
+		sector = FAT[sector];
+	}
+	return bytes;
+
+}
 //---------- eFile_Init-----------------
 // Activate the file system, without formating
 // Input: none

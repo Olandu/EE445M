@@ -271,8 +271,11 @@ extern void Interpreter(void);
 // 4) delete file
 // execute   eFile_Init();  after periodic interrupts have started
 
+void SW1Push1 (void);
+void SW1Push2 (void);
+
 //*******************lab 4 main **********
-int realmain(void){        // lab 4 real main
+int main(void){        // lab 4 real main
   OS_Init();           // initialize, disable interrupts
   Running = 0;         // robot not running
   DataLost = 0;        // lost data between producer and consumer
@@ -286,13 +289,13 @@ int realmain(void){        // lab 4 real main
   OS_AddPeriodicThread(&DAS,10*TIME_1MS,1); // 100Hz real time sampling of PE0
 
 //*******attach background tasks***********
-  OS_AddSW1Task(&SW1Push,2);    // PF4, SW1
-  OS_AddSW2Task(&SW2Push,3);   // PF0
+  //OS_AddSW1Task(&SW1Push,2);    // PF4, SW1
+  OS_AddSW2Task(&SW1Push2,3);   // PF0
   OS_AddPeriodicThread(disk_timerproc,10*TIME_1MS,5);
 
   NumCreated = 0 ;
 // create initial foreground threads
-  NumCreated += OS_AddThread(&Interpreter,128,2); 
+  //NumCreated += OS_AddThread(&Interpreter,128,2); 
   NumCreated += OS_AddThread(&DSP,128,1); 
   NumCreated += OS_AddThread(&IdleTask,128,7);  // runs when nothing useful to do
  
@@ -627,7 +630,7 @@ void SW1Push2(void){
 //******************* test main2 **********
 // SYSTICK interrupts, period established by OS_Launch
 // Timer interrupts, period established by first call to OS_AddPeriodicThread
-int main(void){ 
+int testmain2(void){ 
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
   Running = 1; 

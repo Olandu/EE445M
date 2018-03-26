@@ -11,6 +11,9 @@
 
  ******************************************************************************/
 
+ int get_DirIdx (char name []);
+ int get_BytesWritten (int dirIdx);
+ 
 
 /**
  * @details This function must be called first, before calling any of the other eFile functions

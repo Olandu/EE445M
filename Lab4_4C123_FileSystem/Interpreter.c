@@ -13,14 +13,52 @@
 #include <string.h> 
 #include <stdio.h>
 
+#define NAME_FILE 6 // From eFile.c
 
-void Interpreter(void) {
-		while(1){
-//		cmdLine_Start (DataLost, PIDWork, FilterWork);
-		}
-}
+
 
 char option;
+
+void cmdLine_OptionE (void){
+	int task, dirIdx, bytes,i;
+	char data;
+	char name[NAME_FILE];
+	OutCRLF(); OutCRLF(); 
+	
+	UART_OutString ("Choose a task:"); OutCRLF();
+	UART_OutString ("1.) Format the SD card"); OutCRLF();
+	UART_OutString ("2.) Display the directory");  OutCRLF();
+	UART_OutString ("3.) Print out the contents of a file as ASCII characters"); OutCRLF(); 
+	UART_OutString ("4.) Delete a file"); OutCRLF(); OutCRLF();
+	task = UART_InUDec();
+	while ((task < 1) || (task > 4)){
+			OutCRLF(); OutCRLF();
+			UART_OutString ("Invalid measurement. Try again!"); OutCRLF(); 
+			UART_OutString ("Measurement #: ");
+			task = UART_InUDec();
+		}
+	OutCRLF(); OutCRLF();
+	switch (task){
+		case 1: eFile_Format(); UART_OutString ("SD card formatting done."); break;
+		case 2: UART_OutString ("Directory:"); OutCRLF(); eFile_Directory(&UART_OutChar); break;
+		case 4: UART_OutString ("Choose a file to delete: "); 
+						UART_InString(name, NAME_FILE);
+						eFile_Delete(name);
+						break;
+		case 3: UART_OutString ("Print contents of: "); 
+						UART_InString(name, NAME_FILE);
+						eFile_ROpen(name);
+						dirIdx = get_DirIdx (name);
+						bytes = get_BytesWritten(dirIdx);
+						for (i = 0; i < bytes; i++){
+							eFile_ReadNext (&data);
+							UART_OutChar(data);
+						}
+						break;
+						
+	}
+	OutCRLF();
+}
 
 void cmdLine_OptionD(int DataLost, int PIDWork, int FilterWork){
 	int measurement;
@@ -56,11 +94,12 @@ void cmdLine_Start(int DataLost, int PIDWork, int FilterWork) {
 	UART_OutString ("b.) Collect multiple ADC samples."); OutCRLF(); 
 	UART_OutString ("c.) Write to LCD."); OutCRLF();
 	// Lab 2	
-	UART_OutString ("d.) Print performance measures."); OutCRLF(); OutCRLF(); 
+	UART_OutString ("d.) Print performance measures."); OutCRLF(); 
+	UART_OutString ("e.) Manage SD card."); OutCRLF(); OutCRLF();
 	UART_OutString ("Option: ");
 	option = UART_InChar ();
 	UART_OutChar (option);
-	while ((option != 'a') && (option != 'b') && (option != 'c') && (option != 'd')){
+	while ((option != 'a') && (option != 'b') && (option != 'c') && (option != 'd') && (option != 'e')){
 		OutCRLF(); OutCRLF(); 
 		UART_OutString ("Invalid option. Try again!"); OutCRLF();  
 		UART_OutString ("Option: ");
@@ -71,6 +110,14 @@ void cmdLine_Start(int DataLost, int PIDWork, int FilterWork) {
 		//case 'b': cmdLine_OptionB(); break;
 		//case 'c': cmdLine_OptionC(); break;
 		case 'd': cmdLine_OptionD(DataLost, PIDWork, FilterWork); break;
+		case 'e': cmdLine_OptionE();
 	}
 	
+}
+
+void Interpreter(void) {
+		while(1){
+	//	cmdLine_Start (DataLost, PIDWork, FilterWork);
+			cmdLine_Start (0,0,0);
+		}
 }
