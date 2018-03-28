@@ -1284,3 +1284,9 @@ void Timer0A_Init(void){long sr;
 void Timer0A_Handler(void){
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
 }
+
+int OS_AddProcess(void(*entry)(void), void *text, void *data,
+ unsigned long stackSize, unsigned long priority){
+	 
+	 return 0;
+ }

@@ -1,1 +1,1 @@
-.\osasm.o: osasm.s
+.\osasm.o: OSasm.s

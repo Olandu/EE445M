@@ -1,0 +1,44 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\tejas\Documents\GitHub\EE445M\Lab 5\SDCFile.uvproj
+Project File Date:  03/28/2018
+
+<h2>Output:</h2>
+Rebuild target 'SDCFile'
+assembling startup.s...
+compiling diskio.c...
+compiling ff.c...
+compiling PLL.c...
+compiling SDCFile.c...
+compiling loader.c...
+loader.c(668): warning:  #111-D: statement is unreachable
+    return -1;
+loader.c(148): warning:  #177-D: function "swabo" was declared but never referenced
+  static uint32_t swabo(uint32_t hl) {
+loader.c(250): warning:  #177-D: function "readSegment" was declared but never referenced
+  static int readSegment(ELFExec_t *e, int n, Elf32_Phdr *h, size_t nlen) {
+loader.c(274): warning:  #177-D: function "typeStr" was declared but never referenced
+  static const char *typeStr(int symt) {
+loader.c: 4 warnings, 0 errors
+compiling heap.c...
+compiling UART2.c...
+compiling OS.c...
+compiling ST7735.c...
+assembling OSasm.s...
+linking...
+Program Size: Code=14656 RO-data=2068 RW-data=216 ZI-data=10464  
+".\SDCFile.axf" - 0 Error(s), 4 Warning(s).
+</pre>
+</body>
+</html>
+am Size: Code=14656 RO-data=2068 RW-data=216 ZI-data=10464  
+".\SDCFile.axf" - 0 Error(s), 5 Warning(s).
+ol OS_EnableInterrupts (referred from os.o).
+.\SDCFile.axf: Error: L6218E: Undefined symbol StartOS (referred from os.o).
+Not enough information to list image symbols.
+Finished: 1 information, 0 warning and 3 error messages.
+".\SDCFile.axf" - 3 Error(s), 5 Warning(s).
+Target not created

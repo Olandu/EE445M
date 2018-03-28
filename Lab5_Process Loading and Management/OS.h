@@ -269,4 +269,7 @@ unsigned long OS_MsTime(void);
 // It is ok to limit the range of theTimeSlice to match the 24-bit SysTick
 void OS_Launch(unsigned long theTimeSlice);
 
+int OS_AddProcess(void(*entry)(void), void *text, void *data,
+ unsigned long stackSize, unsigned long priority);
+
 #endif

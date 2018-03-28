@@ -136,9 +136,9 @@ ARM Macro Assembler    Page 3
 
               00000000 
               00000000 
-Command Line: --debug --xref --cpu=Cortex-M4.fp --apcs=interwork --depend=.\osa
-sm.d -o.\osasm.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\A
-RM\Inc\TI\TM4C123 --predefine="__MICROLIB SETA 1" --list=.\osasm.lst osasm.s
+Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=.\osasm.
+d -o.\osasm.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\
+Inc\Luminary --list=.\osasm.lst OSasm.s
 
 
 
@@ -149,7 +149,7 @@ Relocatable symbols
 
 Symbol: .text
    Definitions
-      At line 26 in file osasm.s
+      At line 26 in file OSasm.s
    Uses
       None
 Comment: .text unused
@@ -157,33 +157,33 @@ OS_DisableInterrupts 00000000
 
 Symbol: OS_DisableInterrupts
    Definitions
-      At line 40 in file osasm.s
+      At line 40 in file OSasm.s
    Uses
-      At line 33 in file osasm.s
+      At line 33 in file OSasm.s
 Comment: OS_DisableInterrupts used once
 OS_EnableInterrupts 00000004
 
 Symbol: OS_EnableInterrupts
    Definitions
-      At line 45 in file osasm.s
+      At line 45 in file OSasm.s
    Uses
-      At line 34 in file osasm.s
+      At line 34 in file OSasm.s
 Comment: OS_EnableInterrupts used once
 PendSV_Handler 00000008
 
 Symbol: PendSV_Handler
    Definitions
-      At line 50 in file osasm.s
+      At line 50 in file OSasm.s
    Uses
-      At line 36 in file osasm.s
+      At line 36 in file OSasm.s
 Comment: PendSV_Handler used once
 StartOS 00000028
 
 Symbol: StartOS
    Definitions
-      At line 67 in file osasm.s
+      At line 67 in file OSasm.s
    Uses
-      At line 35 in file osasm.s
+      At line 35 in file OSasm.s
 Comment: StartOS used once
 5 symbols
 
@@ -196,18 +196,18 @@ NextRunPt 00000000
 
 Symbol: NextRunPt
    Definitions
-      At line 32 in file osasm.s
+      At line 32 in file OSasm.s
    Uses
-      At line 57 in file osasm.s
+      At line 57 in file OSasm.s
 Comment: NextRunPt used once
 RunPt 00000000
 
 Symbol: RunPt
    Definitions
-      At line 31 in file osasm.s
+      At line 31 in file OSasm.s
    Uses
-      At line 53 in file osasm.s
-      At line 68 in file osasm.s
+      At line 53 in file OSasm.s
+      At line 68 in file OSasm.s
 
 2 symbols
-341 symbols in table
+339 symbols in table
