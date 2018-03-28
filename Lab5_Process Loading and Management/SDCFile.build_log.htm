@@ -30,16 +30,17 @@ compiling ST7735.c...
 assembling OSasm.s...
 compiling Interpreter.c...
 linking...
-Program Size: Code=10204 RO-data=2052 RW-data=232 ZI-data=10704  
+Program Size: Code=16148 RO-data=2068 RW-data=228 ZI-data=10460  
 ".\SDCFile.axf" - 0 Error(s), 4 Warning(s).
-ling OS.c...
-compiling ST7735.c...
-assembling OSasm.s...
-compiling Interpreter.c...
-".\SDCFile.axf" - 2 Error(s), 4 Warning(s).
-Target not created
-ared implicitly
-                case 1: eFile_Format(); UART_OutString ("SD card formatting done."); break;
+Load "C:\\Users\\tejas\\Documents\\GitHub\\EE445M\\Lab5_Process Loading and Management\\SDCFile.axf" 
+Connecting: Mode=JTAG, Speed=1000000Hz
+Erase Done.
+Programming Done.
+Verify OK.
+</pre>
+</body>
+</html>
+T_OutString ("SD card formatting done."); break;
 Interpreter.c(43): warning:  #223-D: function "eFile_Directory" declared implicitly
                 case 2: UART_OutString ("Directory:"); OutCRLF(); eFile_Directory(&UART_OutChar); break;
 Interpreter.c(46): warning:  #223-D: function "eFile_Delete" declared implicitly

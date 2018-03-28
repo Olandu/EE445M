@@ -259,7 +259,7 @@ void IdleTask(void){
 unsigned long NumCreated;
 
 // *********************Lab 5 main***************************
-int main (void) {	// Lab 5 main
+int lab5main (void) {	// Lab 5 main
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
   
@@ -284,15 +284,16 @@ int main (void) {	// Lab 5 main
 const char inFilename[] = "test.txt";   // 8 characters or fewer
 const char outFilename[] = "out.txt";   // 8 characters or fewer
 
-int realmain(void){	// original main
+int main(void){	// original main
   UINT successfulreads, successfulwrites;
   uint8_t c, x, y;
   PLL_Init(Bus80MHz);    // 80 MHz
   ST7735_InitR(INITR_REDTAB);
   ST7735_FillScreen(0);                 // set screen to black
   EnableInterrupts();
-//  SimpleUnformattedTest();              // comment this out if continuing to the advanced file system tests
-//  FileSystemTest();                     // comment this out if file system works
+	ST7735_OutString ("Hello");
+SimpleUnformattedTest();              // comment this out if continuing to the advanced file system tests
+FileSystemTest();                     // comment this out if file system works
   MountFresult = f_mount(&g_sFatFs, "", 0);
   if(MountFresult){
     ST7735_DrawString(0, 0, "f_mount error", ST7735_Color565(0, 0, 255));

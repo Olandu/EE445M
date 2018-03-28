@@ -480,6 +480,21 @@
               <FileType>1</FileType>
               <FilePath>.\OS.c</FilePath>
             </File>
+            <File>
+              <FileName>ST7735.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ST7735.c</FilePath>
+            </File>
+            <File>
+              <FileName>ST7735.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\ST7735.h</FilePath>
+            </File>
+            <File>
+              <FileName>OSasm.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\OSasm.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
