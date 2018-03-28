@@ -63,6 +63,40 @@
 #include "PLL.h"
 #include "ST7735.h"
 #include "../inc/tm4c123gh6pm.h"
+#include "OS.h"
+#include "loader.h"
+#include "elf.h"
+#include "heap.h"
+
+#define TIMESLICE 2*TIME_1MS  // thread switch time in system time units
+
+#define PD0  (*((volatile unsigned long *)0x40007004))
+#define PD1  (*((volatile unsigned long *)0x40007008))
+#define PD2  (*((volatile unsigned long *)0x40007010))
+#define PD3  (*((volatile unsigned long *)0x40007020))
+	
+//******** Interpreter **************
+// your intepreter from Lab 4 
+// foreground thread, accepts input from UART port, outputs to UART port
+// inputs:  none
+// outputs: none
+extern void Interpreter(void); 
+// add the following commands, remove commands that do not make sense anymore
+// 1) format 
+// 2) directory 
+// 3) print file
+// 4) delete file
+// execute   eFile_Init();  after periodic interrupts have started
+
+void PortD_Init(void){ 
+  SYSCTL_RCGCGPIO_R |= 0x08;       // activate port D
+  while((SYSCTL_PRGPIO_R&0x08)==0){};      
+  GPIO_PORTD_DIR_R |= 0x0F;    // make PE3-0 output heartbeats
+  GPIO_PORTD_AFSEL_R &= ~0x0F;   // disable alt funct on PD3-0
+  GPIO_PORTD_DEN_R |= 0x0F;     // enable digital I/O on PD3-0
+  GPIO_PORTD_PCTL_R = ~0x0000FFFF;
+  GPIO_PORTD_AMSEL_R &= ~0x0F;;      // disable analog functionality on PD
+}  
 
 void EnableInterrupts(void);
 
@@ -210,10 +244,47 @@ void FileSystemTest(void){
   }*/
 }
 
+//******** IdleTask  *************** 
+// foreground thread, runs when no other work needed
+// never blocks, never sleeps, never dies
+// inputs:  none
+// outputs: none
+unsigned long Idlecount=0;
+void IdleTask(void){ 
+  while(1) { 
+    Idlecount++;        // debugging 
+  }
+}
+
+unsigned long NumCreated;
+
+// *********************Lab 5 main***************************
+int main (void) {	// Lab 5 main
+  OS_Init();           // initialize, disable interrupts
+  PortD_Init();
+  
+//*******attach background tasks***********
+  OS_Fifo_Init (256);
+  NumCreated = 0 ;
+// create initial foreground threads
+  NumCreated += OS_AddThread(&Interpreter,128,2);  
+  NumCreated += OS_AddThread(&IdleTask,128,7); 
+	
+	MountFresult = f_mount(&g_sFatFs, "", 0);
+	if(MountFresult){
+    ST7735_DrawString(0, 0, "f_mount error", ST7735_Color565(0, 0, 255));
+    while(1){};
+  }
+	
+	Heap_Init();
+ 
+  OS_Launch(10*TIME_1MS); // doesn't return, interrupts enabled in here
+  return 0;               // this never executes
+}
 const char inFilename[] = "test.txt";   // 8 characters or fewer
 const char outFilename[] = "out.txt";   // 8 characters or fewer
 
-int main(void){
+int realmain(void){	// original main
   UINT successfulreads, successfulwrites;
   uint8_t c, x, y;
   PLL_Init(Bus80MHz);    // 80 MHz

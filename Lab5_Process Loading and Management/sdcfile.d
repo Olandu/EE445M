@@ -7,3 +7,7 @@
 .\sdcfile.o: PLL.h
 .\sdcfile.o: ST7735.h
 .\sdcfile.o: ../inc/tm4c123gh6pm.h
+.\sdcfile.o: OS.h
+.\sdcfile.o: loader.h
+.\sdcfile.o: elf.h
+.\sdcfile.o: heap.h
