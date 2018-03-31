@@ -232,8 +232,10 @@ int eFile_Create( char name[]){  // create new file, make it empty
 	int i,freeFile_idx, dirIdx; 
 	char dirName[NAME];
 	
-	readDIR(DIR_SECTOR);
-	readFAT();
+	if(readDIR(DIR_SECTOR))
+		return FAIL;
+	if(readFAT())
+		return FAIL;
 	
 	//No free space in Directory
 	if (directory[0].size < 1) 

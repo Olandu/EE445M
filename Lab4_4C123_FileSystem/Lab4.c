@@ -189,6 +189,7 @@ unsigned long time;      // in 10msec,  0 to 1000
   DataLost = 0;          // new run with no lost data 
   OS_Fifo_Init(256);
   printf("Robot running...");
+	eFile_Init();
   eFile_RedirectToFile(Name); // robot0, robot1,...,robot7
   printf("time(sec)\tdata(volts)\tdistance(mm)\n\r");
   do{
@@ -292,8 +293,6 @@ int main(void){        // lab 4 real main
   OS_AddSW1Task(&SW1Push,2);    // PF4, SW1
   OS_AddSW2Task(&SW2Push,3);   // PF0
   OS_AddPeriodicThread(disk_timerproc,10*TIME_1MS,5);
-	
-	eFile_Init();
 	
   NumCreated = 0 ;
 // create initial foreground threads
@@ -465,9 +464,6 @@ int testmain1(void){   // testmain1
   Running = 1; 
 // create initial foreground threads
   NumCreated += OS_AddThread(&TestDisk,128,1); 
-	//Note: eDisk_Init is initialized	in TestDisk and TestWrite
-//	NumCreated += OS_AddThread(&TestWrite,128,1);
-//	NumCreated += OS_AddThread(&TestRead,128,1);
   NumCreated += OS_AddThread(&IdleTask,128,3); 
   OS_AddSW1Task(&SW1Push1,2);    // PF4, SW1
  
@@ -674,8 +670,7 @@ int testmain3(void){
   OS_AddSW2Task(&SW1Push2,2);    // PF0, SW2
   NumCreated = 0 ;
 // create initial foreground threads
-  NumCreated += OS_AddThread(&TestFile2,128,1); 
-//	NumCreated += OS_AddThread(&TestFile4,128,1); 
+  NumCreated += OS_AddThread(&TestFile3,128,1); ; 
   NumCreated += OS_AddThread(&IdleTask,128,3); 
  
   OS_Launch(10*TIME_1MS); // doesn't return, interrupts enabled in here
