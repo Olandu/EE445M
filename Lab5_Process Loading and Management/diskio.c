@@ -174,14 +174,14 @@ void SSI0_Init(uint32_t CPSDVSR){
 // SSIClk = PIOSC / (CPSDVSR * (1 + SCR)) = 16 MHz/CPSDVSR
 // 40 for   400,000 bps slow mode, used during initialization
 // 2  for 8,000,000 bps fast mode, used during disk I/O
-//#define FCLK_SLOW() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+40; }
-//#define FCLK_FAST() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+2; }
+#define FCLK_SLOW() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+40; }
+#define FCLK_FAST() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+2; }
 
 // SSIClk = PIOSC / (CPSDVSR * (1 + SCR)) = 80 MHz/CPSDVSR
 // 200 for   400,000 bps slow mode, used during initialization
 // 8  for 10,000,000 bps fast mode, used during disk I/O
-#define FCLK_SLOW() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+200; }  
-#define FCLK_FAST() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+8; }
+//#define FCLK_SLOW() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+200; }  
+//#define FCLK_FAST() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+8; }
 
 // de-asserts the CS pin to the card
 #define CS_HIGH()  SDC_CS = SDC_CS_HIGH;
@@ -193,9 +193,9 @@ void SSI0_Init(uint32_t CPSDVSR){
 //#define  SPIx_CR1  SPI1_CR1
 //#define  SPIx_SR    SPI1_SR
 //#define  SPIx_DR    SPI1_DR
-//#define  SPIxENABLE() {SSI0_Init(40);}
+#define  SPIxENABLE() {SSI0_Init(40);}
 
-#define  SPIxENABLE() {SSI0_Init(200);}
+//#define  SPIxENABLE() {SSI0_Init(200);}
 
 
 /*--------------------------------------------------------------------------

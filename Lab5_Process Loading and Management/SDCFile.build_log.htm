@@ -7,20 +7,18 @@ C:\Users\oland\OneDrive - The University of Texas at Austin\Documents\UT\Spring2
 Project File Date:  04/01/2018
 
 <h2>Output:</h2>
-Build target 'SDCFile'
-linking...
-Program Size: Code=14504 RO-data=2084 RW-data=272 ZI-data=10728  
-".\SDCFile.axf" - 0 Error(s), 0 Warning(s).
-Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab5_Process Loading and Management\\SDCFile.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-</pre>
-</body>
-</html>
-
-r referenced
+Rebuild target 'SDCFile'
+assembling startup.s...
+compiling diskio.c...
+compiling ff.c...
+compiling PLL.c...
+compiling SDCFile.c...
+compiling loader.c...
+loader.c(668): warning:  #111-D: statement is unreachable
+    return -1;
+loader.c(148): warning:  #177-D: function "swabo" was declared but never referenced
+  static uint32_t swabo(uint32_t hl) {
+loader.c(250): warning:  #177-D: function "readSegment" was declared but never referenced
   static int readSegment(ELFExec_t *e, int n, Elf32_Phdr *h, size_t nlen) {
 loader.c(274): warning:  #177-D: function "typeStr" was declared but never referenced
   static const char *typeStr(int symt) {
@@ -29,20 +27,74 @@ compiling heap.c...
 compiling UART2.c...
 compiling OS.c...
 compiling ST7735.c...
-ST7735.c(668): warning:  #223-D: function "CS_Init" declared implicitly
-    CS_Init();
-ST7735.c: 1 warning, 0 errors
 assembling OSasm.s...
 compiling Interpreter.c...
 linking...
-Program Size: Code=14476 RO-data=2084 RW-data=272 ZI-data=10728  
-".\SDCFile.axf" - 0 Error(s), 5 Warning(s).
+Program Size: Code=14632 RO-data=2084 RW-data=256 ZI-data=10728  
+".\SDCFile.axf" - 0 Error(s), 4 Warning(s).
 Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab5_Process Loading and Management\\SDCFile.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
-
+Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab5_Process Loading and Management\\SDCFile.axf" 
+Connecting: Mode=JTAG, Speed=1000000Hz
+Erase Done.
+Programming Done.
+Verify OK.
+, uint16_t color);
+ST7735.h(138): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
+ST7735.h(138): error:  #20: identifier "uint16_t" is undefined
+  void ST7735_DrawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
+ST7735.h(150): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
+ST7735.h(150): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
+ST7735.h(150): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
+ST7735.h(150): error:  #20: identifier "uint16_t" is undefined
+  void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
+ST7735.h(158): error:  #20: identifier "uint16_t" is undefined
+  void ST7735_FillScreen(uint16_t color);
+ST7735.h(170): error:  #20: identifier "int16_t" is undefined
+  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+ST7735.h(170): error:  #20: identifier "int16_t" is undefined
+  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+ST7735.h(170): error:  #20: identifier "int16_t" is undefined
+  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+ST7735.h(170): error:  #20: identifier "int16_t" is undefined
+  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+ST7735.h(170): error:  #20: identifier "uint16_t" is undefined
+  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+ST7735.h(179): error:  #20: identifier "uint16_t" is undefined
+  uint16_t ST7735_Color565(uint8_t r, uint8_t g, uint8_t b);
+ST7735.h(179): error:  #20: identifier "uint8_t" is undefined
+  uint16_t ST7735_Color565(uint8_t r, uint8_t g, uint8_t b);
+ST7735.h(179): error:  #20: identifier "uint8_t" is undefined
+  uint16_t ST7735_Color565(uint8_t r, uint8_t g, uint8_t b);
+ST7735.h(179): error:  #20: identifier "uint8_t" is undefined
+  uint16_t ST7735_Color565(uint8_t r, uint8_t g, uint8_t b);
+ST7735.h(186): error:  #20: identifier "uint16_t" is undefined
+  uint16_t ST7735_SwapColor(uint16_t x) ;
+ST7735.h(186): error:  #20: identifier "uint16_t" is undefined
+  uint16_t ST7735_SwapColor(uint16_t x) ;
+ST7735.h(208): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
+ST7735.h(208): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
+ST7735.h(208): error:  #20: identifier "uint16_t" is undefined
+  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
+ST7735.h(208): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
+ST7735.h(208): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
+ST7735.h(225): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawCharS(int16_t x, int16_t y, char c, int16_t textColor, int16_t bgColor, uint8_t size);
+ST7735.h(225): error:  #20: identifier "int16_t" is undefined
+  void ST7735_DrawCharS(int16_t x, int16_t y, char c, int16_t textColor, int16_t bgColor, uint8_t size);
+Interpreter.c: 0 warnings, 30 errors
+".\SDCFile.axf" - 30 Error(s), 4 Warning(s).
 Target not created
 Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab5_Process Loading and Management\\SDCFile.axf" 
 _____^

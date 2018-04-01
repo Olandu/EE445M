@@ -22,20 +22,20 @@ enum commands{PrintFile, Malloc,Free, ELF, Help};
 
 char *usercmds[NUM_CMD] = {"PrintFile", "Malloc","Free", "ELF", "Help"};
 
-void printFile(void){
-	FIL Handle;
+void printFile(TCHAR *path){
+	FIL File_Handle;
 	FRESULT status;
 	char data;
 	UINT bytesRead;
 
-	f_open(&Handle, input, FA_READ);
+	f_open(&File_Handle, path, FA_READ);
 	do{
-		status = f_read(&Handle, &data, 1, &bytesRead);
+		status = f_read(&File_Handle, &data, 1, &bytesRead);
 		if(bytesRead){
 			UART_OutChar(data);
 		}
 	}while(status == FR_OK && bytesRead);
-	f_close(&Handle);
+	f_close(&File_Handle);
 }
 
 
@@ -60,19 +60,15 @@ void parseInput(char *token){
 void cmdLine_Start(void) {
 	OutCRLF();
   UART_OutString(">");
-	UART_InString(&token, MAX_IN);
+	UART_InString(input, MAX_IN);
 	OutCRLF();
-	parseInput(&token);
 	option = getOption();
 	switch(option){
 		case PrintFile:
-			UART_OutString("Enter File Name");
+			UART_OutString(">Enter File Name: ");
+			UART_InString(input, MAX_IN);
 			OutCRLF();
-			UART_OutString(">");
-			UART_InString(&token, MAX_IN);
-			parseInput(&token);
-			OutCRLF();
-			printFile();
+			printFile(input);
 			break;
 		case Malloc:
 			break;
