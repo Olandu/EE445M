@@ -291,9 +291,8 @@ int main(void){	// original main
   ST7735_InitR(INITR_REDTAB);
   ST7735_FillScreen(0);                 // set screen to black
   EnableInterrupts();
-	ST7735_OutString ("Hello");
-SimpleUnformattedTest();              // comment this out if continuing to the advanced file system tests
-FileSystemTest();                     // comment this out if file system works
+	SimpleUnformattedTest();              // comment this out if continuing to the advanced file system tests
+	FileSystemTest();                     // comment this out if file system works
   MountFresult = f_mount(&g_sFatFs, "", 0);
   if(MountFresult){
     ST7735_DrawString(0, 0, "f_mount error", ST7735_Color565(0, 0, 255));

@@ -48,28 +48,74 @@
 // SDO  – (NC) I2C alternate address for ADXL345 accelerometer
 // Backlight + - Light, backlight connected to +3.3 V
 
-#define TFT_CS           (*((volatile uint32_t *)0x40004020))
-#define TFT_CS_LOW       0           // CS controlled by software
-#define TFT_CS_HIGH      0x08
-#define SDC_CS           (*((volatile uint32_t *)0x40007200))
+//#define TFT_CS           (*((volatile uint32_t *)0x40004020))
+//#define TFT_CS_LOW       0           // CS controlled by software
+//#define TFT_CS_HIGH      0x08
+//#define SDC_CS           (*((volatile uint32_t *)0x40007200))
+//#define SDC_CS_LOW       0           // CS controlled by software
+//#define SDC_CS_HIGH      0x80
+//void CS_Init(void){
+//  SYSCTL_RCGCGPIO_R |= 0x08;            // activate clock for Port D
+//  while((SYSCTL_PRGPIO_R&0x08) == 0){}; // allow time for clock to stabilize
+//  GPIO_PORTD_LOCK_R = 0x4C4F434B;       // unlock GPIO Port D
+//  GPIO_PORTD_CR_R = 0xFF;               // allow changes to PD7-0
+//  // only PD7 needs to be unlocked, other bits can't be locked
+//  GPIO_PORTD_DIR_R |= 0x80;             // make PD7 out
+//  GPIO_PORTD_AFSEL_R &= ~0x80;          // disable alt funct on PD7
+//  GPIO_PORTD_DR4R_R |= 0x80;            // 4mA drive on outputs
+//  GPIO_PORTD_PUR_R |= 0x80;             // enable weak pullup on PD7
+//  GPIO_PORTD_DEN_R |= 0x80;             // enable digital I/O on PD7
+//                                        // configure PD7 as GPIO
+//  GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R&0x0FFFFFFF)+0x00000000;
+//  GPIO_PORTD_AMSEL_R &= ~0x80;          // disable analog functionality on PD7
+//  SDC_CS = SDC_CS_HIGH;
+//}
+
+#define SDC_CS_PB0 1
+#define SDC_CS_PD7 0
+#define TFT_CS                  (*((volatile unsigned long *)0x40004020))
+#define TFT_CS_LOW              0           // CS normally controlled by hardware
+#define TFT_CS_HIGH             0x08
+
+#if SDC_CS_PD7
+// CS is PD7  
+// to change CS to another GPIO, change SDC_CS and CS_Init
+#define SDC_CS   (*((volatile unsigned long *)0x40007200)) 
 #define SDC_CS_LOW       0           // CS controlled by software
-#define SDC_CS_HIGH      0x80
-void CS_Init(void){
-  SYSCTL_RCGCGPIO_R |= 0x08;            // activate clock for Port D
-  while((SYSCTL_PRGPIO_R&0x08) == 0){}; // allow time for clock to stabilize
-  GPIO_PORTD_LOCK_R = 0x4C4F434B;       // unlock GPIO Port D
-  GPIO_PORTD_CR_R = 0xFF;               // allow changes to PD7-0
-  // only PD7 needs to be unlocked, other bits can't be locked
-  GPIO_PORTD_DIR_R |= 0x80;             // make PD7 out
-  GPIO_PORTD_AFSEL_R &= ~0x80;          // disable alt funct on PD7
-  GPIO_PORTD_DR4R_R |= 0x80;            // 4mA drive on outputs
-  GPIO_PORTD_PUR_R |= 0x80;             // enable weak pullup on PD7
-  GPIO_PORTD_DEN_R |= 0x80;             // enable digital I/O on PD7
-                                        // configure PD7 as GPIO
-  GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R&0x0FFFFFFF)+0x00000000;
-  GPIO_PORTD_AMSEL_R &= ~0x80;          // disable analog functionality on PD7
+#define SDC_CS_HIGH      0x80  
+void CS_Init(void){ 
+  SYSCTL_RCGCGPIO_R |= 0x08; // activate port D
+  while((SYSCTL_PRGPIO_R&0x08)==0){};
+  GPIO_PORTD_LOCK_R = 0x4C4F434B;   // 2) unlock PortD PD7  
+  GPIO_PORTD_CR_R |= 0xFF;          // allow changes to PD7-0       
+  GPIO_PORTD_PUR_R |= 0x80;         // enable weak pullup on PD7
+  GPIO_PORTD_DIR_R |= 0x80;         // make PD7 output 
+  GPIO_PORTD_DR4R_R |= 0x80;        // 4mA output on outputs
   SDC_CS = SDC_CS_HIGH;
+  GPIO_PORTD_PCTL_R &= ~0xF0000000;
+  GPIO_PORTD_AMSEL_R &= ~0x80; // disable analog functionality on PD7
+  GPIO_PORTD_DEN_R |= 0x80;    // enable digital I/O on PD7
 }
+#endif
+#if SDC_CS_PB0
+// CS is PB0
+// to change CS to another GPIO, change SDC_CS and CS_Init
+#define SDC_CS   (*((volatile unsigned long *)0x40005004)) 
+#define SDC_CS_LOW       0           // CS controlled by software
+#define SDC_CS_HIGH      0x01  
+void CS_Init(void){ 
+  SYSCTL_RCGCGPIO_R |= 0x02; // activate port B
+  while((SYSCTL_PRGPIO_R&0x02)==0){};
+  GPIO_PORTB_PUR_R |= 0x01;         // enable weak pullup on PB0
+  GPIO_PORTB_DIR_R |= 0x01;         // make PB0 output 
+  GPIO_PORTB_DR4R_R |= 0x01;        // 4mA output on outputs
+  SDC_CS = SDC_CS_HIGH;
+  GPIO_PORTB_PCTL_R &= ~0x0000000F;
+  GPIO_PORTB_AMSEL_R &= ~0x01; // disable analog functionality on PB0
+  GPIO_PORTB_DEN_R |= 0x01;    // enable digital I/O on PB0
+}
+#endif
+
 //********SSI0_Init*****************
 // Initialize SSI0 interface to SDC
 // inputs:  clock divider to set clock frequency
@@ -128,8 +174,14 @@ void SSI0_Init(uint32_t CPSDVSR){
 // SSIClk = PIOSC / (CPSDVSR * (1 + SCR)) = 16 MHz/CPSDVSR
 // 40 for   400,000 bps slow mode, used during initialization
 // 2  for 8,000,000 bps fast mode, used during disk I/O
-#define FCLK_SLOW() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+40; }
-#define FCLK_FAST() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+2; }
+//#define FCLK_SLOW() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+40; }
+//#define FCLK_FAST() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+2; }
+
+// SSIClk = PIOSC / (CPSDVSR * (1 + SCR)) = 80 MHz/CPSDVSR
+// 200 for   400,000 bps slow mode, used during initialization
+// 8  for 10,000,000 bps fast mode, used during disk I/O
+#define FCLK_SLOW() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+200; }  
+#define FCLK_FAST() { SSI0_CPSR_R = (SSI0_CPSR_R&~SSI_CPSR_CPSDVSR_M)+8; }
 
 // de-asserts the CS pin to the card
 #define CS_HIGH()  SDC_CS = SDC_CS_HIGH;
@@ -141,7 +193,10 @@ void SSI0_Init(uint32_t CPSDVSR){
 //#define  SPIx_CR1  SPI1_CR1
 //#define  SPIx_SR    SPI1_SR
 //#define  SPIx_DR    SPI1_DR
-#define  SPIxENABLE() {SSI0_Init(40);}
+//#define  SPIxENABLE() {SSI0_Init(40);}
+
+#define  SPIxENABLE() {SSI0_Init(200);}
+
 
 /*--------------------------------------------------------------------------
 
