@@ -200,8 +200,7 @@ void OS_Init(void){
 	int i;
 	OS_DisableInterrupts();
   PLL_Init(Bus80MHz);         // set processor clock to 80 MHz
-	ST7735_InitR(INITR_REDTAB);						// LCD initialization
-	ST7735_FillScreen(0);  
+	Output_Init();
 	UART_Init();	
 	SystemTime_Ms = 0;
 	for(i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)

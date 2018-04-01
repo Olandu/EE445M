@@ -259,12 +259,12 @@ void IdleTask(void){
 unsigned long NumCreated;
 
 // *********************Lab 5 main***************************
-int lab5main (void) {	// Lab 5 main
+int main(void) {	// Lab 5 main
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
   
 //*******attach background tasks***********
-  OS_Fifo_Init (256);
+  OS_Fifo_Init(256);
   NumCreated = 0 ;
 // create initial foreground threads
   NumCreated += OS_AddThread(&Interpreter,128,2);  
@@ -278,13 +278,13 @@ int lab5main (void) {	// Lab 5 main
 	
 	Heap_Init();
  
-  OS_Launch(10*TIME_1MS); // doesn't return, interrupts enabled in here
+  OS_Launch(TIMESLICE); // doesn't return, interrupts enabled in here
   return 0;               // this never executes
 }
 const char inFilename[] = "test.txt";   // 8 characters or fewer
 const char outFilename[] = "out.txt";   // 8 characters or fewer
 
-int main(void){	// original main
+int original_main(void){	// original main
   UINT successfulreads, successfulwrites;
   uint8_t c, x, y;
   PLL_Init(Bus80MHz);    // 80 MHz

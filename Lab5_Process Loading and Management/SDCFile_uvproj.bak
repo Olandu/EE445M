@@ -495,6 +495,11 @@
               <FileType>2</FileType>
               <FilePath>.\OSasm.s</FilePath>
             </File>
+            <File>
+              <FileName>Interpreter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Interpreter.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
