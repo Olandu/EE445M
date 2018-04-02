@@ -13,6 +13,9 @@ compiling diskio.c...
 compiling ff.c...
 compiling PLL.c...
 compiling SDCFile.c...
+SDCFile.c(137): warning:  #550-D: variable "status" was set but never used
+        int status;
+SDCFile.c: 1 warning, 0 errors
 compiling loader.c...
 loader.c(668): warning:  #111-D: statement is unreachable
     return -1;
@@ -30,73 +33,14 @@ compiling ST7735.c...
 assembling OSasm.s...
 compiling Interpreter.c...
 linking...
-Program Size: Code=14632 RO-data=2084 RW-data=256 ZI-data=10728  
-".\SDCFile.axf" - 0 Error(s), 4 Warning(s).
-Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab5_Process Loading and Management\\SDCFile.axf" 
+Program Size: Code=15256 RO-data=2084 RW-data=272 ZI-data=9320  
+".\SDCFile.axf" - 0 Error(s), 5 Warning(s).
+compiling Interpreter.c...
+linking...
+Program Size: Code=14860 RO-data=2084 RW-data=272 ZI-data=9320  
+".\SDCFile.axf" - 0 Error(s), 6 Warning(s).
+anagement\\SDCFile.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
-Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab5_Process Loading and Management\\SDCFile.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-, uint16_t color);
-ST7735.h(138): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
-ST7735.h(138): error:  #20: identifier "uint16_t" is undefined
-  void ST7735_DrawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
-ST7735.h(150): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-ST7735.h(150): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-ST7735.h(150): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-ST7735.h(150): error:  #20: identifier "uint16_t" is undefined
-  void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-ST7735.h(158): error:  #20: identifier "uint16_t" is undefined
-  void ST7735_FillScreen(uint16_t color);
-ST7735.h(170): error:  #20: identifier "int16_t" is undefined
-  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
-ST7735.h(170): error:  #20: identifier "int16_t" is undefined
-  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
-ST7735.h(170): error:  #20: identifier "int16_t" is undefined
-  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
-ST7735.h(170): error:  #20: identifier "int16_t" is undefined
-  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
-ST7735.h(170): error:  #20: identifier "uint16_t" is undefined
-  void ST7735_FillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
-ST7735.h(179): error:  #20: identifier "uint16_t" is undefined
-  uint16_t ST7735_Color565(uint8_t r, uint8_t g, uint8_t b);
-ST7735.h(179): error:  #20: identifier "uint8_t" is undefined
-  uint16_t ST7735_Color565(uint8_t r, uint8_t g, uint8_t b);
-ST7735.h(179): error:  #20: identifier "uint8_t" is undefined
-  uint16_t ST7735_Color565(uint8_t r, uint8_t g, uint8_t b);
-ST7735.h(179): error:  #20: identifier "uint8_t" is undefined
-  uint16_t ST7735_Color565(uint8_t r, uint8_t g, uint8_t b);
-ST7735.h(186): error:  #20: identifier "uint16_t" is undefined
-  uint16_t ST7735_SwapColor(uint16_t x) ;
-ST7735.h(186): error:  #20: identifier "uint16_t" is undefined
-  uint16_t ST7735_SwapColor(uint16_t x) ;
-ST7735.h(208): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
-ST7735.h(208): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
-ST7735.h(208): error:  #20: identifier "uint16_t" is undefined
-  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
-ST7735.h(208): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
-ST7735.h(208): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawBitmap(int16_t x, int16_t y, const uint16_t *image, int16_t w, int16_t h);
-ST7735.h(225): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawCharS(int16_t x, int16_t y, char c, int16_t textColor, int16_t bgColor, uint8_t size);
-ST7735.h(225): error:  #20: identifier "int16_t" is undefined
-  void ST7735_DrawCharS(int16_t x, int16_t y, char c, int16_t textColor, int16_t bgColor, uint8_t size);
-Interpreter.c: 0 warnings, 30 errors
-".\SDCFile.axf" - 30 Error(s), 4 Warning(s).
-Target not created
-Load "C:\\Users\\oland\\OneDrive - The University of Texas at Austin\\Documents\\UT\\Spring2018\\EE445M_Realtime_OS\\EE445M\\Lab5_Process Loading and Management\\SDCFile.axf" 
-_____^
-*** error 56: cannot open file
-Error: Flash Download failed  -  Could not load file 'C:\Users\oland\OneDrive - The University of Texas at Austin\Documents\UT\Spring2018\EE445M_Realtime_OS\EE445M\Lab5_Process Loading and Management\SDCFile.axf'

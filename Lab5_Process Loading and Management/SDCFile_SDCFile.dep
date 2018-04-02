@@ -1,84 +1,85 @@
 Dependencies for Project 'SDCFile', Target 'SDCFile': (DO NOT MODIFY !)
-F (.\startup.s)(0x5ABFC6E0)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
-F (.\diskio.c)(0x5AC101E8)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\diskio.o --omf_browse .\diskio.crf --depend .\diskio.d)
+F (.\startup.s)(0x5AC174BF)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\diskio.c)(0x5AC174BF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\diskio.o --omf_browse .\diskio.crf --depend .\diskio.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
 I (../inc/tm4c123gh6pm.h)(0x5ABFC6E0)
-I (integer.h)(0x5ABFC6E0)
-I (diskio.h)(0x5ABFC6DF)
-F (.\ff.c)(0x5ABFC6E0)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\ff.o --omf_browse .\ff.crf --depend .\ff.d)
-I (ff.h)(0x5ABFC6E0)
-I (integer.h)(0x5ABFC6E0)
-I (ffconf.h)(0x5ABFC6E0)
-I (diskio.h)(0x5ABFC6DF)
-F (.\PLL.c)(0x5ABFC6DF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
+I (integer.h)(0x5AC174BF)
+I (diskio.h)(0x5AC19AAD)
+F (.\ff.c)(0x5AC174BF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\ff.o --omf_browse .\ff.crf --depend .\ff.d)
+I (ff.h)(0x5AC174BF)
+I (integer.h)(0x5AC174BF)
+I (ffconf.h)(0x5AC174BF)
+I (diskio.h)(0x5AC19AAD)
+F (.\PLL.c)(0x5AC174BF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\pll.o --omf_browse .\pll.crf --depend .\pll.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (PLL.h)(0x5ABFC6DF)
+I (PLL.h)(0x5AC174BF)
 I (../inc/tm4c123gh6pm.h)(0x5ABFC6E0)
-F (.\SDCFile.c)(0x5AC10CEE)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\sdcfile.o --omf_browse .\sdcfile.crf --depend .\sdcfile.d)
+F (.\SDCFile.c)(0x5AC24D78)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\sdcfile.o --omf_browse .\sdcfile.crf --depend .\sdcfile.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (diskio.h)(0x5ABFC6DF)
-I (integer.h)(0x5ABFC6E0)
-I (ff.h)(0x5ABFC6E0)
-I (ffconf.h)(0x5ABFC6E0)
-I (PLL.h)(0x5ABFC6DF)
-I (ST7735.h)(0x5AC10295)
+I (diskio.h)(0x5AC19AAD)
+I (integer.h)(0x5AC174BF)
+I (ff.h)(0x5AC174BF)
+I (ffconf.h)(0x5AC174BF)
+I (PLL.h)(0x5AC174BF)
+I (ST7735.h)(0x5AC174BF)
 I (../inc/tm4c123gh6pm.h)(0x5ABFC6E0)
-I (OS.h)(0x5ABFC6DF)
-I (loader.h)(0x5ABFC6E0)
-I (elf.h)(0x5ABFC6DF)
-I (heap.h)(0x5ABFC6E0)
-F (.\loader.c)(0x5ABFC6E0)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\loader.o --omf_browse .\loader.crf --depend .\loader.d)
-I (loader.h)(0x5ABFC6E0)
-I (elf.h)(0x5ABFC6DF)
+I (OS.h)(0x5AC174BF)
+I (loader.h)(0x5AC174BF)
+I (elf.h)(0x5AC174BF)
+I (heap.h)(0x5AC174BF)
+F (.\loader.c)(0x5AC174BF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\loader.o --omf_browse .\loader.crf --depend .\loader.d)
+I (loader.h)(0x5AC174BF)
+I (elf.h)(0x5AC174BF)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (loader_config.h)(0x5ABFC6E0)
+I (loader_config.h)(0x5AC174BF)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
 I (C:\Keil\ARM\ARMCC\include\stdlib.h)(0x51C88A34)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
-I (ff.h)(0x5ABFC6E0)
-I (integer.h)(0x5ABFC6E0)
-I (ffconf.h)(0x5ABFC6E0)
-I (heap.h)(0x5ABFC6E0)
-I (UART2.h)(0x5ABFC6DF)
-I (OS.h)(0x5ABFC6DF)
-F (.\elf.h)(0x5ABFC6DF)()
-F (.\heap.h)(0x5ABFC6E0)()
-F (.\loader.h)(0x5ABFC6E0)()
-F (.\loader_config.h)(0x5ABFC6E0)()
-F (.\heap.c)(0x5ABFC6E0)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\heap.o --omf_browse .\heap.crf --depend .\heap.d)
+I (ff.h)(0x5AC174BF)
+I (integer.h)(0x5AC174BF)
+I (ffconf.h)(0x5AC174BF)
+I (heap.h)(0x5AC174BF)
+I (UART2.h)(0x5AC174BF)
+I (OS.h)(0x5AC174BF)
+F (.\elf.h)(0x5AC174BF)()
+F (.\heap.h)(0x5AC174BF)()
+F (.\loader.h)(0x5AC174BF)()
+F (.\loader_config.h)(0x5AC174BF)()
+F (.\heap.c)(0x5AC174BF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\heap.o --omf_browse .\heap.crf --depend .\heap.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (heap.h)(0x5ABFC6E0)
-F (.\UART2.c)(0x5ABFC6DF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\uart2.o --omf_browse .\uart2.crf --depend .\uart2.d)
+I (heap.h)(0x5AC174BF)
+F (.\UART2.c)(0x5AC174BF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\uart2.o --omf_browse .\uart2.crf --depend .\uart2.d)
 I (..\inc/tm4c123gh6pm.h)(0x5ABFC6E0)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (UART2.h)(0x5ABFC6DF)
+I (UART2.h)(0x5AC174BF)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
-I (OS.h)(0x5ABFC6DF)
-F (.\UART2.h)(0x5ABFC6DF)()
-F (.\OS.h)(0x5ABFC6DF)()
-F (.\OS.c)(0x5AC10B74)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\os.o --omf_browse .\os.crf --depend .\os.d)
+I (OS.h)(0x5AC174BF)
+F (.\UART2.h)(0x5AC174BF)()
+F (.\OS.h)(0x5AC174BF)()
+F (.\OS.c)(0x5AC26B00)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\os.o --omf_browse .\os.crf --depend .\os.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (OS.h)(0x5ABFC6DF)
-I (PLL.h)(0x5ABFC6DF)
+I (OS.h)(0x5AC174BF)
+I (PLL.h)(0x5AC174BF)
 I (../inc/tm4c123gh6pm.h)(0x5ABFC6E0)
-I (ST7735.h)(0x5AC10295)
-I (UART2.h)(0x5ABFC6DF)
-F (.\ST7735.c)(0x5AC10295)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\st7735.o --omf_browse .\st7735.crf --depend .\st7735.d)
+I (ST7735.h)(0x5AC174BF)
+I (UART2.h)(0x5AC174BF)
+I (heap.h)(0x5AC174BF)
+F (.\ST7735.c)(0x5AC174BF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\st7735.o --omf_browse .\st7735.crf --depend .\st7735.d)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (ST7735.h)(0x5AC10295)
-I (OS.h)(0x5ABFC6DF)
-F (.\ST7735.h)(0x5AC10295)()
-F (.\OSasm.s)(0x5ABFC6E0)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\osasm.lst --xref -o .\osasm.o --depend .\osasm.d)
-F (.\Interpreter.c)(0x5AC109E9)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\interpreter.o --omf_browse .\interpreter.crf --depend .\interpreter.d)
+I (ST7735.h)(0x5AC174BF)
+I (OS.h)(0x5AC174BF)
+F (.\ST7735.h)(0x5AC174BF)()
+F (.\OSasm.s)(0x5AC174BF)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\osasm.lst --xref -o .\osasm.o --depend .\osasm.d)
+F (.\Interpreter.c)(0x5AC17510)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\interpreter.o --omf_browse .\interpreter.crf --depend .\interpreter.d)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
-I (ST7735.h)(0x5AC10295)
+I (ST7735.h)(0x5AC174BF)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
-I (os.h)(0x5ABFC6DF)
-I (UART2.h)(0x5ABFC6DF)
-I (ff.h)(0x5ABFC6E0)
-I (integer.h)(0x5ABFC6E0)
-I (ffconf.h)(0x5ABFC6E0)
-I (loader.h)(0x5ABFC6E0)
-I (heap.h)(0x5ABFC6E0)
+I (os.h)(0x5AC174BF)
+I (UART2.h)(0x5AC174BF)
+I (ff.h)(0x5AC174BF)
+I (integer.h)(0x5AC174BF)
+I (ffconf.h)(0x5AC174BF)
+I (loader.h)(0x5AC174BF)
+I (heap.h)(0x5AC174BF)

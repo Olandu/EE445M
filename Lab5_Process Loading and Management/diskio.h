@@ -42,6 +42,15 @@ typedef enum {
 DSTATUS disk_initialize(BYTE drv);
 
 /*-----------------------------------------------------------------------*/
+/* Device timer function                                                 */
+/*-----------------------------------------------------------------------*/
+/* This function must be called from timer interrupt routine in period
+/  of 1 ms to generate card control timing.
+*/
+
+void disk_timerproc (void);
+
+/*-----------------------------------------------------------------------*/
 /* Get disk status                                                       */
 /*-----------------------------------------------------------------------*/
 // Inputs:  Physical drive number, which must be 0

@@ -15,6 +15,7 @@
 #include "../inc/tm4c123gh6pm.h"
 #include "ST7735.h"
 #include "UART2.h"
+#include "heap.h"
 
 
 // edit these depending on your clock        
@@ -45,9 +46,14 @@
 #define STACKSIZE   128       // number of 32-bit words in stack
 #define PRILEVELS		8					// Maximum number of priority levels we can have is 7
 
+// Process Management
+#define NUMPROCESSES 10
+
 #define Lab2 0
 #define Lab3 1
 #define PriScheduler 0
+#define Process 1
+
 
 // Lab 3 Profile Thread
 #define DumpSize 100
@@ -77,12 +83,18 @@ void Timer0A_Init(void);
 unsigned long SystemTime_Ms;
 unsigned long NumThreads = 0;
 
+//Process Management
+unsigned long NumProcess = 0;
+int validProcess = 0;
+
+
 
 struct tcb{
   int32_t *sp;                // pointer to stack (valid for threads not running
   struct tcb *next;           // linked-list pointer
 	struct tcb *prev;
 	int Id;
+	int processId;
 	int sleep;
 	int status;
 	uint8_t priority;						// Range: 0 to 5 because 6 adn 7 being used for Systick and PendSV respectively
@@ -99,6 +111,17 @@ tcbType *NextRunPt;
 tcbType *LinkPt;
 int32_t Stacks[NUMTHREADS][STACKSIZE];
 
+
+struct pcb{
+	int id;
+	int32_t *code;
+	int32_t *data;
+	int numThreads;
+};
+typedef struct pcb pcbType;
+pcbType pcbs[NUMPROCESSES];
+pcbType *newProcess;
+
 // Priority Scheduling Data Structures
 tcbType *PriPt[PRILEVELS] = {0};						// Each correspongding slot will lead to the linked list associated with the priority (index)
 tcbType *PriLastPt[PRILEVELS] = {0};
@@ -107,7 +130,7 @@ int32_t Pri_Available[PRILEVELS] = {0};			// Modified when any of the threads ar
 void AddPriThread (tcbType *thread);
 
 
-void SetInitialStack(int i){
+void SetInitialStack(int i, int32_t *dataPt){
   tcbs[i].sp = &Stacks[i][STACKSIZE-16]; // thread stack pointer
   Stacks[i][STACKSIZE-1] = 0x01000000;   // thumb bit
   Stacks[i][STACKSIZE-3] = 0x14141414;   // R14
@@ -118,7 +141,7 @@ void SetInitialStack(int i){
   Stacks[i][STACKSIZE-8] = 0x00000000;   // R0
   Stacks[i][STACKSIZE-9] = 0x11111111;   // R11
   Stacks[i][STACKSIZE-10] = 0x10101010;  // R10
-  Stacks[i][STACKSIZE-11] = 0x09090909;  // R9
+  Stacks[i][STACKSIZE-11] = (int32_t)dataPt;  // R9
   Stacks[i][STACKSIZE-12] = 0x08080808;  // R8
   Stacks[i][STACKSIZE-13] = 0x07070707;  // R7
   Stacks[i][STACKSIZE-14] = 0x06060606;  // R6
@@ -185,6 +208,14 @@ void UnBlock(Sema4Type *semaPt){
 		blockedTCB->blocked = 0; //wake up threads
 }
 
+pcbType* getProcess(int processID){
+	for(int i = 0; i < NUMPROCESSES; i++){
+			if(pcbs[i].id == processID)
+				return(&pcbs[i]);
+		}
+	return 0;
+}
+
 // ******** OS_Init ************
 // initialize operating system, disable interrupts until OS_Launch
 // initialize OS controlled I/O: serial, ADC, systick, LaunchPad I/O and timers 
@@ -205,6 +236,7 @@ void OS_Init(void){
 	SystemTime_Ms = 0;
 	for(i = 0; i < NUMTHREADS; i++){ // initialize the state of the tcb (-1 means tcbs are free)
 		tcbs[i].status = -1;
+		pcbs[i].id = -1;  // free pcb
 	}
 	for(i = 0; i < PRILEVELS; i++){
 		PriPt[i] = 0;
@@ -362,7 +394,24 @@ int OS_AddThread(void(*task)(void),unsigned long stackSize, unsigned long priori
 		last->next = &tcbs[freetcb];
 		
 	}
-	SetInitialStack(freetcb);
+	#if Process
+		if(validProcess){
+			validProcess = 0;
+			tcbs[freetcb].processId = newProcess->id;
+		}
+		
+		// assumes that the first process has been added
+		// threads can only be added to current running process
+		if(RunPt->processId > -1){
+			pcbType *currProcess = getProcess(RunPt->processId);
+			tcbs[freetcb].processId = RunPt->processId;
+			SetInitialStack(freetcb,currProcess->data);
+			currProcess->numThreads ++;
+		}
+	#else
+		SetInitialStack(freetcb, (int32_t *)0x09090909);
+	#endif
+	
 	Stacks[freetcb][STACKSIZE-2] = (int32_t)(task); // PC
 	//set inittial state of tcb fields
 	tcbs[freetcb].sleep = 0;
@@ -995,6 +1044,17 @@ void OS_Sleep(unsigned long sleepTime){
 void OS_Kill(void){
 #if !PriScheduler
 	OS_DisableInterrupts();
+	
+	#if Process
+	pcbType *currentProcess = getProcess(RunPt->processId);
+	currentProcess->numThreads --;
+	if(currentProcess->numThreads == 0){
+		currentProcess->id = -1;
+		Heap_Free(currentProcess->code);
+		Heap_Free(currentProcess->data);
+	}
+	#endif
+	
 	UnchainTCB();  //remove current running thread from the circular linked list
 	tcbs[RunPt->Id].status = -1; // remember which tcb is free
 	OS_Suspend(); //switch to the next task to run
@@ -1284,8 +1344,30 @@ void Timer0A_Handler(void){
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
 }
 
+
 int OS_AddProcess(void(*entry)(void), void *text, void *data,
- unsigned long stackSize, unsigned long priority){
-	 
-	 return 0;
- }
+ unsigned long stackSize, unsigned long priority){long sr;
+	int freepcb = 0; 
+	if(NumProcess >= NUMPROCESSES){
+		return 0; //process cannot be added
+	}
+	sr = StartCritical(); 
+	for(freepcb = 0; freepcb < NUMPROCESSES; freepcb++){
+		if(pcbs[freepcb].id == -1)
+			break;
+	}
+	newProcess = &pcbs[freepcb];
+	newProcess->data = data;
+	newProcess->code = text;
+	newProcess->id = freepcb;
+	newProcess->numThreads = 1;
+	NumProcess ++;
+	
+	//Add a thread to the new process
+	validProcess = 1;
+	OS_AddThread(entry,stackSize,priority);
+	
+	
+	EndCritical(sr);
+	return 1; // sucessful
+}
