@@ -18,9 +18,9 @@
 char input[MAX_IN],token;
 int option;
 
-enum commands{PrintFile, Malloc,Free, ELF, Help};
+enum commands{PrintFile, Malloc,Free, LoadELF, Menu};
 
-char *usercmds[NUM_CMD] = {"PrintFile", "Malloc","Free", "ELF", "Help"};
+char *usercmds[NUM_CMD] = {"PrintFile", "Malloc","Free", "LoadELF", "Menu"};
 
 void printFile(TCHAR *path){
 	FIL File_Handle;
@@ -48,12 +48,14 @@ int getOption(void){
 	return option;
 }
 
-void parseInput(char *token){
-	int i = 0;
-	while(*token != 0){
-		input[i] = *token;
-		token ++;
-		i++;
+static const ELFSymbol_t symtab[] = {
+	{ "ST7735_Message", ST7735_Message }
+};
+
+void LoadProgram() {
+	ELFEnv_t env = { symtab, 1 };
+	if (!exec_elf("Proc.axf", &env)) {
+		UART_OutString("Load Successful");
 	}
 }
 
@@ -74,9 +76,13 @@ void cmdLine_Start(void) {
 			break;
 		case Free:
 			break;
-		case ELF:
+		case LoadELF:
+			//UART_OutString(">Enter File Path: ");
+			//UART_InString(input, MAX_IN);
+			//LoadProgram(input);
+			LoadProgram();
 			break;
-		case Help:
+		case Menu:
 			break;
 		default:
 			UART_OutString("command not found");

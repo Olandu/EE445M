@@ -75,6 +75,7 @@
 #define PD2  (*((volatile unsigned long *)0x40007010))
 #define PD3  (*((volatile unsigned long *)0x40007020))
 
+void WaitForInterrupt(void);
 int Running;
 //******** Interpreter **************
 // your intepreter from Lab 4 
@@ -109,28 +110,12 @@ FRESULT MountFresult, Fresult;
 // outputs: none
 unsigned long Idlecount=0;
 void IdleTask(void){ 
-  while(1) { 
-    Idlecount++;        // debugging 
-  }
+	for(;;) {
+		WaitForInterrupt();
+	}
 }
 
 unsigned long NumCreated;
-
-//************SW1Push*************
-// Called when SW1 Button pushed
-// background threads execute once and return
-void SW1Push(void){
-  if(Running==0){
-    Running = 1;  // prevents you from starting two robot threads
-   // NumCreated += OS_AddThread(&Robot,128,1);  // start a 2 second run
-  }
-}
-//************SW2Push*************
-// Called when SW2 Button pushed
-// background threads execute once and return
-void SW2Push(void){
-
-}
 
 // *********************Lab 5 main***************************
 int main(void) {	// Lab 5 main
@@ -153,7 +138,6 @@ int main(void) {	// Lab 5 main
 		ST7735_DrawString(0, 0, "f_mount error", ST7735_Color565(0,0,255));
     while(1) {}
   }
-	
 	
   OS_Launch(TIMESLICE); // doesn't return, interrupts enabled in here
   return 0;               // this never executes
