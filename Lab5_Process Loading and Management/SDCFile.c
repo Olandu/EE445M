@@ -137,6 +137,7 @@ int main(void) {	// Lab 5 main
 	int status;
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
+//	Timer5_Init();
   Running = 1;
 //*******attach background tasks***********
   OS_Fifo_Init(256);

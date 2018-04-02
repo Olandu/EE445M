@@ -54,86 +54,122 @@ ARM Macro Assembler    Page 1
    34 00000000                 EXPORT           OS_EnableInterrupts
    35 00000000                 EXPORT           StartOS
    36 00000000                 EXPORT           PendSV_Handler
-   37 00000000         
+   37 00000000                 EXPORT           SVC_Handler
    38 00000000         
-   39 00000000         
-   40 00000000         OS_DisableInterrupts
-   41 00000000 B672            CPSID            I
-   42 00000002 4770            BX               LR
-   43 00000004         
-   44 00000004         
-   45 00000004         OS_EnableInterrupts
+   39 00000000                 EXTERN           OS_Id
+   40 00000000                 EXTERN           OS_Kill
+   41 00000000                 EXTERN           OS_Sleep
+   42 00000000                 EXTERN           OS_Time
+   43 00000000                 EXTERN           OS_AddThread
+   44 00000000         
+   45 00000000         
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   46 00000004 B662            CPSIE            I
-   47 00000006 4770            BX               LR
-   48 00000008         
-   49 00000008         
-   50 00000008         PendSV_Handler
-   51 00000008 B672            CPSID            I           ; Prevent interrupt
+   46 00000000         OS_DisableInterrupts
+   47 00000000 B672            CPSID            I
+   48 00000002 4770            BX               LR
+   49 00000004         
+   50 00000004         
+   51 00000004         OS_EnableInterrupts
+   52 00000004 B662            CPSIE            I
+   53 00000006 4770            BX               LR
+   54 00000008         
+   55 00000008         
+   56 00000008         PendSV_Handler
+   57 00000008 B672            CPSID            I           ; Prevent interrupt
                                                             ion during context 
                                                             switch
-   52 0000000A E92D 0FF0       PUSH             {R4-R11}    ; Save remaining re
+   58 0000000A E92D 0FF0       PUSH             {R4-R11}    ; Save remaining re
                                                             gs r4-11 
-   53 0000000E 480E            LDR              R0, =RunPt  ; R0=pointer to Run
+   59 0000000E 481F            LDR              R0, =RunPt  ; R0=pointer to Run
                                                             Pt, old thread
-   54 00000010 6801            LDR              R1, [R0]    ; RunPt->stackPoint
+   60 00000010 6801            LDR              R1, [R0]    ; RunPt->stackPoint
                                                             er = SP;
-   55 00000012 F8C1 D000       STR              SP, [R1]    ; save SP of proces
+   61 00000012 F8C1 D000       STR              SP, [R1]    ; save SP of proces
                                                             s being switched ou
                                                             t
-   56 00000016         
-   57 00000016 490D            LDR              R1, =NextRunPt
-   58 00000018 6809            LDR              R1,[R1]     ; R1 = NextRunPt
-   59 0000001A         ;LDR     R1, [R1,#4]        ; 6) R1 = RunPt->next
-   60 0000001A 6001            STR              R1, [R0]    ;    RunPt = R1
-   61 0000001C         
-   62 0000001C F8D1 D000       LDR              SP, [R1]    ; 7) new thread SP;
+   62 00000016         
+   63 00000016 491E            LDR              R1, =NextRunPt
+   64 00000018 6809            LDR              R1,[R1]     ; R1 = NextRunPt
+   65 0000001A         ;LDR     R1, [R1,#4]        ; 6) R1 = RunPt->next
+   66 0000001A 6001            STR              R1, [R0]    ;    RunPt = R1
+   67 0000001C         
+   68 0000001C F8D1 D000       LDR              SP, [R1]    ; 7) new thread SP;
                                                              SP = RunPt->sp;
-   63 00000020 E8BD 0FF0       POP              {R4-R11}    ; restore regs r4-1
+   69 00000020 E8BD 0FF0       POP              {R4-R11}    ; restore regs r4-1
                                                             1 
-   64 00000024 B662            CPSIE            I           ; tasks run with I=
+   70 00000024 B662            CPSIE            I           ; tasks run with I=
                                                             0
-   65 00000026 4770            BX               LR          ; Exception return 
+   71 00000026 4770            BX               LR          ; Exception return 
                                                             will restore remain
                                                             ing context 
-   66 00000028         
-   67 00000028         StartOS
-   68 00000028 4807            LDR              R0, =RunPt  ; currently running
+   72 00000028         
+   73 00000028         StartOS
+   74 00000028 4818            LDR              R0, =RunPt  ; currently running
                                                              thread
-   69 0000002A 6802            LDR              R2, [R0]    ; R2 = value of Run
+   75 0000002A 6802            LDR              R2, [R0]    ; R2 = value of Run
                                                             Pt
-   70 0000002C F8D2 D000       LDR              SP, [R2]    ; new thread SP; SP
+   76 0000002C F8D2 D000       LDR              SP, [R2]    ; new thread SP; SP
                                                              = RunPt->stackPoin
                                                             ter;
-   71 00000030 E8BD 0FF0       POP              {R4-R11}    ; restore regs r4-1
+   77 00000030 E8BD 0FF0       POP              {R4-R11}    ; restore regs r4-1
                                                             1
-   72 00000034 BC0F            POP              {R0-R3}     ; restore regs r0-3
+   78 00000034 BC0F            POP              {R0-R3}     ; restore regs r0-3
                                                             
-   73 00000036 F85D CB04       POP              {R12}
-   74 0000003A B001            ADD              SP,SP, #4
-   75 0000003C F85D EB04       POP              {LR}        ; discard LR from i
+   79 00000036 F85D CB04       POP              {R12}
+   80 0000003A B001            ADD              SP,SP, #4
+   81 0000003C F85D EB04       POP              {LR}        ; discard LR from i
                                                             nitial stack
-   76 00000040 B001            ADD              SP, SP, #4  ; discard PSR
-   77 00000042 B662            CPSIE            I           ; Enable interrupts
+   82 00000040 B001            ADD              SP, SP, #4  ; discard PSR
+   83 00000042 B662            CPSIE            I           ; Enable interrupts
                                                              at processor level
                                                             
-   78 00000044 4770            BX               LR          ; start first threa
-                                                            d
-   79 00000046         
-   80 00000046         
-   81 00000046 00 00           ALIGN
-   82 00000048                 END
 
 
 
 ARM Macro Assembler    Page 3 
 
 
+   84 00000044 4770            BX               LR          ; start first threa
+                                                            d
+   85 00000046         
+   86 00000046         
+   87 00000046         SVC_Handler
+   88 00000046 F8DD C018       LDR              R12,[SP,#24] ; Return address
+   89 0000004A F83C CC02       LDRH             R12,[R12,#-2] ; SVC instruction
+                                                             is 2 bytes
+   90 0000004E F42C 4C7F       BIC              R12,#0xFF00 ; Extract ID in R12
+                                                            
+   91 00000052 E89D 000F       LDM              SP,{R0-R3}  ; Get any parameter
+                                                            s
+   92 00000056         
+   93 00000056 B500            PUSH             {LR}
+   94 00000058 F8DF E038       LDR              LR, = Return
+   95 0000005C F1BC 0F00       CMP              R12, #0
+   96 00000060 F43F AFFE       BEQ              OS_Id
+   97 00000064 F1BC 0F01       CMP              R12, #1
+   98 00000068 F43F AFFE       BEQ              OS_Kill
+   99 0000006C F1BC 0F02       CMP              R12, #2
+  100 00000070 F43F AFFE       BEQ              OS_Sleep
+  101 00000074 F1BC 0F03       CMP              R12, #3
+  102 00000078 F43F AFFE       BEQ              OS_Time
+  103 0000007C F1BC 0F04       CMP              R12, #4
+  104 00000080 F43F AFFE       BEQ              OS_AddThread
+  105 00000084         
+  106 00000084 F85D EB04 
+                       Return  POP              {LR}
+  107 00000088 9000            STR              R0,[SP]     ; Store return valu
+                                                            e
+  108 0000008A 4770            BX               LR          ; Return from excep
+                                                            tion
+  109 0000008C         
+  110 0000008C                 ALIGN
+  111 0000008C                 END
+              00000000 
               00000000 
               00000000 
 Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=.\osasm.
@@ -157,7 +193,7 @@ OS_DisableInterrupts 00000000
 
 Symbol: OS_DisableInterrupts
    Definitions
-      At line 40 in file OSasm.s
+      At line 46 in file OSasm.s
    Uses
       At line 33 in file OSasm.s
 Comment: OS_DisableInterrupts used once
@@ -165,7 +201,7 @@ OS_EnableInterrupts 00000004
 
 Symbol: OS_EnableInterrupts
    Definitions
-      At line 45 in file OSasm.s
+      At line 51 in file OSasm.s
    Uses
       At line 34 in file OSasm.s
 Comment: OS_EnableInterrupts used once
@@ -173,19 +209,35 @@ PendSV_Handler 00000008
 
 Symbol: PendSV_Handler
    Definitions
-      At line 50 in file OSasm.s
+      At line 56 in file OSasm.s
    Uses
       At line 36 in file OSasm.s
 Comment: PendSV_Handler used once
+Return 00000084
+
+Symbol: Return
+   Definitions
+      At line 106 in file OSasm.s
+   Uses
+      At line 94 in file OSasm.s
+Comment: Return used once
+SVC_Handler 00000046
+
+Symbol: SVC_Handler
+   Definitions
+      At line 87 in file OSasm.s
+   Uses
+      At line 37 in file OSasm.s
+Comment: SVC_Handler used once
 StartOS 00000028
 
 Symbol: StartOS
    Definitions
-      At line 67 in file OSasm.s
+      At line 73 in file OSasm.s
    Uses
       At line 35 in file OSasm.s
 Comment: StartOS used once
-5 symbols
+7 symbols
 
 
 
@@ -198,16 +250,56 @@ Symbol: NextRunPt
    Definitions
       At line 32 in file OSasm.s
    Uses
-      At line 57 in file OSasm.s
+      At line 63 in file OSasm.s
 Comment: NextRunPt used once
+OS_AddThread 00000000
+
+Symbol: OS_AddThread
+   Definitions
+      At line 43 in file OSasm.s
+   Uses
+      At line 104 in file OSasm.s
+Comment: OS_AddThread used once
+OS_Id 00000000
+
+Symbol: OS_Id
+   Definitions
+      At line 39 in file OSasm.s
+   Uses
+      At line 96 in file OSasm.s
+Comment: OS_Id used once
+OS_Kill 00000000
+
+Symbol: OS_Kill
+   Definitions
+      At line 40 in file OSasm.s
+   Uses
+      At line 98 in file OSasm.s
+Comment: OS_Kill used once
+OS_Sleep 00000000
+
+Symbol: OS_Sleep
+   Definitions
+      At line 41 in file OSasm.s
+   Uses
+      At line 100 in file OSasm.s
+Comment: OS_Sleep used once
+OS_Time 00000000
+
+Symbol: OS_Time
+   Definitions
+      At line 42 in file OSasm.s
+   Uses
+      At line 102 in file OSasm.s
+Comment: OS_Time used once
 RunPt 00000000
 
 Symbol: RunPt
    Definitions
       At line 31 in file OSasm.s
    Uses
-      At line 53 in file OSasm.s
-      At line 68 in file OSasm.s
+      At line 59 in file OSasm.s
+      At line 74 in file OSasm.s
 
-2 symbols
-339 symbols in table
+7 symbols
+346 symbols in table

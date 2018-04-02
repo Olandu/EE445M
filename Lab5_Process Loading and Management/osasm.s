@@ -34,7 +34,13 @@
         EXPORT  OS_EnableInterrupts
         EXPORT  StartOS
 		EXPORT  PendSV_Handler
+		EXPORT  SVC_Handler
 
+		EXTERN OS_Id
+		EXTERN OS_Kill
+		EXTERN OS_Sleep
+		EXTERN OS_Time
+		EXTERN OS_AddThread
 
 
 OS_DisableInterrupts
@@ -77,6 +83,29 @@ StartOS
     CPSIE   I                  ; Enable interrupts at processor level
     BX      LR                 ; start first thread
 
+
+SVC_Handler
+	LDR R12,[SP,#24] 			; Return address
+	LDRH R12,[R12,#-2] 			; SVC instruction is 2 bytes
+	BIC R12,#0xFF00 			; Extract ID in R12
+	LDM SP,{R0-R3} 				; Get any parameters
+	
+	PUSH {LR}
+	LDR LR, = Return
+	CMP R12, #0
+	BEQ OS_Id
+	CMP R12, #1
+	BEQ OS_Kill
+	CMP R12, #2
+	BEQ OS_Sleep
+	CMP R12, #3
+	BEQ OS_Time
+	CMP R12, #4
+	BEQ OS_AddThread
+	
+Return 	POP {LR}
+	STR R0,[SP] 				; Store return value
+	BX LR 						; Return from exception
 
     ALIGN
     END
