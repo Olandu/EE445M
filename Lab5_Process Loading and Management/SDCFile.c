@@ -76,8 +76,7 @@
 #define PD2  (*((volatile unsigned long *)0x40007010))
 #define PD3  (*((volatile unsigned long *)0x40007020))
 
-void WaitForInterrupt(void);
-int Running;
+
 //******** Interpreter **************
 // your intepreter from Lab 4 
 // foreground thread, accepts input from UART port, outputs to UART port
@@ -112,7 +111,7 @@ FRESULT MountFresult, Fresult;
 unsigned long Idlecount=0;
 void IdleTask(void){ 
 	for(;;) {
-		WaitForInterrupt();
+		Idlecount ++;
 	}
 }
 
@@ -120,19 +119,16 @@ unsigned long NumCreated;
 
 // *********************Lab 5 main***************************
 int main(void) {	// Lab 5 main
-	int status;
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
-//	Timer5_Init();
-  Running = 1;
-//*******attach background tasks***********
-  OS_Fifo_Init(256);
+	OS_Fifo_Init(256);
   NumCreated = 0 ;
+	
 // create initial foreground threads
   NumCreated += OS_AddThread(&Interpreter,128,2);  
   NumCreated += OS_AddThread(&IdleTask,128,7); 
 	
-	status = Heap_Init();
+	Heap_Init();
  
 	MountFresult = f_mount(&g_sFatFs, "", 0);
   if(MountFresult){
@@ -153,7 +149,7 @@ FRESULT Fresult;
 const char inFilename[] = "test.txt";   // 8 characters or fewer
 const char outFilename[] = "out.txt";   // 8 characters or fewer
 
-int testmain1 (void){ //test main 1
+int testmain (void){ //test main
 	UINT successfulreads, successfulwrites;
   uint8_t c, x, y;
   PLL_Init(Bus80MHz);    // 80 MHz
@@ -245,34 +241,4 @@ int testmain1 (void){ //test main 1
 		ST7735_DrawString(0, 0, "Couldn't open File", ST7735_Color565(0, 255, 0));
 	}
 	while(1){};
-}
-
-//static const ELFSymbol_t symtab[] = {
-//	{ "ST7735_Message", ST7735_Message }
-//};
-
-//void LoadProgram() {
-//	ELFEnv_t env = { symtab, 1 };
-//	if (!exec_elf("Proc.axf", &env)) {
-//		UART_OutString("Load Successful");
-//	}
-//}
-
-int testmain2 (void){ // test main 2
-	PLL_Init(Bus80MHz);    // 80 MHz
-  ST7735_InitR(INITR_REDTAB);
-  ST7735_FillScreen(0);                 // set screen to black
-  EnableInterrupts();
-	
-	MountFresult = f_mount(&g_sFatFs, "", 0);
-  if(MountFresult){
-    ST7735_DrawString(0, 0, "f_mount error", ST7735_Color565(0, 0, 255));
-    while(1){};
-  }
-	
-	Fresult = f_open(&Handle, "Proc.axf", FA_WRITE|FA_OPEN_ALWAYS);
-	
-//	LoadProgram();
-	while(1){
-	}
 }

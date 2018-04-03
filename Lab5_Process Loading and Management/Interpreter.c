@@ -15,12 +15,7 @@
 
 #define MAX_IN 20
 #define NUM_CMD 5
-char input[MAX_IN],token;
-int option;
-
-enum commands{PrintFile, Malloc,Free, LoadELF, Menu};
-
-char *usercmds[NUM_CMD] = {"PrintFile", "Malloc","Free", "LoadELF", "Menu"};
+char input[MAX_IN];
 
 void printFile(TCHAR *path){
 	FIL File_Handle;
@@ -38,16 +33,6 @@ void printFile(TCHAR *path){
 	f_close(&File_Handle);
 }
 
-
-int getOption(void){
-	int option = -1, idx;
-	 for(idx = 0; idx < NUM_CMD; idx++){
-		 if(strcmp(input,usercmds[idx]) == 0)
-			 return idx;
-	 }
-	return option;
-}
-
 static const ELFSymbol_t symtab[] = {
 	{ "ST7735_Message", ST7735_Message }
 };
@@ -59,35 +44,42 @@ void LoadProgram() {
 	}
 }
 
-void cmdLine_Start(void) {
+void cmdLine_Start(void){
+	int task;
 	OutCRLF();
-  UART_OutString(">");
-	UART_InString(input, MAX_IN);
-	OutCRLF();
-	option = getOption();
-	switch(option){
-		case PrintFile:
+	UART_OutString ("Choose a task:"); OutCRLF();
+	UART_OutString ("1.) Print a File"); OutCRLF();
+	UART_OutString ("2.) Malloc");  OutCRLF();
+	UART_OutString ("3.) Free"); OutCRLF(); 
+	UART_OutString ("4.) Load ELF"); OutCRLF(); OutCRLF();
+	UART_OutString ("Option #: ");
+	task = UART_InUDec();
+	while ((task < 1) || (task > 4)){
+			OutCRLF(); OutCRLF();
+			UART_OutString ("Invalid Option. Try again!"); OutCRLF(); 
+			UART_OutString ("Option #: ");
+			task = UART_InUDec();
+	}
+	OutCRLF(); OutCRLF();
+	switch (task){
+		case 1: 
 			UART_OutString(">Enter File Name: ");
 			UART_InString(input, MAX_IN);
 			OutCRLF();
 			printFile(input);
 			break;
-		case Malloc:
+		case 2: 
 			break;
-		case Free:
+		case 3: 
 			break;
-		case LoadELF:
-			//UART_OutString(">Enter File Path: ");
-			//UART_InString(input, MAX_IN);
-			//LoadProgram(input);
+		case 4: 
 			LoadProgram();
-			break;
-		case Menu:
-			break;
-		default:
-			UART_OutString("command not found");
+			break;					
 	}
+	OutCRLF();
 }
+
+
 
 void Interpreter(void) {
 		while(1){

@@ -436,26 +436,6 @@
               <FilePath>.\loader.c</FilePath>
             </File>
             <File>
-              <FileName>elf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\elf.h</FilePath>
-            </File>
-            <File>
-              <FileName>heap.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\heap.h</FilePath>
-            </File>
-            <File>
-              <FileName>loader.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\loader.h</FilePath>
-            </File>
-            <File>
-              <FileName>loader_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\loader_config.h</FilePath>
-            </File>
-            <File>
               <FileName>heap.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\heap.c</FilePath>
@@ -466,16 +446,6 @@
               <FilePath>.\UART2.c</FilePath>
             </File>
             <File>
-              <FileName>UART2.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\UART2.h</FilePath>
-            </File>
-            <File>
-              <FileName>OS.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\OS.h</FilePath>
-            </File>
-            <File>
               <FileName>OS.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\OS.c</FilePath>
@@ -484,11 +454,6 @@
               <FileName>ST7735.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\ST7735.c</FilePath>
-            </File>
-            <File>
-              <FileName>ST7735.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\ST7735.h</FilePath>
             </File>
             <File>
               <FileName>OSasm.s</FileName>

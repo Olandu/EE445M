@@ -14,7 +14,7 @@ F (.\PLL.c)(0x5AC174BF)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_secti
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
 I (PLL.h)(0x5AC174BF)
 I (../inc/tm4c123gh6pm.h)(0x5ABFC6E0)
-F (.\SDCFile.c)(0x5AC3B418)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\sdcfile.o --omf_browse .\sdcfile.crf --depend .\sdcfile.d)
+F (.\SDCFile.c)(0x5AC403B5)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\sdcfile.o --omf_browse .\sdcfile.crf --depend .\sdcfile.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
 I (diskio.h)(0x5AC19AAD)
 I (integer.h)(0x5AC174BF)
@@ -64,8 +64,8 @@ I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C88A34)
 I (ST7735.h)(0x5AC174BF)
 I (OS.h)(0x5AC174BF)
-F (.\OSasm.s)(0x5AC28DA7)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\osasm.lst --xref -o .\osasm.o --depend .\osasm.d)
-F (.\Interpreter.c)(0x5AC3AE68)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\interpreter.o --omf_browse .\interpreter.crf --depend .\interpreter.d)
+F (.\OSasm.s)(0x5AC40018)(--cpu Cortex-M4 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\osasm.lst --xref -o .\osasm.o --depend .\osasm.d)
+F (.\Interpreter.c)(0x5AC40984)(-c --cpu Cortex-M4 -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\interpreter.o --omf_browse .\interpreter.crf --depend .\interpreter.d)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C88A34)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C88A34)
 I (ST7735.h)(0x5AC174BF)
