@@ -11,3 +11,4 @@
 .\sdcfile.o: loader.h
 .\sdcfile.o: elf.h
 .\sdcfile.o: heap.h
+.\sdcfile.o: UART2.h

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\SDCFile.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\SDCFile.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Apr 02 18:04:48 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Tue Apr 03 14:06:58 2018
 <BR><P>
 <H3>Maximum Stack Usage =        920 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1235,19 +1235,19 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_FillRect
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Output_Init
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
+<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Output_Init
 </UL>
 
 <P><STRONG><a name="[d0]"></a>ST7735_InitR</STRONG> (Thumb, 90 bytes, Stack size 8 bytes, st7735.o(i.ST7735_InitR))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = ST7735_InitR &rArr; ST7735_FillScreen &rArr; ST7735_FillRect &rArr; setAddrWindow &rArr; writedata
 </UL>
-<BR>[Calls]<UL><LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writedata
+<BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_SetCursor
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_FillScreen
+<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writedata
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writecommand
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commonInit
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandList
-<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_SetCursor
-<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_FillScreen
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Output_Init
 </UL>
@@ -1582,8 +1582,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 576 + Unknown Stack Size
 <LI>Call Chain = exec_elf &rArr; relocateSections &rArr; relocateSection &rArr; relocate &rArr; readSymbol &rArr; readSection &rArr; readSectionName &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_OPEN_FOR_RD
-<LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;relocateSections
+<BR>[Calls]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;relocateSections
 <LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;relocateProgram
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loadSymbols
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loadProgram
@@ -1591,6 +1590,7 @@ Global Symbols
 <LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initElf
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;freeElf
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutString
+<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_OPEN_FOR_RD
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoadProgram
 </UL>
@@ -2114,9 +2114,9 @@ Local Symbols
 <P><STRONG><a name="[117]"></a>initElf</STRONG> (Thumb, 134 bytes, Stack size 104 bytes, loader.o(i.initElf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 344<LI>Call Chain = initElf &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
+<BR>[Calls]<UL><LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
 <LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_CLEAR
-<LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exec_elf
 </UL>
@@ -2147,13 +2147,13 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 256 + Unknown Stack Size
 <LI>Call Chain = loadSecData &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
-<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_CLEAR
-<LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;freeSection
+<BR>[Calls]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;freeSection
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dumpData
 <LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutString
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Heap_Malloc
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
+<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_CLEAR
 </UL>
 <BR>[Called By]<UL><LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;placeInfo
 </UL>
@@ -2162,13 +2162,13 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 256 + Unknown Stack Size
 <LI>Call Chain = loadSegData &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
-<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_CLEAR
-<LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;freeSegment
+<BR>[Calls]<UL><LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;freeSegment
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dumpData
 <LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutString
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Heap_Malloc
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
+<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_CLEAR
 </UL>
 <BR>[Called By]<UL><LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loadProgram
 </UL>
@@ -2189,8 +2189,8 @@ Local Symbols
 <P><STRONG><a name="[12f]"></a>placeDynamic</STRONG> (Thumb, 132 bytes, Stack size 32 bytes, loader.o(i.placeDynamic))
 <BR><BR>[Stack]<UL><LI>Max Depth = 272<LI>Call Chain = placeDynamic &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
-<LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<BR>[Calls]<UL><LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loadProgram
 </UL>
@@ -2208,8 +2208,8 @@ Local Symbols
 <P><STRONG><a name="[134]"></a>readSecHeader</STRONG> (Thumb, 62 bytes, Stack size 24 bytes, loader.o(i.readSecHeader))
 <BR><BR>[Stack]<UL><LI>Max Depth = 264<LI>Call Chain = readSecHeader &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
-<LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<BR>[Calls]<UL><LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;relocateSection
 <LI><a href="#[13e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readSection
@@ -2228,8 +2228,8 @@ Local Symbols
 <P><STRONG><a name="[135]"></a>readSectionName</STRONG> (Thumb, 68 bytes, Stack size 32 bytes, loader.o(i.readSectionName))
 <BR><BR>[Stack]<UL><LI>Max Depth = 272<LI>Call Chain = readSectionName &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
-<LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<BR>[Calls]<UL><LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[13e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readSection
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loadSymbols
@@ -2238,8 +2238,8 @@ Local Symbols
 <P><STRONG><a name="[12e]"></a>readSegHeader</STRONG> (Thumb, 58 bytes, Stack size 24 bytes, loader.o(i.readSegHeader))
 <BR><BR>[Stack]<UL><LI>Max Depth = 264<LI>Call Chain = readSegHeader &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
-<LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<BR>[Calls]<UL><LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;loadProgram
 </UL>
@@ -2247,10 +2247,10 @@ Local Symbols
 <P><STRONG><a name="[13f]"></a>readSymbol</STRONG> (Thumb, 114 bytes, Stack size 80 bytes, loader.o(i.readSymbol))
 <BR><BR>[Stack]<UL><LI>Max Depth = 376<LI>Call Chain = readSymbol &rArr; readSection &rArr; readSectionName &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
-<LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readSymbolName
+<BR>[Calls]<UL><LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readSymbolName
 <LI><a href="#[13e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readSection
 <LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;relocate
 </UL>
@@ -2258,8 +2258,8 @@ Local Symbols
 <P><STRONG><a name="[140]"></a>readSymbolName</STRONG> (Thumb, 68 bytes, Stack size 32 bytes, loader.o(i.readSymbolName))
 <BR><BR>[Stack]<UL><LI>Max Depth = 272<LI>Call Chain = readSymbolName &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
-<LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<BR>[Calls]<UL><LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readSymbol
 </UL>
@@ -2274,12 +2274,12 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 480 + Unknown Stack Size
 <LI>Call Chain = relocate &rArr; readSymbol &rArr; readSection &rArr; readSectionName &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
-<LI><a href="#[142]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;relocateSymbol
+<BR>[Calls]<UL><LI><a href="#[142]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;relocateSymbol
 <LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readSymbol
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;addressOf
 <LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_lseek
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_OutString
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOADER_READ
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;relocateSection
@@ -2452,8 +2452,8 @@ Local Symbols
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writecommand
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay1ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commonInit
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
+<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
+<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commonInit
 </UL>
 
 <P><STRONG><a name="[df]"></a>commonInit</STRONG> (Thumb, 510 bytes, Stack size 8 bytes, st7735.o(i.commonInit))
@@ -2486,18 +2486,18 @@ Local Symbols
 <P><STRONG><a name="[e1]"></a>writecommand</STRONG> (Thumb, 68 bytes, Stack size 8 bytes, st7735.o(i.writecommand))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = writecommand
 </UL>
-<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddrWindow
+<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
+<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddrWindow
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandList
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
 </UL>
 
 <P><STRONG><a name="[de]"></a>writedata</STRONG> (Thumb, 72 bytes, Stack size 8 bytes, st7735.o(i.writedata))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = writedata
 </UL>
-<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddrWindow
+<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
+<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddrWindow
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pushColor
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandList
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_FillRect
 </UL>
 

@@ -30,23 +30,22 @@
  *****************************************************************************/
 
 #ifndef LOADER_CONFIG_H_
-#define LOADER_CONFIG_H_ 
-
-#define VALVANOWARE
+#define LOADER_CONFIG_H_ 1
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef DOX
+#define VALVANOWARE
 
+#ifndef DOX
 #ifdef VALVANOWARE
 
 #include <stdint.h>
 #include "ff.h"
 #include "heap.h"
 #include "UART2.h"
-#include "OS.h"
+#include "os.h"
 
 typedef unsigned long int off_t;
 typedef void(entry_t)(void);
@@ -84,7 +83,6 @@ void LOADER_CLEAR(void* ptr, size_t size) { int i; int32_t *p;
 #define MSG(msg) UART_OutString("ELF: " msg "\n\r")
 
 #else // VALVANOWARE
-
 
 #include <unistd.h>
 #include <sys/types.h>

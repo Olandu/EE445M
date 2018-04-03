@@ -11,4 +11,4 @@
 .\loader.o: ffconf.h
 .\loader.o: heap.h
 .\loader.o: UART2.h
-.\loader.o: OS.h
+.\loader.o: os.h
