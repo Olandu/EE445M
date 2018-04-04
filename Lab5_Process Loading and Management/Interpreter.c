@@ -16,6 +16,9 @@
 #define MAX_IN 20
 #define NUM_CMD 5
 char input[MAX_IN];
+int num_instances;
+
+Sema4Type Debug; 
 
 void printFile(TCHAR *path){
 	FIL File_Handle;
@@ -37,16 +40,19 @@ static const ELFSymbol_t symtab[] = {
 	{ "ST7735_Message", ST7735_Message }
 };
 
-void LoadProgram(char *input) {
+void LoadProgram() {
 	ELFEnv_t env = { symtab, 1 };
-	if (!exec_elf(input, &env)) {
+	//OS_bWait (&Debug);
+	if (!exec_elf("Proc.axf", &env)) {
 		UART_OutString("Load Successful");
 	}
+	//OS_bSignal (&Debug);
 }
 
 void cmdLine_Start(void){
 	int task;
 	OutCRLF();
+	//OS_InitSemaphore (&Debug, 1);
 	UART_OutString ("Choose a task:"); OutCRLF();
 	UART_OutString ("1.) Print a File"); OutCRLF();
 	UART_OutString ("2.) Malloc");  OutCRLF();
@@ -73,15 +79,7 @@ void cmdLine_Start(void){
 		case 3: 
 			break;
 		case 4:
-			UART_OutString(">Enter File Name: ");
-			UART_InString(input, MAX_IN);
-		
-			UART_OutString(">Enter number of instances : ");
-			int num = UART_InUDec();
-		
-			for(int i=0; i< num; i++){
-				LoadProgram(input);
-			}
+			LoadProgram();
 			break;					
 	}
 	OutCRLF();

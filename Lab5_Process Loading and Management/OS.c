@@ -84,7 +84,6 @@ unsigned long NumThreads = 0;
 
 //Process Management
 unsigned long NumProcess = 0;
-int validProcess = 0;
 
 
 
@@ -127,7 +126,19 @@ int32_t Pri_Total[PRILEVELS] = {0};					// 0 if none else >0; Modify when any of
 int32_t Pri_Available[PRILEVELS] = {0};			// Modified when any of the threads are sleeping or blocked...if 0, scheduler moves to the next priority level
 void AddPriThread (tcbType *thread);
 
-
+// Lab 5 Debug
+heap_stats_t heap;
+void print_HeapStats (void) {
+	OutCRLF ();
+	UART_OutString ("WordsAllocated: "); UART_OutUDec (heap.wordsAllocated); OutCRLF ();
+	UART_OutString ("WordsAvailable: "); UART_OutUDec (heap.wordsAvailable); OutCRLF ();
+	UART_OutString ("WordsOverhead: "); UART_OutUDec (heap.wordsOverhead); OutCRLF ();
+	UART_OutString ("blocksUsed: "); UART_OutUDec (heap.blocksUsed); OutCRLF ();
+	UART_OutString ("blocksUnused: "); UART_OutUDec (heap.wordsAllocated); OutCRLF ();
+	OutCRLF ();
+	
+}
+		
 void SetInitialStack(int i, int32_t *dataPt){
   tcbs[i].sp = &Stacks[i][STACKSIZE-16]; // thread stack pointer
   Stacks[i][STACKSIZE-1] = 0x01000000;   // thumb bit
@@ -451,7 +462,7 @@ int OS_AddFirstThread(void(*task)(void),unsigned long stackSize, unsigned long p
 	tcbs[freetcb].processId = processID;
 	pcbType *currProcess = getProcess(tcbs[freetcb].processId);
 	SetInitialStack(freetcb,currProcess->data);
-	currProcess->numThreads ++;
+	currProcess->numThreads = 1;
 	
 	Stacks[freetcb][STACKSIZE-2] = (int32_t)(task); // PC
 	//set inittial state of tcb fields
@@ -1079,16 +1090,25 @@ void OS_Sleep(unsigned long sleepTime){
  *  @param  none
  *  @return none
 */
+
+int numKills = 0;
 void OS_Kill(void){
 #if !PriScheduler
 	long status = StartCritical();
-	
+	numKills++;
 	pcbType *currentProcess = getProcess(RunPt->processId);
 	currentProcess->numThreads --;
-	if(currentProcess->numThreads == 0){
+	if(currentProcess->numThreads <= 0){
 		currentProcess->id = -1;
 		Heap_Free(currentProcess->code);
 		Heap_Free(currentProcess->data);
+		NumProcess -- ;
+		numKills = 0;
+	} else if ((numKills >= 2) && (currentProcess->numThreads != 0)){
+		currentProcess->id = -1;
+		Heap_Free(currentProcess->code);
+		Heap_Free(currentProcess->data);
+		numKills = 0;
 	}
 	
 	UnchainTCB();  //remove current running thread from the circular linked list
@@ -1392,6 +1412,10 @@ int OS_AddProcess(void(*entry)(void), void *text, void *data,
 		if(pcbs[freepcb].id == -1)
 			break;
 	}
+	
+//	heap = Heap_Stats();
+//	print_HeapStats();
+	//UART_OutUDec (Heap_Test());
 	newProcess = &pcbs[freepcb];
 	newProcess->data = data;
 	newProcess->code = text;
@@ -1399,7 +1423,6 @@ int OS_AddProcess(void(*entry)(void), void *text, void *data,
 	NumProcess ++;
 	
 	//Add a thread to the new process
-	validProcess = 1;
 	OS_AddFirstThread(entry,stackSize,priority, newProcess->id);
 	
 	
