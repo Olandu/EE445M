@@ -100,6 +100,24 @@ void PortD_Init(void){
   GPIO_PORTD_AMSEL_R &= ~0x0F;;      // disable analog functionality on PD
 }  
 
+#define PF2     (*((volatile uint32_t *)0x40025010))
+#define PF3     (*((volatile uint32_t *)0x40025020))
+
+
+void PortF_Init(void){
+	SYSCTL_RCGCGPIO_R |= 0x20; // activate port F
+  while((SYSCTL_PRGPIO_R&0x20)==0){}; // allow time for clock to start 
+	GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;
+	GPIO_PORTF_CR_R |= 0x0C;
+  GPIO_PORTF_DIR_R |= 0x0C;    // (c) make PF4 out (built-in button)
+  GPIO_PORTF_AFSEL_R &= ~0x0C;  //     disable alt funct on PF0, PF4
+  GPIO_PORTF_DEN_R |= 0x0C;     //     enable digital I/O on PF4
+  GPIO_PORTF_PCTL_R &= ~0x0000FF00; //  configure PF4 as GPIO
+  GPIO_PORTF_AMSEL_R &= ~0x0C;  //    disable analog functionality on PF4
+  GPIO_PORTF_PUR_R |= 0x0C;     //     enable weak pull-up on PF4
+}
+
+
 static FATFS g_sFatFs;
 FRESULT MountFresult, Fresult;
 
@@ -121,6 +139,7 @@ unsigned long NumCreated;
 int main(void) {	// Lab 5 main
   OS_Init();           // initialize, disable interrupts
   PortD_Init();
+	PortF_Init();
 	OS_Fifo_Init(256);
   NumCreated = 0 ;
 	

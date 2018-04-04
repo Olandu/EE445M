@@ -1692,6 +1692,7 @@ int ferror(FILE *f){
 void Output_Init(void){
   ST7735_InitR(INITR_REDTAB);
   ST7735_FillScreen(0);                 // set screen to black
+	OS_InitSemaphore(&LCDFree, 1);
 }
 
 // Clear display
