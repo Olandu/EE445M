@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\SDCFile.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\SDCFile.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Wed Apr 04 05:25:31 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Wed Apr 04 09:02:04 2018
 <BR><P>
 <H3>Maximum Stack Usage =        920 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -746,7 +746,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[9]"></a>SVC_Handler</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, osasm.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 72 + Unknown Stack Size
 <LI>Call Chain = SVC_Handler &rArr; OS_Kill &rArr; Heap_Free &rArr; mergeBlockWithBelow &rArr; blockTrailer
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_AddThread
@@ -1023,8 +1023,8 @@ Global Symbols
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RxFifo_Init
 </UL>
 
-<P><STRONG><a name="[98]"></a>OS_Kill</STRONG> (Thumb, 90 bytes, Stack size 0 bytes, os.o(i.OS_Kill))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56 + Unknown Stack Size
+<P><STRONG><a name="[98]"></a>OS_Kill</STRONG> (Thumb, 90 bytes, Stack size 16 bytes, os.o(i.OS_Kill))
+<BR><BR>[Stack]<UL><LI>Max Depth = 72 + Unknown Stack Size
 <LI>Call Chain = OS_Kill &rArr; Heap_Free &rArr; mergeBlockWithBelow &rArr; blockTrailer
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EndCritical
@@ -1299,8 +1299,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ST7735_InitR
 </UL>
 
-<P><STRONG><a name="[80]"></a>SW1_Debounce</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, os.o(i.SW1_Debounce))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56 + Unknown Stack Size
+<P><STRONG><a name="[80]"></a>SW1_Debounce</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, os.o(i.SW1_Debounce))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80 + Unknown Stack Size
 <LI>Call Chain = SW1_Debounce &rArr; OS_Kill &rArr; Heap_Free &rArr; mergeBlockWithBelow &rArr; blockTrailer
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Sleep
@@ -1308,8 +1308,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> os.o(i.GPIOPortF_Handler)
 </UL>
-<P><STRONG><a name="[81]"></a>SW2_Debounce</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, os.o(i.SW2_Debounce))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56 + Unknown Stack Size
+<P><STRONG><a name="[81]"></a>SW2_Debounce</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, os.o(i.SW2_Debounce))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80 + Unknown Stack Size
 <LI>Call Chain = SW2_Debounce &rArr; OS_Kill &rArr; Heap_Free &rArr; mergeBlockWithBelow &rArr; blockTrailer
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Sleep

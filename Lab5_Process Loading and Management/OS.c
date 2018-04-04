@@ -1095,7 +1095,7 @@ void OS_Kill(void){
 	tcbs[RunPt->Id].status = -1; // remember which tcb is free
 	OS_Suspend(); //switch to the next task to run
 	EndCritical(status);
-	for(;;){}
+//	for(;;){}
 #else
 	OS_DisableInterrupts();
 	tcbType *temp, *current;

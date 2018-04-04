@@ -72,7 +72,7 @@ void cmdLine_Start(void){
 			break;
 		case 3: 
 			break;
-		case 4: 
+		case 4:
 			LoadProgram();
 			break;					
 	}
