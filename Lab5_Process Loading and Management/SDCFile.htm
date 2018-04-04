@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\SDCFile.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\SDCFile.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Wed Apr 04 09:02:04 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Wed Apr 04 13:10:27 2018
 <BR><P>
-<H3>Maximum Stack Usage =        920 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        928 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 Interpreter &rArr; cmdLine_Start &rArr; printFile &rArr; f_open &rArr; follow_path &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 <P>
@@ -873,7 +873,7 @@ Global Symbols
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OS_Kill
 </UL>
 
-<P><STRONG><a name="[138]"></a>Heap_Init</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, heap.o(i.Heap_Init))
+<P><STRONG><a name="[138]"></a>Heap_Init</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, heap.o(i.Heap_Init))
 <BR><BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -894,7 +894,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> sdcfile.o(i.main)
 </UL>
 <P><STRONG><a name="[82]"></a>Interpreter</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, interpreter.o(i.Interpreter))
-<BR><BR>[Stack]<UL><LI>Max Depth = 920 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 928 + Unknown Stack Size
 <LI>Call Chain = Interpreter &rArr; cmdLine_Start &rArr; printFile &rArr; f_open &rArr; follow_path &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmdLine_Start
@@ -934,7 +934,7 @@ Global Symbols
 <LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initElf
 </UL>
 
-<P><STRONG><a name="[b4]"></a>LoadProgram</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, interpreter.o(i.LoadProgram))
+<P><STRONG><a name="[b4]"></a>LoadProgram</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, interpreter.o(i.LoadProgram))
 <BR><BR>[Stack]<UL><LI>Max Depth = 592 + Unknown Stack Size
 <LI>Call Chain = LoadProgram &rArr; exec_elf &rArr; relocateSections &rArr; relocateSection &rArr; relocate &rArr; readSymbol &rArr; readSection &rArr; readSectionName &rArr; LOADER_READ &rArr; f_read &rArr; get_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -1529,8 +1529,8 @@ Global Symbols
 <LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dir_next
 </UL>
 
-<P><STRONG><a name="[af]"></a>cmdLine_Start</STRONG> (Thumb, 182 bytes, Stack size 8 bytes, interpreter.o(i.cmdLine_Start))
-<BR><BR>[Stack]<UL><LI>Max Depth = 920 + Unknown Stack Size
+<P><STRONG><a name="[af]"></a>cmdLine_Start</STRONG> (Thumb, 220 bytes, Stack size 16 bytes, interpreter.o(i.cmdLine_Start))
+<BR><BR>[Stack]<UL><LI>Max Depth = 928 + Unknown Stack Size
 <LI>Call Chain = cmdLine_Start &rArr; printFile &rArr; f_open &rArr; follow_path &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_InUDec

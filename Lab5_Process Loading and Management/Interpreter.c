@@ -37,9 +37,9 @@ static const ELFSymbol_t symtab[] = {
 	{ "ST7735_Message", ST7735_Message }
 };
 
-void LoadProgram() {
+void LoadProgram(char *input) {
 	ELFEnv_t env = { symtab, 1 };
-	if (!exec_elf("Proc.axf", &env)) {
+	if (!exec_elf(input, &env)) {
 		UART_OutString("Load Successful");
 	}
 }
@@ -73,7 +73,15 @@ void cmdLine_Start(void){
 		case 3: 
 			break;
 		case 4:
-			LoadProgram();
+			UART_OutString(">Enter File Name: ");
+			UART_InString(input, MAX_IN);
+		
+			UART_OutString(">Enter number of instances : ");
+			int num = UART_InUDec();
+		
+			for(int i=0; i< num; i++){
+				LoadProgram(input);
+			}
 			break;					
 	}
 	OutCRLF();
